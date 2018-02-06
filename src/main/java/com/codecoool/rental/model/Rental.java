@@ -5,6 +5,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "rental")
+@NamedQueries({@NamedQuery(name = "getRental",query = "SELECT rental FROM Rental rental WHERE rental.id = :id")})
 public class Rental {
 
     @Id
@@ -39,6 +40,16 @@ public class Rental {
     private Amenity amenity;
 
 
+    @Override
+    public String toString() {
+        return "Rental{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", city='" + city + '\'' +
+                '}';
+    }
+
     @OneToOne
     private Facility facility;
 
@@ -69,16 +80,16 @@ public class Rental {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public String getCity() {
         return city;
     }
 
     public int getNumOfGuests() {
         return numOfGuests;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public void setNumOfGuests(int numOfGuests) {

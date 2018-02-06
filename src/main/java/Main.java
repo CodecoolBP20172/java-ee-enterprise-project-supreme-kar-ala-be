@@ -1,4 +1,5 @@
-import com.codecoool.rental.controller.RentalController;
+import com.codecoool.rental.controller.Controller;
+import com.codecoool.rental.model.Rental;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -21,13 +22,22 @@ public class Main {
         staticFileLocation("/public");
         port(8888);
 
-        get("/", (Request req, Response res) -> new ThymeleafTemplateEngine().render(RentalController.renderRentals(req, res, userId) ));
+        get("/", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
+        get("/rental/:id", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRental(req, res, userId) ));
 
         //roots
         enableDebugScreen();
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
-        EntityManager em = emf.createEntityManager();
+        Rental rental = new Rental("Rental name","Description",22.5,"Bukarest",5);
+        Rental rental2 = new Rental("Rental2 name","Description",22.5,"Bukarest",5);
+        Rental rental3 = new Rental("Rental3 name","Description",22.5,"Bukarest",5);
+        Controller.em.getTransaction().begin();
+        Controller.em.persist(rental);
+        Controller.em.persist(rental2);
+        Controller.em.persist(rental3);
+        Controller.em.getTransaction().commit();
+        Controller.em.getTransaction().begin();
+
 
     }
 
