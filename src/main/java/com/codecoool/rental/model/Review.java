@@ -16,6 +16,10 @@ public class Review {
     @Column(name = "text")
     private String text;
 
+
+    @ManyToOne
+    private Rental rental;
+
     @ManyToOne
     private User user;
 
