@@ -14,12 +14,46 @@ public class Amenity {
     @OneToOne(mappedBy = "amenity")
     private Rental rental;
 
-
     @NotNull
     private boolean hasWifi;
 
     @NotNull
     private boolean hasAirCondition;
 
+    public Amenity() {
+    }
 
+    public Amenity(Rental rental, boolean hasWifi, boolean hasAirCondition) {
+        this.rental = rental;
+        this.hasWifi = hasWifi;
+        this.hasAirCondition = hasAirCondition;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Rental getRental() {
+        return rental;
+    }
+
+    public void setRental(Rental rental) {
+        this.rental = rental;
+    }
+
+    public boolean hasWifi() {
+        return hasWifi;
+    }
+
+    public void setWifi(boolean hasWifi) {
+        this.hasWifi = hasWifi;
+    }
+
+    public boolean hasAirCondition() {
+        return hasAirCondition;
+    }
+
+    public void setAirCondition(boolean hasAirCondition) {
+        this.hasAirCondition = hasAirCondition;
+    }
 }

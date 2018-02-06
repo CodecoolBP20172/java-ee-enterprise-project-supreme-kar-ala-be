@@ -21,7 +21,6 @@ public class User {
     private String password;
     private String contacts;
 
-
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations;
 
