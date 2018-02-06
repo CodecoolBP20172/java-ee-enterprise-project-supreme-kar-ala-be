@@ -10,9 +10,12 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Column(name = "rating")
     private double rating;
+
+    @Column(name = "text")
     private String text;
-    
+
     @ManyToOne
     private User user;
 
