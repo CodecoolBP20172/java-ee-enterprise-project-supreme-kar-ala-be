@@ -29,7 +29,7 @@ public class Controller {
 
         System.out.println(req.params("id"));
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
-        queryResult.setParameter("id",1);
+        queryResult.setParameter("id",Integer.parseInt(req.params("id")));
         List<Rental> rental = queryResult.getResultList();
         System.out.println(rental);
 
