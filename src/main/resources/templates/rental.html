@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Kar-alá-B Rental</title>
 </head>
 <body>
     <h1>Rental page</h1>
+    <div class="divTable">
+        <div class="divTableBody">
+            <div class="divTableRow">
+                <span class="divTableCell">Id</span>
+                <span class="divTableCell" th:text="${id}"></span>
+            </div>
+            <div class="divTableRow">
+                <span class="divTableCell">Name</span>
+                <span class="divTableCell" th:text="${name}"></span>
+            </div>
+            <div class="divTableRow">
+                <span class="divTableCell">Description</span>
+                <span class="divTableCell" th:text="${description}"></span>
+            </div>
+            <div class="divTableRow">
+                <span class="divTableCell">Price</span>
+                <span class="divTableCell" th:text="${price}"></span>
+            </div>
+            <div class="divTableRow">
+                <span class="divTableCell">City</span>
+                <span class="divTableCell" th:text="${city}"></span>
+            </div>
+            <div class="divTableRow">
+                <span class="divTableCell">Number of guests</span>
+                <span class="divTableCell" th:text="${numberOfGuests}"></span>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

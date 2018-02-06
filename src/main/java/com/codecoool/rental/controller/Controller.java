@@ -30,12 +30,19 @@ public class Controller {
         System.out.println(req.params("id"));
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
         queryResult.setParameter("id",Integer.parseInt(req.params("id")));
-        List<Rental> rental = queryResult.getResultList();
-        System.out.println(rental);
+        List<Rental> rentals = queryResult.getResultList();
+
+        Rental rental = rentals.get(0);
+
 
 
         HashMap<String, Object> params = new HashMap<>();
-        //params.put();
+        params.put("id",rental.getId());
+        params.put("name",rental.getName());
+        params.put("description",rental.getDescription());
+        params.put("price",rental.getPrice());
+        params.put("city",rental.getCity());
+        params.put("numberOfGuests",rental.getNumOfGuests());
         return new ModelAndView(params, "rental");
     }
 }
