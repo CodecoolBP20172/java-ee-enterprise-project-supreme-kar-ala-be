@@ -106,3 +106,6 @@ buildNumber.properties
 
 
 # End of https://www.gitignore.io/api/java,maven,intellij
+
+### Db persistence ###
+src/main/resources/META-INF/*
