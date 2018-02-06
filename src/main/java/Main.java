@@ -23,7 +23,7 @@ public class Main {
         port(8888);
 
         get("/", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
-        get("/rental/:id", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRental(req, res, userId) ));
+        get("/rental/:id", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
 
         //roots
         enableDebugScreen();

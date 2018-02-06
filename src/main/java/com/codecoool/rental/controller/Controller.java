@@ -25,18 +25,21 @@ public class Controller {
         //params.put();
         return new ModelAndView(params, "index");
     }
-    public static ModelAndView getRental(Request req, Response res, Integer userId) {
+    public static ModelAndView getRental(Request req, Response res) {
 
         System.out.println(req.params("id"));
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
         queryResult.setParameter("id",Integer.parseInt(req.params("id")));
         List<Rental> rentals = queryResult.getResultList();
 
+        HashMap<String, Object> params = new HashMap<>();
+
+
+        if (rentals.size() == 0){
+            return new ModelAndView(params,"notFound");
+        }
         Rental rental = rentals.get(0);
 
-
-
-        HashMap<String, Object> params = new HashMap<>();
         params.put("id",rental.getId());
         params.put("name",rental.getName());
         params.put("description",rental.getDescription());
