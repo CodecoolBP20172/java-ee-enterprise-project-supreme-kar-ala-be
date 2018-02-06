@@ -27,16 +27,17 @@ public class Rental {
     private int numOfGuests;
 
     @OneToMany(mappedBy = "rental")
-    private Review review;
+    private List<Review> review;
 
     @ElementCollection
     private List<String> reservedPeriod = new ArrayList<>();
 
     @OneToMany(mappedBy = "rental")
-    private Picture picture;
+    private List<Picture> picture;
 
     @OneToOne
     private Amenity amenity;
+
 
     @OneToOne
     private Facility facility;

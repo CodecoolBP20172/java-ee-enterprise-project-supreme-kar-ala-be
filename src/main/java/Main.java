@@ -3,6 +3,10 @@ import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
@@ -21,6 +25,10 @@ public class Main {
 
         //roots
         enableDebugScreen();
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
+        EntityManager em = emf.createEntityManager();
+
     }
 
 }
