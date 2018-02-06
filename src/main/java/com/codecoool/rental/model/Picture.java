@@ -1,7 +1,6 @@
 package com.codecoool.rental.model;
 
 import javax.persistence.*;
-import java.net.URL;
 
 @Entity
 @Table(name = "picture")
@@ -12,19 +11,39 @@ public class Picture {
     private Integer id;
 
     @Column(name = "picture_name")
-    String pictureName;
+    private String pictureName;
+
+    @Column(name = "picture_url")
+    private String url;
+
+    @ManyToOne
+    private Rental rental;
+
+    @ManyToOne
+    private User user;
 
     public Picture() {}
 
-    public Picture(String pictureName) {
+    public Picture(String pictureName, String url) {
+        this.pictureName = pictureName;
+        this.url = url;
+    }
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
         this.pictureName = pictureName;
     }
 
-    public void savePicture(){
-
+    public String getUrl() {
+        return url;
     }
 
-    public void getPicture(){
-
+    public void setUrl(String url) {
+        this.url = url;
     }
+
+
 }

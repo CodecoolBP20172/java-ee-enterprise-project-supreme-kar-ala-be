@@ -24,6 +24,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations;
 
+    @OneToMany(mappedBy = "user")
+    private List<Picture> pictures;
+
     public User() {
     }
 
@@ -76,6 +79,14 @@ public class User {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<Picture> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<Picture> pictures) {
+        this.pictures = pictures;
     }
 
     @Override
