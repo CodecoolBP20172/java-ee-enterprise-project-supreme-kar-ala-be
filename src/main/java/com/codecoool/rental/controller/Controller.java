@@ -2,6 +2,7 @@ package com.codecoool.rental.controller;
 
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
+import com.codecoool.rental.model.Facility;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import spark.ModelAndView;
@@ -89,7 +90,14 @@ public class Controller {
         int numOfBed = Integer.parseInt(request.queryParams("numOfBed"));
         int numOfRoom = Integer.parseInt(request.queryParams("numOfRoom"));
 
-        em.persist(new Rental(name,description,price,location,numOfGuests));
+        Facility facility = new Facility(numOfRoom,numOfBed);
+        Rental rental = new Rental(name,description,price,location,numOfGuests);
+        rental.setFacility(facility);
+        facility.setRental(rental);
+
+
+        em.persist(facility);
+        em.persist(rental);
         em.getTransaction().commit();
         em.getTransaction().begin();
     }

@@ -16,6 +16,10 @@ public class Facility {
     @Column(name = "beds")
     private int beds;
 
+    public void setRental(Rental rental) {
+        this.rental = rental;
+    }
+
     @OneToOne(mappedBy = "facility")
     private Rental rental;
 
