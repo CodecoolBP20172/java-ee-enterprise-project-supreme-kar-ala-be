@@ -1,15 +1,14 @@
 package com.codecoool.rental.controller;
 
+import com.codecoool.rental.RecordNotFoundException;
+import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.model.Rental;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import javax.xml.bind.SchemaOutputResolver;
 import java.util.HashMap;
 import java.util.List;
@@ -21,23 +20,22 @@ public class Controller {
 
     public static ModelAndView index(Request req, Response res, Integer userId) {
         HashMap<String, Object> params = new HashMap<>();
-        //params.put();
         return new ModelAndView(params, "index");
     }
 
-    public static ModelAndView getRental(Request req, Response res) {
+    public static ModelAndView getRental(Request req, Response res) throws RentalDaoException {
+
+        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
+        queryResult.setParameter("id",Integer.parseInt(req.params("id")));
+        List<Rental> rentals = queryResult.getResultList();
+
+
+
+        if (rentals.size() == 0){
+            throw new RecordNotFoundException("Could not find any record with a given id " + req.params("id"));
+        };
+
         HashMap<String, Object> params = new HashMap<>();
-
-        System.out.println(req.params("id"));
-
-        List<Rental> rentals = em
-                .createNamedQuery("getRental", Rental.class)
-                .setParameter("id", Integer.parseInt(req.params("id")))
-                .getResultList();
-
-        if (rentals.size() == 0) {
-            return new ModelAndView(params, "notFound");
-        }
 
         Rental rental = rentals.get(0);
         params.put("id", rental.getId());
@@ -61,5 +59,21 @@ public class Controller {
         params.put("rentals", rentals);
         System.out.println(params);
         return new ModelAndView(params, "rentals");
+    }
+
+    public static ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("message", e.getMessage());
+
+        return new ModelAndView(params,"errors/error404");
+    }
+
+    public static ModelAndView ServerIssue(Request req, Response res, Exception e) {
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("message", e.getMessage());
+
+        return new ModelAndView(params,"errors/error500");
     }
 }

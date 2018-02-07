@@ -1,15 +1,18 @@
+import com.codecoool.rental.RecordNotFoundException;
+import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.controller.Controller;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.User;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
-
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -26,10 +29,22 @@ public class Main {
         port(8888);
 
         get("/", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
+
+
         get("/rental/:id", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
         get("/rentals", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRentals()));
 
-        //roots
+        exception(RecordNotFoundException.class, (e, req, res) -> {
+
+            res.body(new ThymeleafTemplateEngine().render(Controller.RecordNoTFound(req, res, e)));
+            res.status(404);
+        });
+
+        exception(RentalDaoException.class, (e, req, res) -> {
+            res.body(new ThymeleafTemplateEngine().render(Controller.ServerIssue(req, res, e)));
+            res.status(500);
+        });
+
         enableDebugScreen();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -50,6 +65,7 @@ public class Main {
         Rental rental2 = new Rental("Rental2 name","Description",22.5,"Bukarest",5);
         Rental rental3 = new Rental("Rental3 name","Description",22.5,"Bukarest",5);
         User user1 = new User("user name", "user@user.com", "user123", "06-123-1234");
+
         Reservation reservation1 = new Reservation(3, date1, date2, user1, rental);
         Reservation reservation2 = new Reservation(3, date3, date4, user1, rental2);
 

@@ -1,6 +1,7 @@
 package com.codecoool.rental.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "reservation")
@@ -13,16 +14,25 @@ public class Reservation {
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
 
+    @Column(name = "start_date", nullable = false)
+    private Date startDate;
+
+    @Column(name = "end_date", nullable = false)
+    private Date endDate;
+
     @ManyToOne
     private User user;
 
     @ManyToOne
     private Rental rental;
 
-    public Reservation() {}
+    public Reservation() {
+    }
 
-    public Reservation(Integer numberOfPeople, User user, Rental rental) {
+    public Reservation(Integer numberOfPeople, Date startDate, Date endDate, User user, Rental rental) {
         this.numberOfPeople = numberOfPeople;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.user = user;
         this.rental = rental;
     }
