@@ -4,15 +4,13 @@ import com.codecoool.rental.controller.Controller;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.User;
-import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
-import java.sql.Date;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -20,7 +18,7 @@ import static spark.debug.DebugScreen.enableDebugScreen;
 public class Main {
 
     //TODO refactor
-    public static Integer userId = 0;
+    public static Integer userId = 1;
 
     public static void main(String[] args) {
         // default server settings
@@ -28,11 +26,14 @@ public class Main {
         staticFileLocation("/public");
         port(8888);
 
-        get("/", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
-
-
-        get("/rental/:id", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
-        get("/rentals", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRentals()));
+        get("/", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
+        get("/rental/:id", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
+        get("/rentals", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(Controller.getRentals()));
+        get("/user/:userId/reservations", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(Controller.getReservationsByUserId(req)));
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 
@@ -78,8 +79,5 @@ public class Main {
         Controller.em.persist(reservation2);
         Controller.em.getTransaction().commit();
         Controller.em.getTransaction().begin();
-
-
     }
-
 }

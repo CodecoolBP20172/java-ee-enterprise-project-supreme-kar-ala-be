@@ -11,14 +11,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String name;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @ColumnTransformer(read = "pgp_sym_decrypt(password, ‘karalábé‘)", write = "pgp_sym_encrypt(?, ‘karalábé‘)")
+    //@ColumnTransformer(read = "pgp_sym_decrypt(password, ‘karalábé‘)", write = "pgp_sym_encrypt(?, ‘karalábé‘)")
     private String password;
     private String contacts;
 

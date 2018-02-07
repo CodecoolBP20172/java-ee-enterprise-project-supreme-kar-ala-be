@@ -5,6 +5,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "reservation")
+@NamedQueries({
+    @NamedQuery(name = "getReservationsByUserId",
+                query = "SELECT reservation FROM Reservation reservation " +
+                        "WHERE reservation.user.id = :userId " +
+                        "ORDER BY reservation.startDate")
+})
 public class Reservation {
 
     @Id
