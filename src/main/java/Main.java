@@ -1,6 +1,7 @@
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.controller.Controller;
+import com.codecoool.rental.model.Amenity;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.User;
@@ -69,6 +70,10 @@ public class Main {
 
         Reservation reservation1 = new Reservation(3, date1, date2, user1, rental);
         Reservation reservation2 = new Reservation(3, date3, date4, user1, rental2);
+        Reservation reservation3 = new Reservation(2, date2, date2, user1, rental);
+
+        Amenity amenity = new Amenity(rental, true, true);
+        Amenity amenity2 = new Amenity(rental2, true, false);
 
         Controller.em.getTransaction().begin();
         Controller.em.persist(rental);
@@ -77,6 +82,9 @@ public class Main {
         Controller.em.persist(user1);
         Controller.em.persist(reservation1);
         Controller.em.persist(reservation2);
+        Controller.em.persist(reservation3);
+        Controller.em.persist(amenity);
+        Controller.em.persist(amenity2);
         Controller.em.getTransaction().commit();
         Controller.em.getTransaction().begin();
     }
