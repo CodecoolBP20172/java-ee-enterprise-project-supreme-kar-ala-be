@@ -9,10 +9,10 @@ import spark.Request;
 import spark.Response;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 import java.util.HashMap;
 import java.util.List;
-
 public class Controller {
 
     public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
@@ -43,6 +43,7 @@ public class Controller {
         return new ModelAndView(params, "rental");
     }
 
+
     public static ModelAndView getRentals() throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
 
@@ -72,8 +73,35 @@ public class Controller {
         System.out.println(params);
 
         //TODO: render proper html
-        return new ModelAndView(params, "index");
+        return new ModelAndView(params, "redirect:/");
     }
+    public static ModelAndView registerRental(){
+        HashMap<String, Object> params = new HashMap<>();
+        return new ModelAndView(params, "register_rental");
+    }
+
+    public static void submitRegistration(Request request){
+        String name = request.queryParams("title");
+        String description = request.queryParams("description");
+        String location = request.queryParams("location");
+        double price = Double.parseDouble(request.queryParams("price"));
+        int numOfGuests = Integer.parseInt(request.queryParams("numOfGuest"));
+        int numOfBed = Integer.parseInt(request.queryParams("numOfBed"));
+        int numOfRoom = Integer.parseInt(request.queryParams("numOfRoom"));
+
+        em.persist(new Rental(name,description,price,location,numOfGuests));
+        em.getTransaction().commit();
+        em.getTransaction().begin();
+    }
+
+
+
+
+
+
+
+
+
 
     public static ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
         HashMap<String, Object> params = new HashMap<>();

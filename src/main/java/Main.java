@@ -33,8 +33,15 @@ public class Main {
                 new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
         get("/rentals", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.getRentals()));
+        get("/register-rental", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(Controller.registerRental()));
         get("/user/:userId/reservations", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.getReservationsByUserId(req)));
+        post("/register-rental", (Request req, Response res) -> {
+            Controller.submitRegistration(req);
+            res.redirect("/");
+            return "";
+        });
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 

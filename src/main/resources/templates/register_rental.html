@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Codecool" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register rental</title>
+</head>
+<body>
+    <h1>Register your rental</h1>
+    <form action="/register-rental" method="post">
+        <p>
+            <label th:for="title" >Enter the name of your apartment</label><br/>
+            <input type="text" th:name="title"/>
+        </p>
+        <p>
+            <label th:for="description">Write a description</label><br/>
+            <input type="text" th:name="description"/>
+        </p>
+
+        <p>
+            <label th:for="location">Enter your location</label><br/>
+            <input type="text" th:name="location"/>
+        </p>
+
+        <p>
+            <label th:for="price">Enter the price</label><br/>
+            <input type="number" th:name="price"/>
+        </p>
+        <p>
+            <label th:for="numOfGuest">Enter the number of guests</label><br/>
+            <input type="number" th:name="numOfGuest"/>
+        </p>
+
+        <p>
+            <label th:for="numOfRoom">Enter the number of rooms</label><br/>
+            <input type="number" th:name="numOfRoom"/>
+        </p>
+
+        <p>
+            <label th:for="numOfBed">Enter the number of beds</label><br/>
+            <input type="number" th:name="numOfBed"/>
+        </p><br/>
+        <input type="submit" value="Register"/>
+    </form>
+</body>
+</html>
