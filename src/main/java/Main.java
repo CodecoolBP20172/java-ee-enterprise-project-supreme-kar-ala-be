@@ -1,12 +1,13 @@
+import com.codecoool.rental.RecordNotFoundException;
+import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.controller.Controller;
 import com.codecoool.rental.model.Rental;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import java.util.HashMap;
 
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
@@ -23,9 +24,20 @@ public class Main {
         port(8888);
 
         get("/", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
+
         get("/rental/:id", (Request req, Response res) -> new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
 
-        //roots
+        exception(RecordNotFoundException.class, (e, req, res) -> {
+
+            res.body(new ThymeleafTemplateEngine().render(Controller.RecordNoTFound(req, res, e)));
+            res.status(404);
+        });
+
+        exception(RentalDaoException.class, (e, req, res) -> {
+            res.body(new ThymeleafTemplateEngine().render(Controller.ServerIssue(req, res, e)));
+            res.status(500);
+        });
+
         enableDebugScreen();
 
         Rental rental = new Rental("Rental name","Description",22.5,"Bukarest",5);

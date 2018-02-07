@@ -1,5 +1,7 @@
 package com.codecoool.rental.controller;
 
+import com.codecoool.rental.RecordNotFoundException;
+import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.model.Rental;
 import org.hibernate.Transaction;
 import spark.Request;
@@ -22,12 +24,11 @@ public class Controller {
     public static ModelAndView index(Request req, Response res, Integer userId) {
 
         HashMap<String, Object> params = new HashMap<>();
-        //params.put();
         return new ModelAndView(params, "index");
     }
-    public static ModelAndView getRental(Request req, Response res) {
 
-        System.out.println(req.params("id"));
+    public static ModelAndView getRental(Request req, Response res) throws RentalDaoException {
+
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
         queryResult.setParameter("id",Integer.parseInt(req.params("id")));
         List<Rental> rentals = queryResult.getResultList();
@@ -36,8 +37,9 @@ public class Controller {
 
 
         if (rentals.size() == 0){
-            return new ModelAndView(params,"notFound");
-        }
+            throw new RecordNotFoundException("Could not find any record with a given id " + req.params("id"));
+        };
+
         Rental rental = rentals.get(0);
 
         params.put("id",rental.getId());
@@ -48,4 +50,23 @@ public class Controller {
         params.put("numberOfGuests",rental.getNumOfGuests());
         return new ModelAndView(params, "rental");
     }
+
+    public static ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("message", e.getMessage());
+
+        return new ModelAndView(params,"errors/error404");
+    }
+
+    public static ModelAndView ServerIssue(Request req, Response res, Exception e) {
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("message", e.getMessage());
+
+        return new ModelAndView(params,"errors/error500");
+    }
+
+
+
 }
