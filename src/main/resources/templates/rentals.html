@@ -38,7 +38,11 @@
             <span class="divTableCell">Number of guests</span>
             <span class="divTableCell" th:text="${rental.numOfGuests}"></span>
         </div>
-        <p></p>
+        <p>
+            <a th:href="${'/rental/' + rental.id}" href="index.html">
+                <button>View rental</button>
+            </a>
+        </p>
     </div>
 </div>
 </body>

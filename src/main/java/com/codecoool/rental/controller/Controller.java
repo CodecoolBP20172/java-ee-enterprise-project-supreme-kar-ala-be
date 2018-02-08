@@ -90,7 +90,7 @@ public class Controller {
         return new ModelAndView(params, "register_rental");
     }
 
-    public static void addRentalReview(Request request){
+    public static void addRentalReview(Request request) throws RecordNotFoundException{
         String text = request.queryParams("review");
         int id = Integer.parseInt(request.queryParams("id"));
         System.out.println(id);
@@ -98,6 +98,9 @@ public class Controller {
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
         queryResult.setParameter("id",id);
         List<Rental> rentals = queryResult.getResultList();
+        if (rentals == null){
+            throw new RecordNotFoundException("Could not find any record with the given rental id " + id);
+        }
 
         Rental rental = rentals.get(0);
         Review review = new Review(rating,text);
