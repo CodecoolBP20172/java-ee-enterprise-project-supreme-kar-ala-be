@@ -30,55 +30,34 @@ public class Rental {
     @Column(name = "guests")
     private int numOfGuests;
 
-    @OneToMany(mappedBy = "rental")
-    private List<Review> review;
-
-    @ElementCollection
-    private List<String> reservedPeriod = new ArrayList<>();
-
-    @OneToMany(mappedBy = "rental")
-    private List<Picture> picture;
-
     @OneToOne
     private Amenity amenity;
-
-
-    @Override
-    public String toString() {
-        return "Rental{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", city='" + city + '\'' +
-                '}';
-    }
-
-    public void setFacility(Facility facility) {
-        this.facility = facility;
-    }
 
     @OneToOne
     private Facility facility;
 
+    @OneToMany(mappedBy = "rental")
+    private List<Review> reviews = new ArrayList<>();
+
+    @ElementCollection
+    private List<String> reservedPeriods = new ArrayList<>();
+
+    @OneToMany(mappedBy = "rental")
+    private List<Picture> pictures = new ArrayList<>();
+
+    @ManyToOne
+    private User user;
+
     public Rental() {
     }
 
-    public Rental(String name, String description, double price, String city, int numOfGuests, Facility facility) {
+    public Rental(String name, String description, Double price, String city, Integer numOfGuests) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.city = city;
         this.numOfGuests = numOfGuests;
         this.facility = facility;
-    }
-
-    public Rental(String name, String description, double price, String city, int numOfGuests) {
-        this.name = name;
-
-        this.description = description;
-        this.price = price;
-        this.city = city;
-        this.numOfGuests = numOfGuests;
     }
 
     public int getId() {
@@ -89,8 +68,16 @@ public class Rental {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getPrice() {
@@ -105,11 +92,52 @@ public class Rental {
         return city;
     }
 
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public int getNumOfGuests() {
         return numOfGuests;
     }
 
     public void setNumOfGuests(int numOfGuests) {
         this.numOfGuests = numOfGuests;
+    }
+
+    public void setAmenity(Amenity amenity) {
+        this.amenity = amenity;
+    }
+
+    public void setFacility(Facility facility) {
+        this.facility = facility;
+    }
+
+    public void setReview(Review review) {
+        this.reviews.add(review);
+    }
+
+    /*TODO class implementation missing
+    public void setReservedPeriod(ReservedPeriod reservedPeriod) {
+        this.reservedPeriods.add(reservedPeriod)
+    }
+    */
+    public void setPictures(Picture picture) {
+        this.pictures.add(picture);
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Rental{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", city='" + city + '\'' +
+                ", numOfGuests=" + numOfGuests +
+                ", amenity=" + amenity +
+                ", facility=" + facility +
+                '}';
     }
 }

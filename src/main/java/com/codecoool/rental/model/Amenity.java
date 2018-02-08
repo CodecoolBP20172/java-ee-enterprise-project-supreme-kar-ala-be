@@ -23,8 +23,7 @@ public class Amenity {
     public Amenity() {
     }
 
-    public Amenity(Rental rental, boolean hasWifi, boolean hasAirCondition) {
-        this.rental = rental;
+    public Amenity(boolean hasWifi, boolean hasAirCondition) {
         this.hasWifi = hasWifi;
         this.hasAirCondition = hasAirCondition;
     }

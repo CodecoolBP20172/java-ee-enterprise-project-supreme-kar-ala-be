@@ -1,10 +1,7 @@
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.controller.Controller;
-import com.codecoool.rental.model.Amenity;
-import com.codecoool.rental.model.Rental;
-import com.codecoool.rental.model.Reservation;
-import com.codecoool.rental.model.User;
+import com.codecoool.rental.model.*;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -56,6 +53,11 @@ public class Main {
 
         enableDebugScreen();
 
+        populateData();
+    }
+
+    public static void populateData() {
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date date1 = Calendar.getInstance().getTime();
         java.util.Date date2 = Calendar.getInstance().getTime();
@@ -70,28 +72,68 @@ public class Main {
             e.printStackTrace();
         }
 
-        Rental rental = new Rental("Rental name","Description",22.5,"Bukarest",5);
+        User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
+        User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
+
+        Rental rental1 = new Rental("Rental name","Description",22.5,"Bukarest",5);
         Rental rental2 = new Rental("Rental2 name","Description",22.5,"Bukarest",5);
         Rental rental3 = new Rental("Rental3 name","Description",22.5,"Bukarest",5);
-        User user1 = new User("user name", "user@user.com", "user123", "06-123-1234");
 
-        Reservation reservation1 = new Reservation(3, date1, date2, user1, rental);
+        Reservation reservation1 = new Reservation(3, date1, date2, user1, rental1);
         Reservation reservation2 = new Reservation(3, date3, date4, user1, rental2);
-        Reservation reservation3 = new Reservation(2, date2, date2, user1, rental);
+        Reservation reservation3 = new Reservation(2, date2, date2, user1, rental1);
 
-        Amenity amenity = new Amenity(rental, true, true);
-        Amenity amenity2 = new Amenity(rental2, true, false);
+        Amenity amenity1 = new Amenity(true, true);
+        Amenity amenity2 = new Amenity(true, false);
+
+        Picture picture1rent = new Picture("picture_1","ez egy url");
+        Picture picture2rent = new Picture("picture_2","ez egy másik");
+        Picture picture3rent = new Picture("picture_3","VVVVVVTTTTTT");
+
+        Picture picture1user = new Picture("picture_4","user picture");
+        Picture picture2user = new Picture("picture_5","másik user pic");
+
+        user1.setRentals(rental1);
+        user1.setRentals(rental2);
+        user2.setRentals(rental3);
+
+        user1.setReservations(reservation1);
+        user1.setReservations(reservation2);
+        user2.setReservations(reservation3);
+
+        user1.setPictures(picture1user);
+        user2.setPictures(picture2user);
+
+        //rental1.setFacility();
+        //rental1.setReview();
+
+        rental1.setAmenity(amenity1);
+        rental2.setAmenity(amenity2);
+        rental3.setAmenity(amenity1);
+
+        rental1.setPictures(picture1rent);
+        rental1.setPictures(picture3rent);
+        rental2.setPictures(picture2rent);
+
 
         Controller.em.getTransaction().begin();
-        Controller.em.persist(rental);
+
+        Controller.em.persist(user1);
+        Controller.em.persist(user2);
+        Controller.em.persist(rental1);
         Controller.em.persist(rental2);
         Controller.em.persist(rental3);
-        Controller.em.persist(user1);
         Controller.em.persist(reservation1);
         Controller.em.persist(reservation2);
         Controller.em.persist(reservation3);
-        Controller.em.persist(amenity);
+        Controller.em.persist(amenity1);
         Controller.em.persist(amenity2);
+        Controller.em.persist(picture1rent);
+        Controller.em.persist(picture2rent);
+        Controller.em.persist(picture3rent);
+        Controller.em.persist(picture1user);
+        Controller.em.persist(picture2user);
+
         Controller.em.getTransaction().commit();
         Controller.em.getTransaction().begin();
     }

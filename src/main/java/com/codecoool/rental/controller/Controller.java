@@ -95,21 +95,11 @@ public class Controller {
         rental.setFacility(facility);
         facility.setRental(rental);
 
-
         em.persist(facility);
         em.persist(rental);
         em.getTransaction().commit();
         em.getTransaction().begin();
     }
-
-
-
-
-
-
-
-
-
 
     public static ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
         HashMap<String, Object> params = new HashMap<>();

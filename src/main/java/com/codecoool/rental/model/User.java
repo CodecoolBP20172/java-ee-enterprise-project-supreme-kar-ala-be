@@ -3,6 +3,7 @@ package com.codecoool.rental.model;
 import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,10 +24,13 @@ public class User {
     private String contacts;
 
     @OneToMany(mappedBy = "user")
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Picture> pictures;
+    private List<Picture> pictures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Rental> rentals = new ArrayList<>();
 
     public User() {
     }
@@ -78,17 +82,17 @@ public class User {
         return reservations;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
+    public void setReservations(Reservation reservation) { this.reservations.add(reservation); }
 
     public List<Picture> getPictures() {
         return pictures;
     }
 
-    public void setPictures(List<Picture> pictures) {
-        this.pictures = pictures;
-    }
+    public void setPictures(Picture picture) { this.pictures.add(picture); }
+
+    public List<Rental> getRentals() { return rentals; }
+
+    public void setRentals(Rental rental) { this.rentals.add(rental); }
 
     @Override
     public String toString() {
