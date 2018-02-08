@@ -5,6 +5,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "reservation_period")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "reservation_type", discriminatorType = DiscriminatorType.STRING, length=50)
+@DiscriminatorValue("abstract_reservation_period")
 public abstract class ReservationPeriod {
 
     @Id

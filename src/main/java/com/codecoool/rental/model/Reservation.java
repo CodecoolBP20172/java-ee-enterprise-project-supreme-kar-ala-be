@@ -20,7 +20,6 @@ public class Reservation {
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
 
-    @Column(name = "reservation_period")
     @OneToOne
     private ReservationPeriod reservationPeriod;
 

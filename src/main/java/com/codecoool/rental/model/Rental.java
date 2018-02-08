@@ -116,11 +116,19 @@ public class Rental {
         this.reviews.add(review);
     }
 
-    /*TODO class implementation missing
-    public void setReservedPeriod(ReservedPeriod reservedPeriod) {
-        this.reservedPeriods.add(reservedPeriod)
+    public List<Reservation> getReservations() {
+        return reservations;
     }
-    */
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    /*TODO class implementation missing
+        public void setReservedPeriod(ReservedPeriod reservedPeriod) {
+            this.reservedPeriods.add(reservedPeriod)
+        }
+        */
     public void setPictures(Picture picture) {
         this.pictures.add(picture);
     }
