@@ -53,14 +53,28 @@ public class Rental {
                 '}';
     }
 
+    public void setFacility(Facility facility) {
+        this.facility = facility;
+    }
+
     @OneToOne
     private Facility facility;
 
     public Rental() {
     }
 
+    public Rental(String name, String description, double price, String city, int numOfGuests, Facility facility) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.city = city;
+        this.numOfGuests = numOfGuests;
+        this.facility = facility;
+    }
+
     public Rental(String name, String description, double price, String city, int numOfGuests) {
         this.name = name;
+
         this.description = description;
         this.price = price;
         this.city = city;
