@@ -2,10 +2,7 @@ package com.codecoool.rental.controller;
 
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
-import com.codecoool.rental.model.Facility;
-import com.codecoool.rental.model.Rental;
-import com.codecoool.rental.model.Reservation;
-import com.codecoool.rental.model.User;
+import com.codecoool.rental.model.*;
 import com.sun.xml.internal.bind.v2.TODO;
 import com.codecoool.rental.model.*;
 import spark.ModelAndView;
@@ -174,7 +171,10 @@ public class Controller {
         return new ModelAndView(params, "/makeReservation");
     }
 
-    public static void submitReservation(Request req) {
+    public static boolean submitReservation(Request req) {
+        if (!em.getTransaction().isActive()) {
+            em.getTransaction().begin();
+        }
         String startDateInput = req.queryParams("startDate");
         String endDateInput = req.queryParams("endDate");
         String numOfPeople = req.queryParams("numberOfPeople");
@@ -189,6 +189,24 @@ public class Controller {
         } catch (ParseException e) {
             e.printStackTrace();
 //            TODO: raise IllegalUserInput Exception
+        }
+
+        TypedQuery<Reservation> reservation = em.createNamedQuery("getNumOfReservationsForRentalInPeriod", Reservation.class)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate);
+        System.out.println(reservation.getResultList() == null);
+        System.out.println(reservation.getResultList());
+        if (reservation.getResultList().size() == 0) {
+            Rental rental = new Rental("cifraPalota", "kecske", 500.0, "picsa", 3);
+            ReservationPeriodHost host = new ReservationPeriodHost(startDate, endDate);
+            Reservation reservation6 = new Reservation();
+            reservation6.setRental(rental);
+            reservation6.setReservationPeriod(host);
+            em.persist(reservation6);
+            em.getTransaction().commit();
+            return true;
+        } else {
+            return false;
         }
     }
 }

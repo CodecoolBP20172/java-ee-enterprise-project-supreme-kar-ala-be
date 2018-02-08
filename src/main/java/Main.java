@@ -19,7 +19,7 @@ public class Main {
         // default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFileLocation("/public");
-        port(8888);
+        port(8881);
 
         get("/", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.index(req, res)));
@@ -50,6 +50,15 @@ public class Main {
 
             res.body(new ThymeleafTemplateEngine().render(Controller.RecordNoTFound(req, res, e)));
             res.status(404);
+        });
+
+        post("/make-reservation", (Request req, Response res) -> {
+            if (Controller.submitReservation(req)) {
+                res.redirect("/");
+            } else {
+                res.redirect("/errors/error404");
+            }
+            return "";
         });
 
         exception(RentalDaoException.class, (e, req, res) -> {
@@ -154,11 +163,15 @@ public class Main {
         Controller.em.persist(rental2);
         Controller.em.persist(rental3);
 
+        Controller.em.persist(reservationPeriod1);
+        Controller.em.persist(reservationPeriod2);
+        Controller.em.persist(reservationPeriod3);
+
         Controller.em.persist(reservation1);
         Controller.em.persist(reservation2);
         Controller.em.persist(reservation3);
 
-        Controller.em.getTransaction().commit();
 
+        Controller.em.getTransaction().commit();
     }
 }

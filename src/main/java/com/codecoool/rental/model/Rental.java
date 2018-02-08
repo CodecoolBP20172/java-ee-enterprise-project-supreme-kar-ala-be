@@ -37,7 +37,7 @@ public class Rental {
     private Facility facility;
 
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)

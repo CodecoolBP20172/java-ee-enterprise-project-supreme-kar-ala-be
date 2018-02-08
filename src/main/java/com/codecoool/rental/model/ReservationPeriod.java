@@ -20,9 +20,8 @@ public abstract class ReservationPeriod {
     @Column(name = "end_date")
     private Date endDate;
 
-    @ManyToOne
+    @OneToOne(mappedBy = "reservationPeriod", cascade = CascadeType.ALL)
     private Reservation reservation;
-
 
     protected ReservationPeriod() {
     }
