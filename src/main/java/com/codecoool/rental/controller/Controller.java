@@ -119,7 +119,7 @@ public class Controller {
         return new ModelAndView(params, "/makeReservation");
     }
 
-    public static void submitReservation(Request req) {
+    public static boolean submitReservation(Request req) {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
@@ -152,6 +152,9 @@ public class Controller {
             reservation6.setReservationPeriod(host);
             em.persist(reservation6);
             em.getTransaction().commit();
+            return true;
+        } else {
+            return false;
         }
     }
 }

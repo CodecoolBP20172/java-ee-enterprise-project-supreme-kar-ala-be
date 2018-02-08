@@ -46,8 +46,11 @@ public class Main {
         });
 
         post("/make-reservation", (Request req, Response res) -> {
-            Controller.submitReservation(req);
-            res.redirect("/");
+            if (Controller.submitReservation(req)) {
+                res.redirect("/");
+            } else {
+                res.redirect("/errors/error404");
+            }
             return "";
         });
 
