@@ -22,7 +22,7 @@ public class Controller {
     public static EntityManager em = emf.createEntityManager();
 
 
-    public static ModelAndView index(Request req, Response res, Integer userId) {
+    public static ModelAndView index(Request req, Response res) {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "index");
     }

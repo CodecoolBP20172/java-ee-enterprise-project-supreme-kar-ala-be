@@ -15,9 +15,6 @@ import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class Main {
 
-    //TODO refactor
-    public static Integer userId = 1;
-
     public static void main(String[] args) {
         // default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
@@ -25,7 +22,7 @@ public class Main {
         port(8888);
 
         get("/", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
+                new ThymeleafTemplateEngine().render(Controller.index(req, res) ));
         get("/rental/:id", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
         get("/rentals", (Request req, Response res) ->
