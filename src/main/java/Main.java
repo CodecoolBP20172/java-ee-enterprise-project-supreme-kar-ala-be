@@ -19,7 +19,7 @@ public class Main {
         // default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFileLocation("/public");
-        port(8881);
+        port(8888);
 
         get("/", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.index(req, res)));
