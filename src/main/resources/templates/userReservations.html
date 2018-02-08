@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${'User ' + reservations[0].user.name + ' reservations'}">Kar-alá-B user reservations</title>
+</head>
+<body>
+<h1 th:text="${'User ID: ' + reservations[0].user.id + ' reservations'}">User's reservation page</h1>
+<div class="divTable" th:each="reservation : ${reservations}">
+    <div class="divTableBody">
+        <div class="divTableRow">
+            <span class="divTableCell">ID</span>
+            <span class="divTableCell" th:text="${reservation.id}"></span>
+        </div>
+        <div class="divTableRow">
+            <span class="divTableCell">Number of people</span>
+            <span class="divTableCell" th:text="${reservation.numberOfPeople}"></span>
+        </div>
+        <div class="divTableRow">
+            <span class="divTableCell">Rental ID</span>
+            <span class="divTableCell" th:text="${reservation.rental.id}"></span>
+        </div>
+        <div class="divTableRow">
+            <span class="divTableCell">User ID</span>
+            <span class="divTableCell" th:text="${reservation.user.id}"></span>
+        </div>
+        <div class="divTableRow">
+            <span class="divTableCell">User name</span>
+            <span class="divTableCell" th:text="${reservation.user.name}"></span>
+        </div>
+        <div class="divTableRow">
+            <span class="divTableCell">Start date</span>
+            <span class="divTableCell" th:text="${reservation.startDate}"></span>
+        </div>
+        <div class="divTableRow">
+            <span class="divTableCell">End date</span>
+            <span class="divTableCell" th:text="${reservation.endDate}"></span>
+        </div>
+        <p></p>
+    </div>
+</div>
+</body>
+</html>

@@ -9,11 +9,13 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.List;
+
 public class Controller {
 
     public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
@@ -26,11 +28,11 @@ public class Controller {
 
     public static ModelAndView getRental(Request req, Response res) throws RentalDaoException {
         HashMap<String, Object> params = new HashMap<>();
-        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
-        queryResult.setParameter("id",Integer.parseInt(req.params("id")));
+        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental", Rental.class);
+        queryResult.setParameter("id", Integer.parseInt(req.params("id")));
         List<Rental> rentals = queryResult.getResultList();
 
-        if (rentals.size() == 0){
+        if (rentals.size() == 0) {
             throw new RecordNotFoundException("Could not find any record with a given id " + req.params("id"));
         }
 
@@ -47,41 +49,36 @@ public class Controller {
 
     public static ModelAndView getRentals() throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
-
         List<Rental> rentals = em.createNamedQuery("getRentals", Rental.class).getResultList();
+
         if (rentals.size() == 0) {
             throw new RecordNotFoundException("Could not find any records");
         }
+
         params.put("rentals", rentals);
-
-        System.out.println(params);
-
-        //TODO: render proper html
         return new ModelAndView(params, "rentals");
     }
 
     public static ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
-
         List<Reservation> reservations = em.createNamedQuery("getReservationsByUserId", Reservation.class)
                 .setParameter("userId", Integer.parseInt(req.params("userId")))
                 .getResultList();
+
         if (reservations.size() == 0) {
             throw new RecordNotFoundException("Could not find any record with the given user id " + req.params("userId"));
         }
+
         params.put("reservations", reservations);
-
-        System.out.println(params);
-
-        //TODO: render proper html
-        return new ModelAndView(params, "redirect:/");
+        return new ModelAndView(params, "userReservations");
     }
-    public static ModelAndView registerRental(){
+
+    public static ModelAndView registerRental() {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "register_rental");
     }
 
-    public static void submitRegistration(Request request){
+    public static void submitRegistration(Request request) {
         String name = request.queryParams("title");
         String description = request.queryParams("description");
         String location = request.queryParams("location");
@@ -90,11 +87,10 @@ public class Controller {
         int numOfBed = Integer.parseInt(request.queryParams("numOfBed"));
         int numOfRoom = Integer.parseInt(request.queryParams("numOfRoom"));
 
-        Facility facility = new Facility(numOfRoom,numOfBed);
-        Rental rental = new Rental(name,description,price,location,numOfGuests);
+        Facility facility = new Facility(numOfRoom, numOfBed);
+        Rental rental = new Rental(name, description, price, location, numOfGuests);
         rental.setFacility(facility);
         facility.setRental(rental);
-
 
         em.persist(facility);
         em.persist(rental);
@@ -102,19 +98,10 @@ public class Controller {
         em.getTransaction().begin();
     }
 
-
-
-
-
-
-
-
-
-
     public static ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("message", e.getMessage());
-        return new ModelAndView(params,"errors/error404");
+        return new ModelAndView(params, "errors/error404");
     }
 
     public static ModelAndView ServerIssue(Request req, Response res, Exception e) {

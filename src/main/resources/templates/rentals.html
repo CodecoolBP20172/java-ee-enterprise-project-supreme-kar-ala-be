@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"></meta>
-    <title>Title</title>
+    <meta charset="UTF-8"/>
+    <title>Kar-alá-B Rentals</title>
 </head>
 <body>
 <h1>Rentals page</h1>
 <div class="divTable" th:each="rental : ${rentals}">
-
-    <!--
-<div th:each="rental : ${rentals}">
-    <span th:text="${rental.id}"></span>
-</div>
-     -->
     <div class="divTableBody">
         <div class="divTableRow">
             <span class="divTableCell">Id</span>
