@@ -5,6 +5,8 @@ import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.model.Facility;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
+import com.codecoool.rental.model.User;
+import com.sun.xml.internal.bind.v2.TODO;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -13,6 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -110,5 +115,28 @@ public class Controller {
         HashMap<String, Object> params = new HashMap<>();
         params.put("message", e.getMessage());
         return new ModelAndView(params, "errors/error500");
+    }
+
+    public static ModelAndView makeReservation(Request req) {
+        HashMap<String, Object> params = new HashMap<>();
+        return new ModelAndView(params, "/makeReservation");
+    }
+
+    public static void submitReservation(Request req) {
+        String startDateInput = req.queryParams("startDate");
+        String endDateInput = req.queryParams("endDate");
+        String numOfPeople = req.queryParams("numberOfPeople");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date startDate = Calendar.getInstance().getTime();
+        java.util.Date endDate = Calendar.getInstance().getTime();
+
+        try {
+            startDate = sdf.parse(startDateInput);
+            endDate = sdf.parse(endDateInput);
+        } catch (ParseException e) {
+            e.printStackTrace();
+//            TODO: raise IllegalUserInput Exception
+        }
     }
 }

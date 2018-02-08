@@ -39,8 +39,8 @@ public class Rental {
     @OneToMany
     private List<Review> reviews = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> reservedPeriods = new ArrayList<>();
+    @OneToMany
+    private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Picture> pictures = new ArrayList<>();
@@ -122,6 +122,14 @@ public class Rental {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
     }
 
     /*TODO class implementation missing

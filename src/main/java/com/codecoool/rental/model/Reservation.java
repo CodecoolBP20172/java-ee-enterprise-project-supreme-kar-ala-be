@@ -9,7 +9,7 @@ import java.util.Date;
     @NamedQuery(name = "getReservationsByUserId",
                 query = "SELECT reservation FROM Reservation reservation " +
                         "WHERE reservation.user.id = :userId " +
-                        "ORDER BY reservation.startDate")
+                        "ORDER BY reservation.reservationPeriod.startDate")
 })
 public class Reservation {
 
@@ -20,11 +20,8 @@ public class Reservation {
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
 
-    @Column(name = "start_date", nullable = false)
-    private Date startDate;
-
-    @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    @OneToOne
+    private ReservationPeriod reservationPeriod;
 
     @ManyToOne
     private User user;
@@ -35,10 +32,9 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer numberOfPeople, Date startDate, Date endDate, User user, Rental rental) {
+    public Reservation(Integer numberOfPeople, ReservationPeriod reservationPeriod, User user, Rental rental) {
         this.numberOfPeople = numberOfPeople;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.reservationPeriod = reservationPeriod;
         this.user = user;
         this.rental = rental;
     }
@@ -71,20 +67,12 @@ public class Reservation {
         this.rental = rental;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public ReservationPeriod getReservationPeriod() {
+        return reservationPeriod;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setReservationPeriod(ReservationPeriod reservationPeriod) {
+        this.reservationPeriod = reservationPeriod;
     }
 
     @Override

@@ -36,6 +36,8 @@ public class Main {
             res.redirect("/");
             return "";
         });
+        get("/rental/:id/make-reservation", (Request req, Response res) ->
+            new ThymeleafTemplateEngine().render(Controller.makeReservation(req)));
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 
@@ -62,11 +64,15 @@ public class Main {
         java.util.Date date2 = Calendar.getInstance().getTime();
         java.util.Date date3 = Calendar.getInstance().getTime();
         java.util.Date date4 = Calendar.getInstance().getTime();
+        java.util.Date date5 = Calendar.getInstance().getTime();
+        java.util.Date date6 = Calendar.getInstance().getTime();
         try {
             date1 = sdf.parse("2017-07-21");
             date2 = sdf.parse("2017-07-28");
             date3 = sdf.parse("2017-10-8");
             date4 = sdf.parse("2017-10-10");
+            date5 = sdf.parse("2017-07-29");
+            date6 = sdf.parse("2017-08-01");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -81,9 +87,13 @@ public class Main {
         Rental rental3 = new Rental("Rental3 name","Description",22.5,"Bukarest",5);
         rental3.setUser(user2);
 
-        Reservation reservation1 = new Reservation(3, date1, date2, user1, rental1);
-        Reservation reservation2 = new Reservation(3, date3, date4, user1, rental2);
-        Reservation reservation3 = new Reservation(2, date2, date2, user1, rental1);
+        ReservationPeriod reservationPeriod1 = new ReservationPeriodGuest(date1, date2);
+        ReservationPeriod reservationPeriod2 = new ReservationPeriodGuest(date3, date4);
+        ReservationPeriod reservationPeriod3 = new ReservationPeriodGuest(date5, date6);
+
+        Reservation reservation1 = new Reservation(3, reservationPeriod1, user1, rental1);
+        Reservation reservation2 = new Reservation(3, reservationPeriod2, user1, rental2);
+        Reservation reservation3 = new Reservation(2, reservationPeriod3, user2, rental1);
 
         Amenity amenity1 = new Amenity(true, true);
         Amenity amenity2 = new Amenity(true, false);
@@ -125,16 +135,24 @@ public class Main {
         user1.setReservations(reservation2);
         user2.setReservations(reservation3);
 
+        rental1.addReservation(reservation1);
+        rental2.addReservation(reservation2);
+        rental1.addReservation(reservation3);
+
         Controller.em.getTransaction().begin();
 
         Controller.em.persist(user1);
         Controller.em.persist(user2);
+
+        Controller.em.persist(rental1);
+        Controller.em.persist(rental2);
+        Controller.em.persist(rental3);
+
         Controller.em.persist(reservation1);
         Controller.em.persist(reservation2);
         Controller.em.persist(reservation3);
 
         Controller.em.getTransaction().commit();
-
 
         Controller.em.close();
         Controller.emf.close();
