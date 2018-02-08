@@ -30,22 +30,22 @@ public class Rental {
     @Column(name = "guests")
     private int numOfGuests;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Amenity amenity;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Facility facility;
 
-    @OneToMany(mappedBy = "rental")
+    @OneToMany
     private List<Review> reviews = new ArrayList<>();
 
     @ElementCollection
     private List<String> reservedPeriods = new ArrayList<>();
 
-    @OneToMany(mappedBy = "rental")
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Picture> pictures = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
     public Rental() {
@@ -116,11 +116,19 @@ public class Rental {
         this.reviews.add(review);
     }
 
-    /*TODO class implementation missing
-    public void setReservedPeriod(ReservedPeriod reservedPeriod) {
-        this.reservedPeriods.add(reservedPeriod)
+    public User getUser() {
+        return user;
     }
-    */
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /*TODO class implementation missing
+        public void setReservedPeriod(ReservedPeriod reservedPeriod) {
+            this.reservedPeriods.add(reservedPeriod)
+        }
+        */
     public void setPictures(Picture picture) {
         this.pictures.add(picture);
     }

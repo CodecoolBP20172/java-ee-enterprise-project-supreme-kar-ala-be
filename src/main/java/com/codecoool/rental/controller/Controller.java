@@ -21,6 +21,7 @@ public class Controller {
     public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
     public static EntityManager em = emf.createEntityManager();
 
+
     public static ModelAndView index(Request req, Response res, Integer userId) {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "index");
@@ -87,8 +88,9 @@ public class Controller {
         int numOfBed = Integer.parseInt(request.queryParams("numOfBed"));
         int numOfRoom = Integer.parseInt(request.queryParams("numOfRoom"));
 
-        Facility facility = new Facility(numOfRoom, numOfBed);
+
         Rental rental = new Rental(name, description, price, location, numOfGuests);
+        Facility facility = new Facility(numOfRoom, numOfBed);
         rental.setFacility(facility);
         facility.setRental(rental);
 
