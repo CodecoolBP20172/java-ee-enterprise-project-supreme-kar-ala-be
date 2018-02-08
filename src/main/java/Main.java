@@ -31,6 +31,8 @@ public class Main {
                 new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
         get("/rental/:id", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
+        get("/rental/:id/add-review", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(Controller.writeRentalReview(req, res) ));
         get("/rentals", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.getRentals()));
         get("/register-rental", (Request req, Response res) ->
@@ -39,6 +41,11 @@ public class Main {
                 new ThymeleafTemplateEngine().render(Controller.getReservationsByUserId(req)));
         post("/register-rental", (Request req, Response res) -> {
             Controller.submitRegistration(req);
+            res.redirect("/");
+            return "";
+        });
+        post("/add-review", (Request req, Response res) -> {
+            Controller.addRentalReview(req);
             res.redirect("/");
             return "";
         });

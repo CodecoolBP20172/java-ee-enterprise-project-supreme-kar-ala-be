@@ -17,6 +17,10 @@ public class Review {
     private String text;
 
 
+    public void setRental(Rental rental) {
+        this.rental = rental;
+    }
+
     @ManyToOne
     private Rental rental;
 

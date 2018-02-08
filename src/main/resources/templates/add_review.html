@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Codecool" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add your review</title>
+</head>
+<body>
+    <h1>Add review</h1>
+    <form action="/add-review" method="post">
+        <p>
+            <label th:for="review" >Write your review</label><br/>
+            <textarea th:name="review" th:required="required"/>
+        </p>
+        <p>
+            <label th:for="rating">Leave your rating</label><br/>
+            <input type="number" th:name="rating" th:required="required"/>
+            <input th:type="hidden" th:name="id" th:value="${id}" />
+        </p><br/>
+        <input type="submit" value="Submit"/>
+    </form>
+</body>
+</html>

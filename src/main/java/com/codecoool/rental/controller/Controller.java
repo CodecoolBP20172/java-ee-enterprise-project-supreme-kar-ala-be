@@ -5,6 +5,7 @@ import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.model.Facility;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
+import com.codecoool.rental.model.Review;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -23,6 +24,14 @@ public class Controller {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "index");
     }
+    public static ModelAndView writeRentalReview(Request req, Response res) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id",req.params("id"));
+
+        return new ModelAndView(params, "add_review");
+    }
+
+
 
     public static ModelAndView getRental(Request req, Response res) throws RentalDaoException {
         HashMap<String, Object> params = new HashMap<>();
@@ -81,6 +90,24 @@ public class Controller {
         return new ModelAndView(params, "register_rental");
     }
 
+    public static void addRentalReview(Request request){
+        String text = request.queryParams("review");
+        int id = Integer.parseInt(request.queryParams("id"));
+        System.out.println(id);
+        int rating = Integer.parseInt(request.queryParams("rating"));
+        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
+        queryResult.setParameter("id",id);
+        List<Rental> rentals = queryResult.getResultList();
+
+        Rental rental = rentals.get(0);
+        Review review = new Review(rating,text);
+        review.setRental(rental);
+        em.persist(review);
+        em.getTransaction().commit();
+        em.getTransaction().begin();
+
+    }
+
     public static void submitRegistration(Request request){
         String name = request.queryParams("title");
         String description = request.queryParams("description");
@@ -101,9 +128,6 @@ public class Controller {
         em.getTransaction().commit();
         em.getTransaction().begin();
     }
-
-
-
 
 
 

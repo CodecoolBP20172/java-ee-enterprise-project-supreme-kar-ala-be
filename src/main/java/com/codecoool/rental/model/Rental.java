@@ -31,7 +31,7 @@ public class Rental {
     private int numOfGuests;
 
     @OneToMany(mappedBy = "rental")
-    private List<Review> review;
+    private List<Review> reviews = new ArrayList<>();
 
     @ElementCollection
     private List<String> reservedPeriod = new ArrayList<>();
@@ -111,5 +111,9 @@ public class Rental {
 
     public void setNumOfGuests(int numOfGuests) {
         this.numOfGuests = numOfGuests;
+    }
+
+    public void addReview(Review review){
+        reviews.add(review);
     }
 }
