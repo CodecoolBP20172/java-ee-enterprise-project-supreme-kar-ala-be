@@ -30,22 +30,22 @@ public class Rental {
     @Column(name = "guests")
     private int numOfGuests;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Amenity amenity;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Facility facility;
 
-    @OneToMany(mappedBy = "rental")
+    @OneToMany
     private List<Review> reviews = new ArrayList<>();
 
     @OneToMany
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "rental")
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Picture> pictures = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
     public Rental() {
@@ -114,6 +114,14 @@ public class Rental {
 
     public void setReview(Review review) {
         this.reviews.add(review);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Reservation> getReservations() {

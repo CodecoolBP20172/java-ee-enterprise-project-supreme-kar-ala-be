@@ -15,9 +15,6 @@ import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class Main {
 
-    //TODO refactor
-    public static Integer userId = 1;
-
     public static void main(String[] args) {
         // default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
@@ -25,7 +22,7 @@ public class Main {
         port(8888);
 
         get("/", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.index(req, res, userId) ));
+                new ThymeleafTemplateEngine().render(Controller.index(req, res) ));
         get("/rental/:id", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
         get("/rentals", (Request req, Response res) ->
@@ -55,10 +52,12 @@ public class Main {
 
         enableDebugScreen();
 
+
         populateData();
     }
 
     public static void populateData() {
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date date1 = Calendar.getInstance().getTime();
@@ -82,8 +81,11 @@ public class Main {
         User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
 
         Rental rental1 = new Rental("Rental name","Description",22.5,"Bukarest",5);
+        rental1.setUser(user1);
         Rental rental2 = new Rental("Rental2 name","Description",22.5,"Bukarest",5);
+        rental2.setUser(user1);
         Rental rental3 = new Rental("Rental3 name","Description",22.5,"Bukarest",5);
+        rental3.setUser(user2);
 
         ReservationPeriod reservationPeriod1 = new ReservationPeriodGuest(date1, date2);
         ReservationPeriod reservationPeriod2 = new ReservationPeriodGuest(date3, date4);
@@ -95,13 +97,35 @@ public class Main {
 
         Amenity amenity1 = new Amenity(true, true);
         Amenity amenity2 = new Amenity(true, false);
+        rental1.setAmenity(amenity1);
+        rental2.setAmenity(amenity2);
+
+        Facility facility1 = new Facility(2, 3);
+        Facility facility2 = new Facility(4, 7);
+        Facility facility3 = new Facility(1, 2);
+        rental1.setFacility(facility1);
+        rental2.setFacility(facility2);
+        rental3.setFacility(facility3);
 
         Picture picture1rent = new Picture("picture_1","ez egy url");
+        picture1rent.setRental(rental1);
         Picture picture2rent = new Picture("picture_2","ez egy másik");
+        picture2rent.setRental(rental2);
         Picture picture3rent = new Picture("picture_3","VVVVVVTTTTTT");
+        picture3rent.setRental(rental3);
+        rental1.setPictures(picture1rent);
+        rental2.setPictures(picture2rent);
+        rental2.setPictures(picture3rent);
+
+
 
         Picture picture1user = new Picture("picture_4","user picture");
+        picture1user.setUser(user1);
         Picture picture2user = new Picture("picture_5","másik user pic");
+        picture2user.setUser(user2);
+        user1.setPictures(picture1user);
+        user2.setPictures(picture2user);
+
 
         user1.setRentals(rental1);
         user1.setRentals(rental2);
@@ -111,20 +135,6 @@ public class Main {
         user1.setReservations(reservation2);
         user2.setReservations(reservation3);
 
-        user1.setPictures(picture1user);
-        user2.setPictures(picture2user);
-
-        //rental1.setFacility();
-        //rental1.setReview();
-
-        rental1.setAmenity(amenity1);
-        rental2.setAmenity(amenity2);
-        rental3.setAmenity(amenity1);
-
-        rental1.setPictures(picture1rent);
-        rental1.setPictures(picture3rent);
-        rental2.setPictures(picture2rent);
-
         rental1.addReservation(reservation1);
         rental2.addReservation(reservation2);
         rental1.addReservation(reservation3);
@@ -133,24 +143,18 @@ public class Main {
 
         Controller.em.persist(user1);
         Controller.em.persist(user2);
+
         Controller.em.persist(rental1);
         Controller.em.persist(rental2);
         Controller.em.persist(rental3);
-        Controller.em.persist(reservationPeriod1);
-        Controller.em.persist(reservationPeriod2);
-        Controller.em.persist(reservationPeriod3);
+
         Controller.em.persist(reservation1);
         Controller.em.persist(reservation2);
         Controller.em.persist(reservation3);
-        Controller.em.persist(amenity1);
-        Controller.em.persist(amenity2);
-        Controller.em.persist(picture1rent);
-        Controller.em.persist(picture2rent);
-        Controller.em.persist(picture3rent);
-        Controller.em.persist(picture1user);
-        Controller.em.persist(picture2user);
 
         Controller.em.getTransaction().commit();
-        Controller.em.getTransaction().begin();
+
+        Controller.em.close();
+        Controller.emf.close();
     }
 }

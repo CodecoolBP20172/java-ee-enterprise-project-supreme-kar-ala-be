@@ -11,7 +11,7 @@ public class Amenity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(mappedBy = "amenity")
+    @OneToOne(mappedBy = "amenity", cascade = CascadeType.ALL)
     private Rental rental;
 
     @NotNull
