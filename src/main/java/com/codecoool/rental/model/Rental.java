@@ -30,7 +30,11 @@ public class Rental {
     @Column(name = "guests")
     private int numOfGuests;
 
-    @OneToMany(mappedBy = "rental")
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    @OneToMany(mappedBy = "rental",cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
     @ElementCollection
@@ -49,7 +53,14 @@ public class Rental {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", price=" + price +
                 ", city='" + city + '\'' +
+                ", numOfGuests=" + numOfGuests +
+                ", reviews=" + reviews +
+                ", reservedPeriod=" + reservedPeriod +
+                ", picture=" + picture +
+                ", amenity=" + amenity +
+                ", facility=" + facility +
                 '}';
     }
 

@@ -21,7 +21,7 @@ public class Review {
         this.rental = rental;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Rental rental;
 
     @ManyToOne

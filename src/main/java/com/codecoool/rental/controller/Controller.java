@@ -50,6 +50,12 @@ public class Controller {
         params.put("price", rental.getPrice());
         params.put("city", rental.getCity());
         params.put("numberOfGuests", rental.getNumOfGuests());
+        params.put("reviews", rental.getReviews());
+        System.out.println(rental);
+        for(Review review : rental.getReviews()){
+            System.out.println(review.getText());
+            System.out.println(review.getRating());
+        }
         return new ModelAndView(params, "rental");
     }
 
@@ -91,6 +97,9 @@ public class Controller {
     }
 
     public static void addRentalReview(Request request) throws RecordNotFoundException{
+        if (!em.getTransaction().isActive()){
+            em.getTransaction().begin();
+        }
         String text = request.queryParams("review");
         int id = Integer.parseInt(request.queryParams("id"));
         System.out.println(id);
@@ -104,10 +113,11 @@ public class Controller {
 
         Rental rental = rentals.get(0);
         Review review = new Review(rating,text);
+        rental.addReview(review);
         review.setRental(rental);
         em.persist(review);
         em.getTransaction().commit();
-        em.getTransaction().begin();
+
 
     }
 
@@ -124,12 +134,14 @@ public class Controller {
         Rental rental = new Rental(name,description,price,location,numOfGuests);
         rental.setFacility(facility);
         facility.setRental(rental);
+        if (!em.getTransaction().isActive()){
+            em.getTransaction().begin();
+        }
 
 
         em.persist(facility);
         em.persist(rental);
         em.getTransaction().commit();
-        em.getTransaction().begin();
     }
 
 
