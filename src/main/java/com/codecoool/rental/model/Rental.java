@@ -39,8 +39,8 @@ public class Rental {
     @OneToMany(mappedBy = "rental")
     private List<Review> reviews = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> reservedPeriods = new ArrayList<>();
+    @OneToMany
+    private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "rental")
     private List<Picture> pictures = new ArrayList<>();
