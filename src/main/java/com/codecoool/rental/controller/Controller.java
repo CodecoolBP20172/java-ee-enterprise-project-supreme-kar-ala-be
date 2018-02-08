@@ -2,10 +2,7 @@ package com.codecoool.rental.controller;
 
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
-import com.codecoool.rental.model.Facility;
-import com.codecoool.rental.model.Rental;
-import com.codecoool.rental.model.Reservation;
-import com.codecoool.rental.model.Review;
+import com.codecoool.rental.model.*;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -129,16 +126,23 @@ public class Controller {
         int numOfGuests = Integer.parseInt(request.queryParams("numOfGuest"));
         int numOfBed = Integer.parseInt(request.queryParams("numOfBed"));
         int numOfRoom = Integer.parseInt(request.queryParams("numOfRoom"));
+        boolean hasWifi = false;
+        boolean hasAirConditioner = false;
+        hasWifi = request.queryParams("hasWifi") != null;
+        hasAirConditioner = request.queryParams("hasAirConditioner") != null;
+
 
         Facility facility = new Facility(numOfRoom,numOfBed);
         Rental rental = new Rental(name,description,price,location,numOfGuests);
+        Amenity amenity = new Amenity(rental,hasWifi,hasAirConditioner);
+        rental.setAmenity(amenity);
         rental.setFacility(facility);
         facility.setRental(rental);
         if (!em.getTransaction().isActive()){
             em.getTransaction().begin();
         }
 
-
+        em.persist(amenity);
         em.persist(facility);
         em.persist(rental);
         em.getTransaction().commit();

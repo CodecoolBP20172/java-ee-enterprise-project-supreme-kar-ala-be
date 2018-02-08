@@ -29,23 +29,46 @@ public class Rental {
 
     @Column(name = "guests")
     private int numOfGuests;
+    @OneToMany(mappedBy = "rental",cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
+    @ElementCollection
+    private List<String> reservedPeriod = new ArrayList<>();
+    @OneToMany(mappedBy = "rental")
+    private List<Picture> picture;
+    @OneToOne
+    private Amenity amenity;
+    @OneToOne
+    private Facility facility;
+
+    public Rental() {
+    }
+
+
+    public Rental(String name, String description, double price, String city, int numOfGuests, Facility facility) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.city = city;
+        this.numOfGuests = numOfGuests;
+        this.facility = facility;
+    }
+
+    public Rental(String name, String description, double price, String city, int numOfGuests) {
+        this.name = name;
+
+        this.description = description;
+        this.price = price;
+        this.city = city;
+        this.numOfGuests = numOfGuests;
+    }
 
     public List<Review> getReviews() {
         return reviews;
     }
 
-    @OneToMany(mappedBy = "rental",cascade = CascadeType.ALL)
-    private List<Review> reviews = new ArrayList<>();
-
-    @ElementCollection
-    private List<String> reservedPeriod = new ArrayList<>();
-
-    @OneToMany(mappedBy = "rental")
-    private List<Picture> picture;
-
-    @OneToOne
-    private Amenity amenity;
-
+    public void setAmenity(Amenity amenity) {
+        this.amenity = amenity;
+    }
 
     @Override
     public String toString() {
@@ -66,30 +89,6 @@ public class Rental {
 
     public void setFacility(Facility facility) {
         this.facility = facility;
-    }
-
-    @OneToOne
-    private Facility facility;
-
-    public Rental() {
-    }
-
-    public Rental(String name, String description, double price, String city, int numOfGuests, Facility facility) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.city = city;
-        this.numOfGuests = numOfGuests;
-        this.facility = facility;
-    }
-
-    public Rental(String name, String description, double price, String city, int numOfGuests) {
-        this.name = name;
-
-        this.description = description;
-        this.price = price;
-        this.city = city;
-        this.numOfGuests = numOfGuests;
     }
 
     public int getId() {
