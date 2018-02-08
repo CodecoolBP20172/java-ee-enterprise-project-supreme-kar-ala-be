@@ -39,6 +39,8 @@ public class Main {
             res.redirect("/");
             return "";
         });
+        get("/rental/:id/make-reservation", (Request req, Response res) ->
+            new ThymeleafTemplateEngine().render(Controller.makeReservation(req)));
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 
