@@ -82,17 +82,25 @@ public class User {
         return reservations;
     }
 
-    public void setReservations(Reservation reservation) { this.reservations.add(reservation); }
+    public void setReservations(Reservation reservation) {
+        this.reservations.add(reservation);
+    }
 
     public List<Picture> getPictures() {
         return pictures;
     }
 
-    public void setPictures(Picture picture) { this.pictures.add(picture); }
+    public void setPictures(Picture picture) {
+        this.pictures.add(picture);
+    }
 
-    public List<Rental> getRentals() { return rentals; }
+    public List<Rental> getRentals() {
+        return rentals;
+    }
 
-    public void setRentals(Rental rental) { this.rentals.add(rental); }
+    public void setRentals(Rental rental) {
+        this.rentals.add(rental);
+    }
 
     @Override
     public String toString() {

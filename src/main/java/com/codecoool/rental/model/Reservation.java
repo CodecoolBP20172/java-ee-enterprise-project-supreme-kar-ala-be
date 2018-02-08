@@ -6,7 +6,7 @@ import java.util.Date;
 @Entity
 @Table(name = "reservation")
 @NamedQueries({
-    @NamedQuery(name = "getReservationsByUserId",
+        @NamedQuery(name = "getReservationsByUserId",
                 query = "SELECT reservation FROM Reservation reservation " +
                         "WHERE reservation.user.id = :userId " +
                         "ORDER BY reservation.reservationPeriod.startDate")
@@ -20,7 +20,7 @@ public class Reservation {
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private ReservationPeriod reservationPeriod;
 
     @ManyToOne

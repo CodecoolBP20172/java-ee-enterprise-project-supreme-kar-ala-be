@@ -6,7 +6,7 @@ import java.util.*;
 @Entity
 @Table(name = "rental")
 @NamedQueries({
-        @NamedQuery(name = "getRental",  query = "SELECT rental FROM Rental rental WHERE rental.id = :id"),
+        @NamedQuery(name = "getRental", query = "SELECT rental FROM Rental rental WHERE rental.id = :id"),
         @NamedQuery(name = "getRentals", query = "SELECT rental FROM Rental rental")
 })
 public class Rental {
@@ -36,8 +36,6 @@ public class Rental {
     @OneToOne(cascade = CascadeType.ALL)
     private Facility facility;
 
-    @OneToMany
-    private List<Review> reviews = new ArrayList<>();
 
     @OneToMany
     private List<Reservation> reservations = new ArrayList<>();
@@ -47,18 +45,29 @@ public class Rental {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
+    @ElementCollection
+    private List<String> reservedPeriod = new ArrayList<>();
+
 
     public Rental() {
     }
 
-    public Rental(String name, String description, Double price, String city, Integer numOfGuests) {
+
+    public Rental(String name, String description, double price, String city, int numOfGuests) {
         this.name = name;
+
         this.description = description;
         this.price = price;
         this.city = city;
         this.numOfGuests = numOfGuests;
-        this.facility = facility;
     }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
 
     public int getId() {
         return id;
@@ -142,7 +151,6 @@ public class Rental {
     }
 
 
-
     @Override
     public String toString() {
         return "Rental{" +
@@ -155,5 +163,9 @@ public class Rental {
                 ", amenity=" + amenity +
                 ", facility=" + facility +
                 '}';
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
     }
 }

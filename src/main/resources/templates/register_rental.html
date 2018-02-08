@@ -40,6 +40,14 @@
         <p>
             <label th:for="numOfBed">Enter the number of beds</label><br/>
             <input type="number" th:name="numOfBed" th:required="required"/>
+        </p>
+        <p>
+            <label th:for="hasWifi">Wifi</label><br/>
+            <input type="checkbox" th:name="hasWifi" />
+        </p>
+        <p>
+            <label th:for="hasAirConditioner">Air conditioner</label><br/>
+            <input type="checkbox" th:name="hasAirConditioner" />
         </p><br/>
         <input type="submit" value="Register"/>
     </form>

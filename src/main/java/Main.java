@@ -22,9 +22,11 @@ public class Main {
         port(8888);
 
         get("/", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.index(req, res) ));
+                new ThymeleafTemplateEngine().render(Controller.index(req, res)));
         get("/rental/:id", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.getRental(req, res) ));
+                new ThymeleafTemplateEngine().render(Controller.getRental(req, res)));
+        get("/rental/:id/add-review", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(Controller.writeRentalReview(req, res)));
         get("/rentals", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(Controller.getRentals()));
         get("/register-rental", (Request req, Response res) ->
@@ -37,7 +39,12 @@ public class Main {
             return "";
         });
         get("/rental/:id/make-reservation", (Request req, Response res) ->
-            new ThymeleafTemplateEngine().render(Controller.makeReservation(req)));
+                new ThymeleafTemplateEngine().render(Controller.makeReservation(req)));
+        post("/add-review", (Request req, Response res) -> {
+            Controller.addRentalReview(req);
+            res.redirect("/");
+            return "";
+        });
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 
@@ -80,11 +87,11 @@ public class Main {
         User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
         User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
 
-        Rental rental1 = new Rental("Rental name","Description",22.5,"Bukarest",5);
+        Rental rental1 = new Rental("Rental name", "Description", 22.5, "Bukarest", 5);
         rental1.setUser(user1);
-        Rental rental2 = new Rental("Rental2 name","Description",22.5,"Bukarest",5);
+        Rental rental2 = new Rental("Rental2 name", "Description", 22.5, "Bukarest", 5);
         rental2.setUser(user1);
-        Rental rental3 = new Rental("Rental3 name","Description",22.5,"Bukarest",5);
+        Rental rental3 = new Rental("Rental3 name", "Description", 22.5, "Bukarest", 5);
         rental3.setUser(user2);
 
         ReservationPeriod reservationPeriod1 = new ReservationPeriodGuest(date1, date2);
@@ -107,21 +114,20 @@ public class Main {
         rental2.setFacility(facility2);
         rental3.setFacility(facility3);
 
-        Picture picture1rent = new Picture("picture_1","ez egy url");
+        Picture picture1rent = new Picture("picture_1", "ez egy url");
         picture1rent.setRental(rental1);
-        Picture picture2rent = new Picture("picture_2","ez egy másik");
+        Picture picture2rent = new Picture("picture_2", "ez egy másik");
         picture2rent.setRental(rental2);
-        Picture picture3rent = new Picture("picture_3","VVVVVVTTTTTT");
+        Picture picture3rent = new Picture("picture_3", "VVVVVVTTTTTT");
         picture3rent.setRental(rental3);
         rental1.setPictures(picture1rent);
         rental2.setPictures(picture2rent);
         rental2.setPictures(picture3rent);
 
 
-
-        Picture picture1user = new Picture("picture_4","user picture");
+        Picture picture1user = new Picture("picture_4", "user picture");
         picture1user.setUser(user1);
-        Picture picture2user = new Picture("picture_5","másik user pic");
+        Picture picture2user = new Picture("picture_5", "másik user pic");
         picture2user.setUser(user2);
         user1.setPictures(picture1user);
         user2.setPictures(picture2user);
@@ -154,7 +160,5 @@ public class Main {
 
         Controller.em.getTransaction().commit();
 
-        Controller.em.close();
-        Controller.emf.close();
     }
 }

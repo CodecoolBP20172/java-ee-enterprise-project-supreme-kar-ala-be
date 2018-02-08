@@ -34,5 +34,21 @@
             </div>
         </div>
     </div>
+    <p>
+        <a th:href="${id + '/add-review'}" href="index.html">
+            <button>Add review</button>
+        </a>
+    </p>
+    <h2>Reviews</h2>
+    <div th:each="review,iterstat : ${reviews}">
+        <hr/>
+        <p th:text="${iterstat.count} + '. review'"></p>
+        <p th:text="${review.getText()}"></p>
+        <p th:text="${review.getRating()}"></p>
+        <hr/>
+    </div>
+
+
+
 </body>
 </html>

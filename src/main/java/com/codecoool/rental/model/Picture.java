@@ -22,7 +22,13 @@ public class Picture {
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    public Picture() {}
+    public Picture() {
+    }
+
+    public Picture(String pictureName, String url) {
+        this.pictureName = pictureName;
+        this.url = url;
+    }
 
     public Rental getRental() {
         return rental;
@@ -38,11 +44,6 @@ public class Picture {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Picture(String pictureName, String url) {
-        this.pictureName = pictureName;
-        this.url = url;
     }
 
     public String getPictureName() {

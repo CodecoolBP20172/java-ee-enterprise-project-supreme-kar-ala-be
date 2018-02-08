@@ -35,12 +35,12 @@ public class Facility {
         return rooms;
     }
 
-    public int getBeds() {
-        return beds;
-    }
-
     public void setRooms(int rooms) {
         this.rooms = rooms;
+    }
+
+    public int getBeds() {
+        return beds;
     }
 
     public void setBeds(int beds) {

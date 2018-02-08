@@ -7,6 +7,7 @@ import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.User;
 import com.sun.xml.internal.bind.v2.TODO;
+import com.codecoool.rental.model.*;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -31,6 +32,14 @@ public class Controller {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "index");
     }
+    public static ModelAndView writeRentalReview(Request req, Response res) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id",req.params("id"));
+
+        return new ModelAndView(params, "add_review");
+    }
+
+
 
     public static ModelAndView getRental(Request req, Response res) throws RentalDaoException {
         HashMap<String, Object> params = new HashMap<>();
@@ -49,6 +58,12 @@ public class Controller {
         params.put("price", rental.getPrice());
         params.put("city", rental.getCity());
         params.put("numberOfGuests", rental.getNumOfGuests());
+        params.put("reviews", rental.getReviews());
+        System.out.println(rental);
+        for(Review review : rental.getReviews()){
+            System.out.println(review.getText());
+            System.out.println(review.getRating());
+        }
         return new ModelAndView(params, "rental");
     }
 
@@ -84,7 +99,33 @@ public class Controller {
         return new ModelAndView(params, "register_rental");
     }
 
-    public static void submitRegistration(Request request) {
+
+    public static void addRentalReview(Request request) throws RecordNotFoundException{
+        if (!em.getTransaction().isActive()){
+            em.getTransaction().begin();
+        }
+        String text = request.queryParams("review");
+        int id = Integer.parseInt(request.queryParams("id"));
+        System.out.println(id);
+        int rating = Integer.parseInt(request.queryParams("rating"));
+        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
+        queryResult.setParameter("id",id);
+        List<Rental> rentals = queryResult.getResultList();
+        if (rentals == null){
+            throw new RecordNotFoundException("Could not find any record with the given rental id " + id);
+        }
+
+        Rental rental = rentals.get(0);
+        Review review = new Review(rating,text);
+        rental.addReview(review);
+        review.setRental(rental);
+        em.persist(review);
+        em.getTransaction().commit();
+
+
+    }
+
+    public static void submitRegistration(Request request){
         String name = request.queryParams("title");
         String description = request.queryParams("description");
         String location = request.queryParams("location");
@@ -92,18 +133,29 @@ public class Controller {
         int numOfGuests = Integer.parseInt(request.queryParams("numOfGuest"));
         int numOfBed = Integer.parseInt(request.queryParams("numOfBed"));
         int numOfRoom = Integer.parseInt(request.queryParams("numOfRoom"));
+        boolean hasWifi = false;
+        boolean hasAirConditioner = false;
+        hasWifi = request.queryParams("hasWifi") != null;
+        hasAirConditioner = request.queryParams("hasAirConditioner") != null;
 
-
-        Rental rental = new Rental(name, description, price, location, numOfGuests);
-        Facility facility = new Facility(numOfRoom, numOfBed);
+        Facility facility = new Facility(numOfRoom,numOfBed);
+        Rental rental = new Rental(name,description,price,location,numOfGuests);
+        Amenity amenity = new Amenity(hasWifi,hasAirConditioner);
+        rental.setAmenity(amenity);
         rental.setFacility(facility);
         facility.setRental(rental);
+        if (!em.getTransaction().isActive()){
+            em.getTransaction().begin();
+        }
 
+        em.persist(amenity);
         em.persist(facility);
         em.persist(rental);
         em.getTransaction().commit();
-        em.getTransaction().begin();
     }
+
+
+
 
     public static ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
         HashMap<String, Object> params = new HashMap<>();

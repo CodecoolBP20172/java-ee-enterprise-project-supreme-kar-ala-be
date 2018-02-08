@@ -15,11 +15,8 @@ public class Review {
 
     @Column(name = "text")
     private String text;
-
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Rental rental;
-
     @ManyToOne
     private User user;
 
@@ -29,6 +26,10 @@ public class Review {
     public Review(double rating, String text) {
         this.rating = rating;
         this.text = text;
+    }
+
+    public void setRental(Rental rental) {
+        this.rental = rental;
     }
 
     public double getRating() {
