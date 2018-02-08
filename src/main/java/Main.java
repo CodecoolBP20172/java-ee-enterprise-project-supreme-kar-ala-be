@@ -125,6 +125,9 @@ public class Main {
         rental1.setPictures(picture3rent);
         rental2.setPictures(picture2rent);
 
+        rental1.addReservation(reservation1);
+        rental2.addReservation(reservation2);
+        rental1.addReservation(reservation3);
 
         Controller.em.getTransaction().begin();
 
