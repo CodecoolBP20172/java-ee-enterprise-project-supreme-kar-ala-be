@@ -1,55 +1,170 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8" />
-    <meta name="author" content="Codecool" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Register rental</title>
-</head>
-<body>
-    <h1>Register your rental</h1>
-    <form action="/register-rental" method="post">
-        <p>
-            <label th:for="title" >Enter the name of your apartment</label><br/>
-            <input type="text" th:name="title" th:required="required"/>
-        </p>
-        <p>
-            <label th:for="description">Write a description</label><br/>
-            <input type="text" th:name="description" th:required="required"/>
-        </p>
 
-        <p>
-            <label th:for="location">Enter your location</label><br/>
-            <input type="text" th:name="location" th:required="required"/>
-        </p>
+  <head>
 
-        <p>
-            <label th:for="price">Enter the price</label><br/>
-            <input type="number" th:name="price" th:required="required"/>
-        </p>
-        <p>
-            <label th:for="numOfGuest">Enter the number of guests</label><br/>
-            <input type="number" th:name="numOfGuest" th:required="required"/>
-        </p>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
 
-        <p>
-            <label th:for="numOfRoom">Enter the number of rooms</label><br/>
-            <input type="number" th:name="numOfRoom" th:required="required"/>
-        </p>
+    <title>Bare - Start Bootstrap Template</title>
 
-        <p>
-            <label th:for="numOfBed">Enter the number of beds</label><br/>
-            <input type="number" th:name="numOfBed" th:required="required"/>
-        </p>
-        <p>
-            <label th:for="hasWifi">Wifi</label><br/>
-            <input type="checkbox" th:name="hasWifi" />
-        </p>
-        <p>
-            <label th:for="hasAirConditioner">Air conditioner</label><br/>
-            <input type="checkbox" th:name="hasAirConditioner" />
-        </p><br/>
-        <input type="submit" value="Register"/>
-    </form>
-</body>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom styles for this template -->
+    <style>
+      body {
+        padding-top: 54px;
+      }
+      @media (min-width: 992px) {
+        body {
+          padding-top: 56px;
+        }
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">Start Bootstrap</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/rentals">Rentals</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register-rental">Register rental</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+      <form class="form-horizontal" role="form" method="POST" action="/register-rental">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+            <h2>Register New Rental</h2>
+            <hr/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="name">Name</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                <input type="text" th:name="name" class="form-control" id="name"
+                       placeholder="Your rental's name" th:required="required"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="description">Description</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                <textarea th:name="description" class="form-control" id="description"
+                          placeholder="It's a nice place" th:required="required"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put e-mail validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="location">Location</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-globe"></i></div>
+                <input type="text" th:name="location" class="form-control" id="location"
+                       placeholder="Location" th:required="required"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="price">Price</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-money-bill-alt"></i></div>
+                <input type="number" th:name="price" class="form-control" id="price"
+                       placeholder="Location" th:required="required" style="width: 40px;" min="1"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-success"><i class="fa fa-user-plus"></i> Register</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
 </html>
