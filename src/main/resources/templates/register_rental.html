@@ -140,7 +140,110 @@
               <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-money-bill-alt"></i></div>
                 <input type="number" th:name="price" class="form-control" id="price"
-                       placeholder="Location" th:required="required" style="width: 40px;" min="1"/>
+                       placeholder="Price" th:required="required" min="1"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="numOfGuest">Number of guests</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-money-bill-alt"></i></div>
+                <input type="number" th:name="numOfGuest" class="form-control" id="numOfGuest"
+                       placeholder="Capacity" th:required="required" min="1"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="numOfRoom">Number of rooms</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-money-bill-alt"></i></div>
+                <input type="number" th:name="numOfRoom" class="form-control" id="numOfRoom"
+                       placeholder="Enter a number" th:required="required" min="1"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="numOfBed">Number of beds</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-money-bill-alt"></i></div>
+                <input type="number" th:name="numOfBed" class="form-control" id="numOfBed"
+                       placeholder="Beeed" th:required="required" min="1"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="hasWifi">Wifi</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-money-bill-alt"></i></div>
+                <input type="checkbox" th:name="hasWifi" class="form-control" id="hasWifi"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="hasAirConditioner">Air conditioner</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-money-bill-alt"></i></div>
+                <input type="checkbox" th:name="hasAirConditioner" class="form-control" id="hasAirConditioner"/>
               </div>
             </div>
           </div>
