@@ -29,39 +29,40 @@ public class Rental {
 
     @Column(name = "guests")
     private int numOfGuests;
-
+    @Column(name = "rating")
+    private double rating;
     @OneToOne(cascade = CascadeType.ALL)
     private Amenity amenity;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Facility facility;
-
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
-
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Picture> pictures = new ArrayList<>();
-
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
     @ElementCollection
     private List<String> reservedPeriod = new ArrayList<>();
-
-
     public Rental() {
     }
-
-
     public Rental(String name, String description, double price, String city, int numOfGuests) {
         this.name = name;
-
+        this.rating = 5.0;
         this.description = description;
         this.price = price;
         this.city = city;
         this.numOfGuests = numOfGuests;
+    }
+
+    public double getRating() {
+        //TODO create methods to get the real rating from reviews
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public List<Review> getReviews() {

@@ -2611,7 +2611,7 @@ a.btn.disabled, fieldset:disabled a.btn {
 .btn-success {
     color: #fff;
     background-color: #1f7c7c;
-    border-color: #28a745;
+    border-color: #a9a9a9;
     margin-bottom: 10px;
 }
 
@@ -6626,6 +6626,10 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 .align-content-around {
     -ms-flex-line-pack: distribute !important;
     align-content: space-around !important
+}
+
+.container.rental {
+    margin-top: 56px;
 }
 
 .align-content-stretch {

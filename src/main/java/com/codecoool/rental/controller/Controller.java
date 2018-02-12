@@ -56,6 +56,7 @@ public class Controller {
         params.put("city", rental.getCity());
         params.put("numberOfGuests", rental.getNumOfGuests());
         params.put("reviews", rental.getReviews());
+        params.put("rating",rental.getRating());
         System.out.println(rental);
         for(Review review : rental.getReviews()){
             System.out.println(review.getText());

@@ -1,54 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Kar-alá-B Rental</title>
-</head>
-<body>
 
-    <div class="divTable">
-        <div class="divTableBody">
-            <div class="divTableRow">
-                <span class="divTableCell">Id</span>
-                <span class="divTableCell" th:text="${id}"></span>
-            </div>
-            <div class="divTableRow">
-                <span class="divTableCell">Name</span>
-                <span class="divTableCell" th:text="${name}"></span>
-            </div>
-            <div class="divTableRow">
-                <span class="divTableCell">Description</span>
-                <span class="divTableCell" th:text="${description}"></span>
-            </div>
-            <div class="divTableRow">
-                <span class="divTableCell">Price</span>
-                <span class="divTableCell" th:text="${price}"></span>
-            </div>
-            <div class="divTableRow">
-                <span class="divTableCell">City</span>
-                <span class="divTableCell" th:text="${city}"></span>
-            </div>
-            <div class="divTableRow">
-                <span class="divTableCell">Number of guests</span>
-                <span class="divTableCell" th:text="${numberOfGuests}"></span>
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>Shop Item - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom styles for this template -->
+    <link href="css/shop-item.css" rel="stylesheet"/>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Start Bootstrap</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rentals">Rentals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register-rental">Register rental</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container rental">
+
+      <div class="row">
+
+        <div class="col-lg-3">
+          <h1 class="my-4">Rental's page</h1>
+        </div>
+        <!-- /.col-lg-3 -->
+
+        <div class="col-lg-9">
+
+          <div class="card mt-4">
+            <img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt=""/>
+            <div class="card-body">
+              <h3 class="card-title" th:text="${name}" ></h3>
+              <h4 th:text="${price} + '$'">$24.99</h4>
+              <p class="card-text" th:text="${description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
+              <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
+                <span th:text="${rating} + ' stars'"></span>
+            </div>
+          </div>
+          <!-- /.card -->
+
+          <div class="card card-outline-secondary my-4">
+            <div class="card-header">
+              Rental Reviews
+            </div>
+            <div class="card-body" th:each="review,iterstat : ${reviews}">
+              <p th:text="${review.getText()}" >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+              <small class="text-muted">Posted by Anonymous on 3/1/17 Rating : <span th:text="${review.getRating()}"></span>  </small>
+              <hr/>
+            </div>
+          <a th:href="${id + '/add-review'}" class="btn btn-success">Leave a Review</a>
+          </div>
+          <!-- /.card -->
+
+        </div>
+        <!-- /.col-lg-9 -->
+
+      </div>
+
     </div>
-    <p>
-        <a th:href="${id + '/add-review'}" href="index.html">
-            <button>Add review</button>
-        </a>
-    </p>
-    <h2>Reviews</h2>
-    <div th:each="review,iterstat : ${reviews}">
-        <hr/>
-        <p th:text="${iterstat.count} + '. review'"></p>
-        <p th:text="${review.getText()}"></p>
-        <p th:text="${review.getRating()}"></p>
-        <hr/>
-    </div>
+    <!-- /.container -->
 
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+      </div>
+      <!-- /.container -->
+    </footer>
 
+    <!-- Bootstrap core JavaScript -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
 
-</body>
+  </body>
+
 </html>
