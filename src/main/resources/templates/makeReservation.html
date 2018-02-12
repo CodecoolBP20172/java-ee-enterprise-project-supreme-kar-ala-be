@@ -1,29 +1,153 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8" />
-    <meta name="author" content="Codecool" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Register rental</title>
-</head>
-<body>
-<h1>Reserve your rental</h1>
-<form action="/make-reservation" method="post">
-    <p>
-        <label th:for="startDate" >Enter the start date</label><br/>
-        <input type="text" th:name="startDate" th:required="required"/>
-    </p>
-    <p>
-        <label th:for="endDate">Enter the end date</label><br/>
-        <input type="text" th:name="endDate" th:required="required"/>
-    </p>
 
-    <p>
-        <label th:for="numberOfPeople">Enter the number of guests</label><br/>
-        <input type="text" th:name="numberOfPeople" th:required="required"/>
-    </p>
-    <br/>
-    <input type="submit" value="Reserve"/>
-</form>
-</body>
+  <head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>Kar-alá-BNB  -  Make your reserveration</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom styles for this template -->
+    <style>
+      body {
+        padding-top: 54px;
+      }
+      @media (min-width: 992px) {
+        body {
+          padding-top: 56px;
+        }
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">Kar-alá-BNB</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/rentals">Rentals</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register-rental">Register rental</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">???</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container form reservation">
+      <form class="form-horizontal" role="form" method="POST" action="/make-reservation">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+            <h2>Make a reservation</h2>
+            <hr/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="startDate">Enter start date</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                <input type="text" th:name="startDate" class="form-control" id="startDate"
+                       placeholder="2017-02-04" th:required="required"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="endDate">Enter the end date</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                <input type="text" th:name="endDate" class="form-control" id="endDate"
+                       placeholder="2017-01-25" th:required="required"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 field-label-responsive">
+            <label th:for="numberOfPeople">Enter the number of guests</label>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                <input type="number" th:name="numberOfPeople" class="form-control" id="numberOfPeople"
+                       placeholder="Number of guests" th:required="required"/>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-control-feedback">
+                        <span class="text-danger align-middle">
+                            <!-- Put name validation error messages here -->
+                        </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6 regButton">
+            <button type="submit" class="btn btn-success "><i class="fa fa-user-plus"></i> Reserve</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Supreme Kar-alá-b 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
 </html>
