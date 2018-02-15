@@ -124,7 +124,7 @@ public class Controller {
     }
 
     public static void submitRegistration(Request request){
-        String name = request.queryParams("title");
+        String name = request.queryParams("name");
         String description = request.queryParams("description");
         String location = request.queryParams("location");
         double price = Double.parseDouble(request.queryParams("price"));
