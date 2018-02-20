@@ -1,9 +1,28 @@
 package com.codecoool.rental.model;
 
+import org.eclipse.jetty.util.annotation.Name;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "reservation")
+@NamedQueries({
+        @NamedQuery(name = "getReservationsByUserId",
+                query = "SELECT reservation FROM Reservation reservation " +
+                        "WHERE reservation.user.id = :userId " +
+                        "ORDER BY reservation.reservationPeriod.startDate"),
+
+    @NamedQuery(name = "getNumOfReservationsForRentalInPeriod",
+                query = "SELECT reservation FROM Reservation reservation JOIN ReservationPeriod reservationPeriod " +
+                        "ON reservation.reservationPeriod.id = reservationPeriod.id " +
+                        "WHERE reservation.rental.id = 4 " +
+                        "AND (reservationPeriod.startDate BETWEEN :startDate AND :endDate)" +
+                        "OR (reservationPeriod.endDate BETWEEN :startDate AND :endDate)" +
+                        "OR (:startDate BETWEEN reservationPeriod.startDate AND reservationPeriod.endDate)" +
+                        "OR (:endDate BETWEEN reservationPeriod.startDate AND reservationPeriod.endDate)")
+})
+
 public class Reservation {
 
     @Id
@@ -13,16 +32,25 @@ public class Reservation {
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private ReservationPeriod reservationPeriod;
+
     @ManyToOne
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Rental rental;
 
-    public Reservation() {}
+    public Reservation() {
+    }
 
-    public Reservation(Integer numberOfPeople, User user, Rental rental) {
+    public Reservation(ReservationPeriod reservationPeriod, Rental rental) {
+        this.reservationPeriod = reservationPeriod;
+    }
+
+    public Reservation(Integer numberOfPeople, ReservationPeriod reservationPeriod, User user, Rental rental) {
         this.numberOfPeople = numberOfPeople;
+        this.reservationPeriod = reservationPeriod;
         this.user = user;
         this.rental = rental;
     }
@@ -53,6 +81,14 @@ public class Reservation {
 
     public void setRental(Rental rental) {
         this.rental = rental;
+    }
+
+    public ReservationPeriod getReservationPeriod() {
+        return reservationPeriod;
+    }
+
+    public void setReservationPeriod(ReservationPeriod reservationPeriod) {
+        this.reservationPeriod = reservationPeriod;
     }
 
     @Override

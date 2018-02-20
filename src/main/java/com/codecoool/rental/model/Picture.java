@@ -16,17 +16,34 @@ public class Picture {
     @Column(name = "picture_url")
     private String url;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Rental rental;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    public Picture() {}
+    public Picture() {
+    }
 
     public Picture(String pictureName, String url) {
         this.pictureName = pictureName;
         this.url = url;
+    }
+
+    public Rental getRental() {
+        return rental;
+    }
+
+    public void setRental(Rental rental) {
+        this.rental = rental;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getPictureName() {

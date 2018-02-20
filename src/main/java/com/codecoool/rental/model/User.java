@@ -3,6 +3,7 @@ package com.codecoool.rental.model;
 import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,22 +12,25 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String name;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @ColumnTransformer(read = "pgp_sym_decrypt(password, ‘karalábé‘)", write = "pgp_sym_encrypt(?, ‘karalábé‘)")
+    //@ColumnTransformer(read = "pgp_sym_decrypt(password, ‘karalábé‘)", write = "pgp_sym_encrypt(?, ‘karalábé‘)")
     private String password;
     private String contacts;
 
-    @OneToMany(mappedBy = "user")
-    private List<Reservation> reservations;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Picture> pictures;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Picture> pictures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Rental> rentals = new ArrayList<>();
 
     public User() {
     }
@@ -78,16 +82,24 @@ public class User {
         return reservations;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
+    public void setReservations(Reservation reservation) {
+        this.reservations.add(reservation);
     }
 
     public List<Picture> getPictures() {
         return pictures;
     }
 
-    public void setPictures(List<Picture> pictures) {
-        this.pictures = pictures;
+    public void setPictures(Picture picture) {
+        this.pictures.add(picture);
+    }
+
+    public List<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(Rental rental) {
+        this.rentals.add(rental);
     }
 
     @Override

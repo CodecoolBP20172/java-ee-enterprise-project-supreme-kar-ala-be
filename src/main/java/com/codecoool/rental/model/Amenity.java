@@ -11,7 +11,7 @@ public class Amenity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(mappedBy = "amenity")
+    @OneToOne(mappedBy = "amenity", cascade = CascadeType.ALL)
     private Rental rental;
 
     @NotNull
@@ -23,8 +23,7 @@ public class Amenity {
     public Amenity() {
     }
 
-    public Amenity(Rental rental, boolean hasWifi, boolean hasAirCondition) {
-        this.rental = rental;
+    public Amenity(boolean hasWifi, boolean hasAirCondition) {
         this.hasWifi = hasWifi;
         this.hasAirCondition = hasAirCondition;
     }

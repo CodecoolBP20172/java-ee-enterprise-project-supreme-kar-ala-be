@@ -16,7 +16,7 @@ public class Facility {
     @Column(name = "beds")
     private int beds;
 
-    @OneToOne(mappedBy = "facility")
+    @OneToOne(mappedBy = "facility", cascade = CascadeType.ALL)
     private Rental rental;
 
     public Facility() {
@@ -35,16 +35,24 @@ public class Facility {
         return rooms;
     }
 
-    public int getBeds() {
-        return beds;
-    }
-
     public void setRooms(int rooms) {
         this.rooms = rooms;
     }
 
+    public int getBeds() {
+        return beds;
+    }
+
     public void setBeds(int beds) {
         this.beds = beds;
+    }
+
+    public Rental getRental() {
+        return rental;
+    }
+
+    public void setRental(Rental rental) {
+        this.rental = rental;
     }
 
     @Override
