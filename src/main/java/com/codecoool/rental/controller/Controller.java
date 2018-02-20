@@ -21,6 +21,21 @@ import java.util.List;
 
 public class Controller {
 
+    private static volatile Controller instance = null;
+
+    private Controller() {}
+
+    public static Controller getInstance() {
+        if (instance == null) {
+            synchronized (Controller.class) {
+                if (instance == null) {
+                    instance = new Controller();
+                }
+            }
+        }
+        return instance;
+    }
+
     public static EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
     public static EntityManager em = emf.createEntityManager();
 
@@ -69,7 +84,6 @@ public class Controller {
     public static ModelAndView getRentals() throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
         List<Rental> rentals = em.createNamedQuery("getRentals", Rental.class).getResultList();
-
         if (rentals.size() == 0) {
             throw new RecordNotFoundException("Could not find any records");
         }

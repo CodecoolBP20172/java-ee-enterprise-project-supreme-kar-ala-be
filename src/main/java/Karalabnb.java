@@ -13,9 +13,16 @@ import java.util.Calendar;
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
-public class Main {
+public class Karalabnb {
 
     public static void main(String[] args) {
+        Karalabnb karalabnb = new Karalabnb();
+        karalabnb.start();
+        karalabnb.populateData();
+        
+    }
+
+    public void start() {
         // default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFileLocation("/public");
@@ -67,13 +74,9 @@ public class Main {
         });
 
         enableDebugScreen();
-
-
-        populateData();
     }
 
-    public static void populateData() {
-
+    public void populateData() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date date1 = Calendar.getInstance().getTime();
@@ -96,11 +99,11 @@ public class Main {
         User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
         User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
 
-        Rental rental1 = new Rental("Rental name", "Description", 22.5, "Bukarest", 5);
+        Rental rental1 = new Rental("házikó", "Description", 22.5, "Bukarest", 5);
         rental1.setUser(user1);
-        Rental rental2 = new Rental("Rental2 name", "Description", 22.5, "Bukarest", 5);
+        Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Bukarest", 5);
         rental2.setUser(user1);
-        Rental rental3 = new Rental("Rental3 name", "Description", 22.5, "Bukarest", 5);
+        Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Bukarest", 5);
         rental3.setUser(user2);
 
         ReservationPeriod reservationPeriod1 = new ReservationPeriodGuest(date1, date2);
@@ -170,7 +173,6 @@ public class Main {
         Controller.em.persist(reservation1);
         Controller.em.persist(reservation2);
         Controller.em.persist(reservation3);
-
 
         Controller.em.getTransaction().commit();
     }
