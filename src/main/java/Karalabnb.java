@@ -37,11 +37,11 @@ public class Karalabnb {
         port(8888);
 
         get("/", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(controller.index(req, res)));
+                new ThymeleafTemplateEngine().render(controller.index()));
         get("/rental/:id", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(controller.getRental(req, res)));
+                new ThymeleafTemplateEngine().render(controller.getRental(req)));
         get("/rental/:id/add-review", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(controller.writeRentalReview(req, res)));
+                new ThymeleafTemplateEngine().render(controller.writeRentalReview(req)));
         get("/rentals", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.getRentals()));
         get("/register-rental", (Request req, Response res) ->
@@ -54,7 +54,7 @@ public class Karalabnb {
             return "";
         });
         get("/rental/:id/make-reservation", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(controller.makeReservation(req)));
+                new ThymeleafTemplateEngine().render(controller.makeReservation()));
         post("/add-review", (Request req, Response res) -> {
             controller.addRentalReview(req);
             res.redirect("/");
@@ -63,7 +63,7 @@ public class Karalabnb {
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 
-            res.body(new ThymeleafTemplateEngine().render(controller.RecordNoTFound(req, res, e)));
+            res.body(new ThymeleafTemplateEngine().render(controller.RecordNoTFound(e)));
             res.status(404);
         });
 
@@ -77,7 +77,7 @@ public class Karalabnb {
         });
 
         exception(RentalDaoException.class, (e, req, res) -> {
-            res.body(new ThymeleafTemplateEngine().render(controller.ServerIssue(req, res, e)));
+            res.body(new ThymeleafTemplateEngine().render(controller.ServerIssue(e)));
             res.status(500);
         });
 
