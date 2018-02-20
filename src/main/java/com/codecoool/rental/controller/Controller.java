@@ -3,8 +3,6 @@ package com.codecoool.rental.controller;
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
 import com.codecoool.rental.model.*;
-import com.sun.xml.internal.bind.v2.TODO;
-import com.codecoool.rental.model.*;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -40,11 +38,11 @@ public class Controller {
     public static EntityManager em = emf.createEntityManager();
 
 
-    public static ModelAndView index(Request req, Response res) {
+    public ModelAndView index(Request req, Response res) {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "index");
     }
-    public static ModelAndView writeRentalReview(Request req, Response res) {
+    public ModelAndView writeRentalReview(Request req, Response res) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id",req.params("id"));
 
@@ -53,7 +51,7 @@ public class Controller {
 
 
 
-    public static ModelAndView getRental(Request req, Response res) throws RentalDaoException {
+    public ModelAndView getRental(Request req, Response res) throws RentalDaoException {
         HashMap<String, Object> params = new HashMap<>();
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental", Rental.class);
         queryResult.setParameter("id", Integer.parseInt(req.params("id")));
@@ -81,7 +79,7 @@ public class Controller {
     }
 
 
-    public static ModelAndView getRentals() throws RecordNotFoundException {
+    public ModelAndView getRentals() throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
         List<Rental> rentals = em.createNamedQuery("getRentals", Rental.class).getResultList();
         if (rentals.size() == 0) {
@@ -92,7 +90,7 @@ public class Controller {
         return new ModelAndView(params, "rentals");
     }
 
-    public static ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {
+    public ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
         List<Reservation> reservations = em.createNamedQuery("getReservationsByUserId", Reservation.class)
                 .setParameter("userId", Integer.parseInt(req.params("userId")))
@@ -106,13 +104,13 @@ public class Controller {
         return new ModelAndView(params, "userReservations");
     }
 
-    public static ModelAndView registerRental() {
+    public ModelAndView registerRental() {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "register_rental");
     }
 
 
-    public static void addRentalReview(Request request) throws RecordNotFoundException{
+    public void addRentalReview(Request request) throws RecordNotFoundException{
         if (!em.getTransaction().isActive()){
             em.getTransaction().begin();
         }
@@ -137,7 +135,7 @@ public class Controller {
 
     }
 
-    public static void submitRegistration(Request request){
+    public void submitRegistration(Request request){
         String name = request.queryParams("name");
         String description = request.queryParams("description");
         String location = request.queryParams("location");
@@ -169,24 +167,24 @@ public class Controller {
 
 
 
-    public static ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
+    public ModelAndView RecordNoTFound(Request req, Response res, Exception e) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("message", e.getMessage());
         return new ModelAndView(params, "errors/error404");
     }
 
-    public static ModelAndView ServerIssue(Request req, Response res, Exception e) {
+    public ModelAndView ServerIssue(Request req, Response res, Exception e) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("message", e.getMessage());
         return new ModelAndView(params, "errors/error500");
     }
 
-    public static ModelAndView makeReservation(Request req) {
+    public ModelAndView makeReservation(Request req) {
         HashMap<String, Object> params = new HashMap<>();
         return new ModelAndView(params, "/makeReservation");
     }
 
-    public static boolean submitReservation(Request req) {
+    public boolean submitReservation(Request req) {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
