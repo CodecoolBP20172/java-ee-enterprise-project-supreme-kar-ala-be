@@ -1,5 +1,6 @@
 package com.codecoool.rental.services;
 
+import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.ReservationPeriodHost;
@@ -12,6 +13,8 @@ import javax.persistence.TypedQuery;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 public class ReservationService {
 
@@ -35,7 +38,7 @@ public class ReservationService {
             endDate = sdf.parse(endDateInput);
         } catch (ParseException e) {
             e.printStackTrace();
-//            TODO: raise IllegalUserInput Exception
+            // TODO: raise IllegalUserInput Exception
         }
 
         TypedQuery<Reservation> reservation = em.createNamedQuery("getNumOfReservationsForRentalInPeriod", Reservation.class)
@@ -55,6 +58,20 @@ public class ReservationService {
         } else {
             return false;
         }
+    }
+
+    public HashMap getReservationsByUserId(Request req) throws RecordNotFoundException {
+        HashMap<String, Object> params = new HashMap<>();
+        List<Reservation> reservations = em.createNamedQuery("getReservationsByUserId", Reservation.class)
+                .setParameter("userId", Integer.parseInt(req.params("userId")))
+                .getResultList();
+
+        if (reservations.size() == 0) {
+            throw new RecordNotFoundException("Could not find any record with the given user id " + req.params("userId"));
+        }
+
+        params.put("reservations", reservations);
+        return params;
     }
 
     //TODO update reservation

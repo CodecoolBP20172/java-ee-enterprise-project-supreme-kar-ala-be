@@ -1,21 +1,18 @@
 package com.codecoool.rental.services;
 
-
-
 import com.codecoool.rental.RecordNotFoundException;
-import com.codecoool.rental.model.*;
+import com.codecoool.rental.model.Amenity;
+import com.codecoool.rental.model.Facility;
+import com.codecoool.rental.model.Rental;
+import com.codecoool.rental.model.Review;
 import spark.Request;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RentalService {
 
@@ -125,20 +122,6 @@ public class RentalService {
         }
 
         params.put("rentals", rentals);
-        return params;
-    }
-
-    public HashMap getReservationsByUserId(Request req) throws RecordNotFoundException {
-        HashMap<String, Object> params = new HashMap<>();
-        List<Reservation> reservations = em.createNamedQuery("getReservationsByUserId", Reservation.class)
-                .setParameter("userId", Integer.parseInt(req.params("userId")))
-                .getResultList();
-
-        if (reservations.size() == 0) {
-            throw new RecordNotFoundException("Could not find any record with the given user id " + req.params("userId"));
-        }
-
-        params.put("reservations", reservations);
         return params;
     }
 

@@ -66,7 +66,7 @@ public class Controller {
     }
 
     public ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {
-        return new ModelAndView(rentalService.getReservationsByUserId(req), "userReservations");
+        return new ModelAndView(reservationService.getReservationsByUserId(req), "userReservations");
     }
 
     public ModelAndView registerRental() {
