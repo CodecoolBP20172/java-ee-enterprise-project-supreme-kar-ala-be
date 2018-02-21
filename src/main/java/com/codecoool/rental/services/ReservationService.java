@@ -4,7 +4,6 @@ import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.ReservationPeriodHost;
-import spark.Request;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,13 +20,10 @@ public class ReservationService {
     public EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
     public EntityManager em = emf.createEntityManager();
 
-    public boolean submitReservation(Request req) {
+    public boolean submitReservation(String startDateInput, String endDateInput, String numOfPeople) {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
-        String startDateInput = req.queryParams("startDate");
-        String endDateInput = req.queryParams("endDate");
-        String numOfPeople = req.queryParams("numberOfPeople");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date startDate = Calendar.getInstance().getTime();
@@ -60,14 +56,14 @@ public class ReservationService {
         }
     }
 
-    public HashMap getReservationsByUserId(Request req) throws RecordNotFoundException {
+    public HashMap getReservationsByUserId(int id) throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
         List<Reservation> reservations = em.createNamedQuery("getReservationsByUserId", Reservation.class)
-                .setParameter("userId", Integer.parseInt(req.params("userId")))
+                .setParameter("userId", id)
                 .getResultList();
 
         if (reservations.size() == 0) {
-            throw new RecordNotFoundException("Could not find any record with the given user id " + req.params("userId"));
+            throw new RecordNotFoundException("Could not find any record with the given user id " + id);
         }
 
         params.put("reservations", reservations);

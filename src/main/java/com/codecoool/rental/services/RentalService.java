@@ -5,7 +5,6 @@ import com.codecoool.rental.model.Amenity;
 import com.codecoool.rental.model.Facility;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Review;
-import spark.Request;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,30 +21,27 @@ public class RentalService {
     // TODO
     // make reservation
 
-    public HashMap writeRentalReview(Request req) {
+    public HashMap writeRentalReview(int id) {
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("id",req.params("id"));
+        params.put("id", id);
         return params;
     }
 
-    public void submitRentalReview(Request request) throws RecordNotFoundException{
+    public void submitRentalReview(String newReview, int id, int rating) throws RecordNotFoundException {
+
         if (!em.getTransaction().isActive()){
             em.getTransaction().begin();
         }
-        String text = request.queryParams("review");
-        int id = Integer.parseInt(request.queryParams("id"));
-        System.out.println(id);
-        int rating = Integer.parseInt(request.queryParams("rating"));
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
-        queryResult.setParameter("id",id);
+        queryResult.setParameter("id", id);
         List<Rental> rentals = queryResult.getResultList();
         if (rentals == null){
             throw new RecordNotFoundException("Could not find any record with the given rental id " + id);
         }
 
         Rental rental = rentals.get(0);
-        Review review = new Review(rating,text);
+        Review review = new Review(rating, newReview);
         rental.addReview(review);
         review.setRental(rental);
         em.persist(review);
@@ -55,14 +51,14 @@ public class RentalService {
     //TODO update rentalreview
     //TODO delete rentalreview
 
-    public HashMap getRental(Request req) throws RecordNotFoundException {
+    public HashMap getRental(int id) throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental", Rental.class);
-        queryResult.setParameter("id", Integer.parseInt(req.params("id")));
+        queryResult.setParameter("id", id);
         List<Rental> rentals = queryResult.getResultList();
 
         if (rentals.size() == 0) {
-            throw new RecordNotFoundException("Could not find any record with a given id " + req.params("id"));
+            throw new RecordNotFoundException("Could not find any record with a given id " + id);
         }
 
         Rental rental = rentals.get(0);
@@ -82,18 +78,7 @@ public class RentalService {
         return params;
     }
 
-    public void registerRental(Request req){
-        String name = req.queryParams("name");
-        String description = req.queryParams("description");
-        String location = req.queryParams("location");
-        double price = Double.parseDouble(req.queryParams("price"));
-        int numOfGuests = Integer.parseInt(req.queryParams("numOfGuest"));
-        int numOfBed = Integer.parseInt(req.queryParams("numOfBed"));
-        int numOfRoom = Integer.parseInt(req.queryParams("numOfRoom"));
-        boolean hasWifi = false;
-        boolean hasAirConditioner = false;
-        hasWifi = req.queryParams("hasWifi") != null;
-        hasAirConditioner = req.queryParams("hasAirConditioner") != null;
+    public void registerRental(String name, String description, String location, double price, int numOfGuests, int numOfBed, int numOfRoom, boolean hasWifi, boolean hasAirConditioner) {
 
         Facility facility = new Facility(numOfRoom,numOfBed);
         Rental rental = new Rental(name,description,price,location,numOfGuests);
