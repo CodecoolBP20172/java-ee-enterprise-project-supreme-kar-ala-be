@@ -1,13 +1,14 @@
 package com.codecoool.rental.model;
 
-import org.hibernate.annotations.ColumnTransformer;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@NamedQueries({
+        @NamedQuery(name = "getUserById", query = "SELECT user FROM User user WHERE user.id = :id")
+})
 public class User {
 
     @Id

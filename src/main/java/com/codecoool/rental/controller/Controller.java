@@ -53,39 +53,74 @@ public class Controller {
     }
 
     public ModelAndView writeRentalReview(Request req) {
-        return new ModelAndView(rentalService.writeRentalReview(req), "add_review");
+        int rental_id = Integer.parseInt(req.params("id"));
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+        return new ModelAndView(rentalService.writeRentalReview(rental_id, user_id), "add_review");
+    }
+
+    public void submitRentalReview(Request req) throws RecordNotFoundException {
+        String review = req.queryParams("review");
+        int rental_id = Integer.parseInt(req.queryParams("rental_id"));
+        int rating = Integer.parseInt(req.queryParams("rating"));
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+        rentalService.submitRentalReview(review, rental_id, rating, user_id);
     }
 
     public ModelAndView getRental(Request req) throws RentalDaoException {
-        //TODO should we filter request here??
-        return new ModelAndView(rentalService.getRental(req), "rental");
+        int id = Integer.parseInt(req.params("id"));
+        return new ModelAndView(rentalService.getRental(id), "rental");
     }
 
-    public ModelAndView getRentals() throws RecordNotFoundException {
+    public ModelAndView getAllRentals() throws RecordNotFoundException {
         return new ModelAndView(rentalService.getAllRentals(), "rentals");
-    }
-
-    public ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {
-        return new ModelAndView(reservationService.getReservationsByUserId(req), "userReservations");
     }
 
     public ModelAndView registerRental() {
         return new ModelAndView(new HashMap<>(), "register_rental");
     }
 
-    public void addRentalReview(Request req) throws RecordNotFoundException{
-        rentalService.submitRentalReview(req);
+    public void submitRegistration(Request req){
+        String name = req.queryParams("name");
+        String description = req.queryParams("description");
+        String location = req.queryParams("location");
+        double price = Double.parseDouble(req.queryParams("price"));
+        int numOfGuests = Integer.parseInt(req.queryParams("numOfGuest"));
+        int numOfBed = Integer.parseInt(req.queryParams("numOfBed"));
+        int numOfRoom = Integer.parseInt(req.queryParams("numOfRoom"));
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+
+        boolean hasWifi = req.queryParams("hasWifi") != null;
+        boolean hasAirConditioner = req.queryParams("hasAirConditioner") != null;
+
+        rentalService.registerRental(user_id, name, description, location, price, numOfGuests, numOfBed, numOfRoom, hasWifi, hasAirConditioner);
     }
 
-    public void submitRegistration(Request req){
-        rentalService.registerRental(req);
+    public ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+        return new ModelAndView(reservationService.getReservationsByUserId(user_id), "userReservations");
     }
 
     public ModelAndView makeReservation() {
         return new ModelAndView(new HashMap<>(), "/makeReservation");
     }
 
-    public boolean submitReservation(Request req) {
-        return reservationService.submitReservation(req);
+    public boolean submitReservation(Request req) throws RecordNotFoundException {
+        String startDateInput = req.queryParams("startDate");
+        String endDateInput = req.queryParams("endDate");
+        String numOfPeople = req.queryParams("numberOfPeople");
+
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+
+        return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople, user_id);
     }
 }

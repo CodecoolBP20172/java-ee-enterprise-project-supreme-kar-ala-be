@@ -1,6 +1,6 @@
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
-import com.codecoool.rental.controller.*;
+import com.codecoool.rental.controller.Controller;
 import com.codecoool.rental.model.*;
 import spark.Request;
 import spark.Response;
@@ -43,10 +43,10 @@ public class Karalabnb {
         get("/rental/:id/add-review", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.writeRentalReview(req)));
         get("/rentals", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(controller.getRentals()));
+                new ThymeleafTemplateEngine().render(controller.getAllRentals()));
         get("/register-rental", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.registerRental()));
-        get("/user/:userId/reservations", (Request req, Response res) ->
+        get("/user/reservations", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.getReservationsByUserId(req)));
         post("/register-rental", (Request req, Response res) -> {
             controller.submitRegistration(req);
@@ -56,7 +56,7 @@ public class Karalabnb {
         get("/rental/:id/make-reservation", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.makeReservation()));
         post("/add-review", (Request req, Response res) -> {
-            controller.addRentalReview(req);
+            controller.submitRentalReview(req);
             res.redirect("/");
             return "";
         });
@@ -110,12 +110,9 @@ public class Karalabnb {
         User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
         User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
 
-        Rental rental1 = new Rental("házikó", "Description", 22.5, "Bukarest", 5);
-        rental1.setUser(user1);
-        Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Bukarest", 5);
-        rental2.setUser(user1);
-        Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Bukarest", 5);
-        rental3.setUser(user2);
+        Rental rental1 = new Rental("házikó", "Description", 22.5, "Bukarest", 5, user1);
+        Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Bukarest", 5, user1);
+        Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Bukarest", 5, user2);
 
         ReservationPeriod reservationPeriod1 = new ReservationPeriodGuest(date1, date2);
         ReservationPeriod reservationPeriod2 = new ReservationPeriodGuest(date3, date4);
