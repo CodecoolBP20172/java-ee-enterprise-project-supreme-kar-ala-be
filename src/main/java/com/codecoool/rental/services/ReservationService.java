@@ -1,0 +1,62 @@
+package com.codecoool.rental.services;
+
+import com.codecoool.rental.model.Rental;
+import com.codecoool.rental.model.Reservation;
+import com.codecoool.rental.model.ReservationPeriodHost;
+import spark.Request;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class ReservationService {
+
+    public EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
+    public EntityManager em = emf.createEntityManager();
+
+    public boolean submitReservation(Request req) {
+        if (!em.getTransaction().isActive()) {
+            em.getTransaction().begin();
+        }
+        String startDateInput = req.queryParams("startDate");
+        String endDateInput = req.queryParams("endDate");
+        String numOfPeople = req.queryParams("numberOfPeople");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date startDate = Calendar.getInstance().getTime();
+        java.util.Date endDate = Calendar.getInstance().getTime();
+
+        try {
+            startDate = sdf.parse(startDateInput);
+            endDate = sdf.parse(endDateInput);
+        } catch (ParseException e) {
+            e.printStackTrace();
+//            TODO: raise IllegalUserInput Exception
+        }
+
+        TypedQuery<Reservation> reservation = em.createNamedQuery("getNumOfReservationsForRentalInPeriod", Reservation.class)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate);
+        System.out.println(reservation.getResultList() == null);
+        System.out.println(reservation.getResultList());
+        if (reservation.getResultList().size() == 0) {
+            Rental rental = new Rental("cifraPalota", "kecske", 500.0, "picsa", 3);
+            ReservationPeriodHost host = new ReservationPeriodHost(startDate, endDate);
+            Reservation reservation6 = new Reservation();
+            reservation6.setRental(rental);
+            reservation6.setReservationPeriod(host);
+            em.persist(reservation6);
+            em.getTransaction().commit();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //TODO update reservation
+    //TODO delete reservation
+}
