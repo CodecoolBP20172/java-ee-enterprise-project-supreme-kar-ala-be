@@ -16,7 +16,7 @@ import java.util.Date;
     @NamedQuery(name = "getNumOfReservationsForRentalInPeriod",
                 query = "SELECT reservation FROM Reservation reservation JOIN ReservationPeriod reservationPeriod " +
                         "ON reservation.reservationPeriod.id = reservationPeriod.id " +
-                        "WHERE reservation.rental.id = 4 " +
+                        "WHERE reservation.rental.id = :rentalId " +
                         "AND (reservationPeriod.startDate BETWEEN :startDate AND :endDate)" +
                         "OR (reservationPeriod.endDate BETWEEN :startDate AND :endDate)" +
                         "OR (:startDate BETWEEN reservationPeriod.startDate AND reservationPeriod.endDate)" +

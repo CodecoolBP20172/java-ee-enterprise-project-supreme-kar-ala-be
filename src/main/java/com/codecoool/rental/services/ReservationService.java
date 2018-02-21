@@ -12,7 +12,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,14 +21,15 @@ public class ReservationService {
     public EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
     public EntityManager em = emf.createEntityManager();
 
-    public boolean submitReservation(String startDateInput, String endDateInput, String numOfPeople, Integer rentalId, Integer userId) throws RecordNotFoundException {
+    public boolean submitReservation(String startDateInput, String endDateInput, Integer numOfPeople, Integer rentalId, Integer userId) throws RecordNotFoundException {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
 
+        // Todo should this be here, or in controller?
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date startDate = Calendar.getInstance().getTime();
-        java.util.Date endDate = Calendar.getInstance().getTime();
+        Date startDate;
+        Date endDate;
 
         try {
             startDate = sdf.parse(startDateInput);
@@ -38,19 +39,29 @@ public class ReservationService {
             throw new RecordNotFoundException("Could not find any records");
         }
 
-        TypedQuery<Reservation> reservation = em.createNamedQuery("getNumOfReservationsForRentalInPeriod", Reservation.class)
+        TypedQuery<Reservation> reservationTypedQuery = em.createNamedQuery("getNumOfReservationsForRentalInPeriod", Reservation.class)
+                .setParameter("rentalId", rentalId)
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate);
-        System.out.println(reservation.getResultList() == null);
-        System.out.println(reservation.getResultList());
-        if (reservation.getResultList().size() == 0) {
-            User user3 = new User();
-            Rental rental = new Rental("cifraPalota", "kecske", 500.0, "picsa", 3, user3);
+        System.out.println(reservationTypedQuery.getResultList() == null);
+        System.out.println(reservationTypedQuery.getResultList());
+
+        if (reservationTypedQuery.getResultList().size() == 0) {
+            TypedQuery<User> userTypedQuery = em.createNamedQuery("getUserById", User.class).setParameter("id", userId);
+            User user = userTypedQuery.getSingleResult();
+
+            TypedQuery<Rental> rentalTypedQuery = em.createNamedQuery("getRental", Rental.class).setParameter("id", rentalId);
+            Rental rental = rentalTypedQuery.getSingleResult();
+
+            // TODO check if user is the host of the rental
             ReservationPeriodHost host = new ReservationPeriodHost(startDate, endDate);
-            Reservation reservation6 = new Reservation();
-            reservation6.setRental(rental);
-            reservation6.setReservationPeriod(host);
-            em.persist(reservation6);
+
+            Reservation reservation = new Reservation();
+            reservation.setNumberOfPeople(numOfPeople);
+            reservation.setRental(rental);
+            reservation.setUser(user);
+            reservation.setReservationPeriod(host);
+            em.persist(reservation);
             em.getTransaction().commit();
             return true;
         } else {

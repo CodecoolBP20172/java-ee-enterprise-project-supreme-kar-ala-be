@@ -81,6 +81,11 @@ public class Karalabnb {
             res.status(500);
         });
 
+        exception(NumberFormatException.class, (e, req, res) -> {
+            res.body(new ThymeleafTemplateEngine().render(controller.RecordNoTFound(e)));
+            res.status(404);
+        });
+
         enableDebugScreen();
     }
 

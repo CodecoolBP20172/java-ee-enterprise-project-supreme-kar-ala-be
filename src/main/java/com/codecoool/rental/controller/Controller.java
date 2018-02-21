@@ -110,7 +110,6 @@ public class Controller {
 
     public ModelAndView makeReservation(Request req) {
         Integer rentalId = Integer.parseInt(req.params(":id"));
-
         HashMap<String, Integer> params = new HashMap<>();
         params.put("rentalId", rentalId);
         System.out.println(params);
@@ -124,7 +123,7 @@ public class Controller {
         System.out.println(rentalId);
         String startDateInput = req.queryParams("startDate");
         String endDateInput = req.queryParams("endDate");
-        String numOfPeople = req.queryParams("numberOfPeople");
+        Integer numOfPeople = Integer.parseInt(req.queryParams("numberOfPeople"));
         return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople, rentalId, userId);
     }
 }
