@@ -32,6 +32,32 @@ public class RentalService {
         return params;
     }
 
+    public void submitRentalReview(Request request) throws RecordNotFoundException{
+        if (!em.getTransaction().isActive()){
+            em.getTransaction().begin();
+        }
+        String text = request.queryParams("review");
+        int id = Integer.parseInt(request.queryParams("id"));
+        System.out.println(id);
+        int rating = Integer.parseInt(request.queryParams("rating"));
+        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
+        queryResult.setParameter("id",id);
+        List<Rental> rentals = queryResult.getResultList();
+        if (rentals == null){
+            throw new RecordNotFoundException("Could not find any record with the given rental id " + id);
+        }
+
+        Rental rental = rentals.get(0);
+        Review review = new Review(rating,text);
+        rental.addReview(review);
+        review.setRental(rental);
+        em.persist(review);
+        em.getTransaction().commit();
+    }
+
+    //TODO update rentalreview
+    //TODO delete rentalreview
+
     public HashMap getRental(Request req) throws RecordNotFoundException {
         HashMap<String, Object> params = new HashMap<>();
         TypedQuery<Rental> queryResult = em.createNamedQuery("getRental", Rental.class);
@@ -59,55 +85,7 @@ public class RentalService {
         return params;
     }
 
-    public HashMap getAllRentals() throws RecordNotFoundException {
-        HashMap<String, Object> params = new HashMap<>();
-        List<Rental> rentals = em.createNamedQuery("getRentals", Rental.class).getResultList();
-        if (rentals.size() == 0) {
-            throw new RecordNotFoundException("Could not find any records");
-        }
-
-        params.put("rentals", rentals);
-        return params;
-    }
-
-    public HashMap getReservationsByUserId(Request req) throws RecordNotFoundException {
-        HashMap<String, Object> params = new HashMap<>();
-        List<Reservation> reservations = em.createNamedQuery("getReservationsByUserId", Reservation.class)
-                .setParameter("userId", Integer.parseInt(req.params("userId")))
-                .getResultList();
-
-        if (reservations.size() == 0) {
-            throw new RecordNotFoundException("Could not find any record with the given user id " + req.params("userId"));
-        }
-
-        params.put("reservations", reservations);
-        return params;
-    }
-
-    public void addRentalReview(Request request) throws RecordNotFoundException{
-        if (!em.getTransaction().isActive()){
-            em.getTransaction().begin();
-        }
-        String text = request.queryParams("review");
-        int id = Integer.parseInt(request.queryParams("id"));
-        System.out.println(id);
-        int rating = Integer.parseInt(request.queryParams("rating"));
-        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
-        queryResult.setParameter("id",id);
-        List<Rental> rentals = queryResult.getResultList();
-        if (rentals == null){
-            throw new RecordNotFoundException("Could not find any record with the given rental id " + id);
-        }
-
-        Rental rental = rentals.get(0);
-        Review review = new Review(rating,text);
-        rental.addReview(review);
-        review.setRental(rental);
-        em.persist(review);
-        em.getTransaction().commit();
-    }
-
-    public void submitRegistration(Request req){
+    public void registerRental(Request req){
         String name = req.queryParams("name");
         String description = req.queryParams("description");
         String location = req.queryParams("location");
@@ -136,48 +114,34 @@ public class RentalService {
         em.getTransaction().commit();
     }
 
-    public boolean submitReservation(Request req) {
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
-        String startDateInput = req.queryParams("startDate");
-        String endDateInput = req.queryParams("endDate");
-        String numOfPeople = req.queryParams("numberOfPeople");
+    //TODO update rental
+    //TODO delete rental
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date startDate = Calendar.getInstance().getTime();
-        java.util.Date endDate = Calendar.getInstance().getTime();
-
-        try {
-            startDate = sdf.parse(startDateInput);
-            endDate = sdf.parse(endDateInput);
-        } catch (ParseException e) {
-            e.printStackTrace();
-//            TODO: raise IllegalUserInput Exception
+    public HashMap getAllRentals() throws RecordNotFoundException {
+        HashMap<String, Object> params = new HashMap<>();
+        List<Rental> rentals = em.createNamedQuery("getRentals", Rental.class).getResultList();
+        if (rentals.size() == 0) {
+            throw new RecordNotFoundException("Could not find any records");
         }
 
-        TypedQuery<Reservation> reservation = em.createNamedQuery("getNumOfReservationsForRentalInPeriod", Reservation.class)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate);
-        System.out.println(reservation.getResultList() == null);
-        System.out.println(reservation.getResultList());
-        if (reservation.getResultList().size() == 0) {
-            Rental rental = new Rental("cifraPalota", "kecske", 500.0, "picsa", 3);
-            ReservationPeriodHost host = new ReservationPeriodHost(startDate, endDate);
-            Reservation reservation6 = new Reservation();
-            reservation6.setRental(rental);
-            reservation6.setReservationPeriod(host);
-            em.persist(reservation6);
-            em.getTransaction().commit();
-            return true;
-        } else {
-            return false;
-        }
+        params.put("rentals", rentals);
+        return params;
     }
 
+    public HashMap getReservationsByUserId(Request req) throws RecordNotFoundException {
+        HashMap<String, Object> params = new HashMap<>();
+        List<Reservation> reservations = em.createNamedQuery("getReservationsByUserId", Reservation.class)
+                .setParameter("userId", Integer.parseInt(req.params("userId")))
+                .getResultList();
+
+        if (reservations.size() == 0) {
+            throw new RecordNotFoundException("Could not find any record with the given user id " + req.params("userId"));
+        }
+
+        params.put("reservations", reservations);
+        return params;
+    }
 
     // TODO
     // filter
-    // TODO
-    // CRUD
 }

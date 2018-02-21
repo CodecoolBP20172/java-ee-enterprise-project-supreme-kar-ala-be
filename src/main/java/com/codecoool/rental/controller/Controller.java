@@ -2,30 +2,27 @@ package com.codecoool.rental.controller;
 
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
-import com.codecoool.rental.model.*;
 import com.codecoool.rental.services.RentalService;
+import com.codecoool.rental.services.ReservationService;
 import com.codecoool.rental.services.UserService;
 import spark.ModelAndView;
 import spark.Request;
-import spark.Response;
 
-import javax.persistence.TypedQuery;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 
 public class Controller {
 
     RentalService rentalService;
     UserService userService;
+    ReservationService reservationService;
+
 
     private static volatile Controller instance = null;
 
     private Controller() {
         rentalService = new RentalService();
         userService = new UserService();
+        reservationService = new ReservationService();
     }
 
     public static Controller getInstance() {
@@ -77,11 +74,11 @@ public class Controller {
     }
 
     public void addRentalReview(Request req) throws RecordNotFoundException{
-        rentalService.addRentalReview(req);
+        rentalService.submitRentalReview(req);
     }
 
     public void submitRegistration(Request req){
-        rentalService.submitRegistration(req);
+        rentalService.registerRental(req);
     }
 
     public ModelAndView makeReservation() {
@@ -89,6 +86,6 @@ public class Controller {
     }
 
     public boolean submitReservation(Request req) {
-        return rentalService.submitReservation(req);
+        return reservationService.submitReservation(req);
     }
 }
