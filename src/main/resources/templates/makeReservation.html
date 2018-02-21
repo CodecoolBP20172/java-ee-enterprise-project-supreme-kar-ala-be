@@ -35,7 +35,7 @@
 
     <!-- Page Content -->
     <div class="container form reservation">
-      <form class="form-horizontal" role="form" method="POST" action="/make-reservation">
+      <form class="form-horizontal" role="form" method="POST" th:action="${'/rental/' + rentalId + '/submit-reservation'}">
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6">

@@ -54,7 +54,7 @@ public class Karalabnb {
             return "";
         });
         get("/rental/:id/make-reservation", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(controller.makeReservation()));
+                new ThymeleafTemplateEngine().render(controller.makeReservation(req)));
         post("/add-review", (Request req, Response res) -> {
             controller.submitRentalReview(req);
             res.redirect("/");
@@ -67,7 +67,7 @@ public class Karalabnb {
             res.status(404);
         });
 
-        post("/make-reservation", (Request req, Response res) -> {
+        post("/rental/:id/submit-reservation", (Request req, Response res) -> {
             if (controller.submitReservation(req)) {
                 res.redirect("/");
             } else {
