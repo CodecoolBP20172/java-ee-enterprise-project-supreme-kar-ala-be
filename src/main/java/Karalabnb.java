@@ -1,11 +1,14 @@
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.RentalDaoException;
-import com.codecoool.rental.controller.Controller;
+import com.codecoool.rental.controller.*;
 import com.codecoool.rental.model.*;
 import spark.Request;
 import spark.Response;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,47 +16,59 @@ import java.util.Calendar;
 import static spark.Spark.*;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
-public class Main {
+public class Karalabnb {
+
+    Controller controller;
+
+    public Karalabnb() {
+        this.controller = Controller.getInstance();
+    }
 
     public static void main(String[] args) {
+        Karalabnb karalabnb = new Karalabnb();
+        karalabnb.start();
+        karalabnb.populateData();
+    }
+
+    public void start() {
         // default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFileLocation("/public");
         port(8888);
 
         get("/", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.index(req, res)));
+                new ThymeleafTemplateEngine().render(controller.index()));
         get("/rental/:id", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.getRental(req, res)));
+                new ThymeleafTemplateEngine().render(controller.getRental(req)));
         get("/rental/:id/add-review", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.writeRentalReview(req, res)));
+                new ThymeleafTemplateEngine().render(controller.writeRentalReview(req)));
         get("/rentals", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.getRentals()));
+                new ThymeleafTemplateEngine().render(controller.getRentals()));
         get("/register-rental", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.registerRental()));
+                new ThymeleafTemplateEngine().render(controller.registerRental()));
         get("/user/:userId/reservations", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.getReservationsByUserId(req)));
+                new ThymeleafTemplateEngine().render(controller.getReservationsByUserId(req)));
         post("/register-rental", (Request req, Response res) -> {
-            Controller.submitRegistration(req);
+            controller.submitRegistration(req);
             res.redirect("/");
             return "";
         });
         get("/rental/:id/make-reservation", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(Controller.makeReservation(req)));
+                new ThymeleafTemplateEngine().render(controller.makeReservation()));
         post("/add-review", (Request req, Response res) -> {
-            Controller.addRentalReview(req);
+            controller.addRentalReview(req);
             res.redirect("/");
             return "";
         });
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 
-            res.body(new ThymeleafTemplateEngine().render(Controller.RecordNoTFound(req, res, e)));
+            res.body(new ThymeleafTemplateEngine().render(controller.RecordNoTFound(e)));
             res.status(404);
         });
 
         post("/make-reservation", (Request req, Response res) -> {
-            if (Controller.submitReservation(req)) {
+            if (controller.submitReservation(req)) {
                 res.redirect("/");
             } else {
                 res.redirect("/errors/error404");
@@ -62,18 +77,17 @@ public class Main {
         });
 
         exception(RentalDaoException.class, (e, req, res) -> {
-            res.body(new ThymeleafTemplateEngine().render(Controller.ServerIssue(req, res, e)));
+            res.body(new ThymeleafTemplateEngine().render(controller.ServerIssue(e)));
             res.status(500);
         });
 
         enableDebugScreen();
-
-
-        populateData();
     }
 
-    public static void populateData() {
+    public void populateData() {
 
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
+        EntityManager eman = emf.createEntityManager();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date date1 = Calendar.getInstance().getTime();
@@ -96,11 +110,11 @@ public class Main {
         User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
         User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
 
-        Rental rental1 = new Rental("Rental name", "Description", 22.5, "Bukarest", 5);
+        Rental rental1 = new Rental("házikó", "Description", 22.5, "Bukarest", 5);
         rental1.setUser(user1);
-        Rental rental2 = new Rental("Rental2 name", "Description", 22.5, "Bukarest", 5);
+        Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Bukarest", 5);
         rental2.setUser(user1);
-        Rental rental3 = new Rental("Rental3 name", "Description", 22.5, "Bukarest", 5);
+        Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Bukarest", 5);
         rental3.setUser(user2);
 
         ReservationPeriod reservationPeriod1 = new ReservationPeriodGuest(date1, date2);
@@ -154,24 +168,23 @@ public class Main {
         rental2.addReservation(reservation2);
         rental1.addReservation(reservation3);
 
-        Controller.em.getTransaction().begin();
+        eman.getTransaction().begin();
 
-        Controller.em.persist(user1);
-        Controller.em.persist(user2);
+        eman.persist(user1);
+        eman.persist(user2);
 
-        Controller.em.persist(rental1);
-        Controller.em.persist(rental2);
-        Controller.em.persist(rental3);
+        eman.persist(rental1);
+        eman.persist(rental2);
+        eman.persist(rental3);
 
-        Controller.em.persist(reservationPeriod1);
-        Controller.em.persist(reservationPeriod2);
-        Controller.em.persist(reservationPeriod3);
+        eman.persist(reservationPeriod1);
+        eman.persist(reservationPeriod2);
+        eman.persist(reservationPeriod3);
 
-        Controller.em.persist(reservation1);
-        Controller.em.persist(reservation2);
-        Controller.em.persist(reservation3);
+        eman.persist(reservation1);
+        eman.persist(reservation2);
+        eman.persist(reservation3);
 
-
-        Controller.em.getTransaction().commit();
+        eman.getTransaction().commit();
     }
 }
