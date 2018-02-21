@@ -23,9 +23,10 @@ public class Review {
     public Review() {
     }
 
-    public Review(double rating, String text) {
+    public Review(double rating, String text, User user) {
         this.rating = rating;
         this.text = text;
+        this.user = user;
     }
 
     public void setRental(Rental rental) {

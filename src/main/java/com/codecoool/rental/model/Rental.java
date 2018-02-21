@@ -1,7 +1,8 @@
 package com.codecoool.rental.model;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "rental")
@@ -47,7 +48,8 @@ public class Rental {
     private List<String> reservedPeriod = new ArrayList<>();
     public Rental() {
     }
-    public Rental(String name, String description, double price, String city, int numOfGuests) {
+
+    public Rental(String name, String description, double price, String city, int numOfGuests, User user) {
         this.name = name;
         this.rating = 5.0;
         this.description = description;

@@ -53,15 +53,21 @@ public class Controller {
     }
 
     public ModelAndView writeRentalReview(Request req) {
-        int id = Integer.parseInt(req.params("id"));
-        return new ModelAndView(rentalService.writeRentalReview(id), "add_review");
+        int rental_id = Integer.parseInt(req.params("id"));
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+        return new ModelAndView(rentalService.writeRentalReview(rental_id, user_id), "add_review");
     }
 
-    public void addRentalReview(Request req) throws RecordNotFoundException {
+    public void submitRentalReview(Request req) throws RecordNotFoundException {
         String review = req.queryParams("review");
-        int id = Integer.parseInt(req.queryParams("id"));
+        int rental_id = Integer.parseInt(req.queryParams("rental_id"));
         int rating = Integer.parseInt(req.queryParams("rating"));
-        rentalService.submitRentalReview(review, id, rating);
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+        rentalService.submitRentalReview(review, rental_id, rating, user_id);
     }
 
     public ModelAndView getRental(Request req) throws RentalDaoException {
@@ -69,7 +75,7 @@ public class Controller {
         return new ModelAndView(rentalService.getRental(id), "rental");
     }
 
-    public ModelAndView getRentals() throws RecordNotFoundException {
+    public ModelAndView getAllRentals() throws RecordNotFoundException {
         return new ModelAndView(rentalService.getAllRentals(), "rentals");
     }
 
@@ -85,26 +91,36 @@ public class Controller {
         int numOfGuests = Integer.parseInt(req.queryParams("numOfGuest"));
         int numOfBed = Integer.parseInt(req.queryParams("numOfBed"));
         int numOfRoom = Integer.parseInt(req.queryParams("numOfRoom"));
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
 
         boolean hasWifi = req.queryParams("hasWifi") != null;
         boolean hasAirConditioner = req.queryParams("hasAirConditioner") != null;
 
-        rentalService.registerRental(name, description, location, price, numOfGuests, numOfBed, numOfRoom, hasWifi, hasAirConditioner);
+        rentalService.registerRental(user_id, name, description, location, price, numOfGuests, numOfBed, numOfRoom, hasWifi, hasAirConditioner);
     }
 
     public ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {
-        int id = Integer.parseInt(req.params("userId"));
-        return new ModelAndView(reservationService.getReservationsByUserId(id), "userReservations");
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+        return new ModelAndView(reservationService.getReservationsByUserId(user_id), "userReservations");
     }
 
     public ModelAndView makeReservation() {
         return new ModelAndView(new HashMap<>(), "/makeReservation");
     }
 
-    public boolean submitReservation(Request req) {
+    public boolean submitReservation(Request req) throws RecordNotFoundException {
         String startDateInput = req.queryParams("startDate");
         String endDateInput = req.queryParams("endDate");
         String numOfPeople = req.queryParams("numberOfPeople");
-        return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople);
+
+        //TODO session!!!
+        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
+        int user_id = 1;
+
+        return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople, user_id);
     }
 }
