@@ -38,6 +38,8 @@ public class Karalabnb {
 
         get("/", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.index()));
+        get("/takenReservation", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(controller.takenReservation()));
         get("/rental/:id", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.getRental(req)));
         get("/rental/:id/add-review", (Request req, Response res) ->
@@ -78,7 +80,7 @@ public class Karalabnb {
             if (controller.submitReservation(req)) {
                 res.redirect("/");
             } else {
-                res.redirect("/errors/error404");
+                res.redirect("/takenReservation");
             }
             return "";
         });
@@ -146,11 +148,11 @@ public class Karalabnb {
         rental2.setFacility(facility2);
         rental3.setFacility(facility3);
 
-        Picture picture1rent = new Picture("picture_1", "http://placehold.it/900x400");
+        Picture picture1rent = new Picture("picture_1", "http://www.luxe-apartmentsrentals.com/images/stories/italy/luxit24/proprieta_gallery_5699.jpg");
         picture1rent.setRental(rental1);
-        Picture picture2rent = new Picture("picture_2", "http://placehold.it/700x400");
+        Picture picture2rent = new Picture("picture_2", "https://www.thepinnaclelist.com/wp-content/uploads/2016/08/01-OVD-919-Luxury-Villa-Ocean-View-Dr-Bantry-Bay-Cape-Town-South-Africa.jpg");
         picture2rent.setRental(rental2);
-        Picture picture3rent = new Picture("picture_3", "http://placehold.it/900x400");
+        Picture picture3rent = new Picture("picture_3", "https://www.thepinnaclelist.com/wp-content/uploads/2016/08/000a-Villa-Bond-Luxury-Residence-8-First-Crescent-Camps-Bay-South-Africa.jpg");
         picture3rent.setRental(rental3);
         rental1.addPictures(picture1rent);
         rental2.addPictures(picture2rent);

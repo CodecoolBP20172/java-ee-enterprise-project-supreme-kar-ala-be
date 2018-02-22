@@ -43,6 +43,9 @@ public class Controller {
     public ModelAndView index() {
         return new ModelAndView(new HashMap<>(), "index");
     }
+    public ModelAndView takenReservation() {
+        return new ModelAndView(new HashMap<>(), "takenReservation");
+    }
 
     public ModelAndView RecordNoTFound(Exception e) {
         HashMap<String, Object> params = new HashMap<>();
