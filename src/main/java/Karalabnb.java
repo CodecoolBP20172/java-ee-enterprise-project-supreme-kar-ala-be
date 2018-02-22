@@ -146,11 +146,11 @@ public class Karalabnb {
         rental2.setFacility(facility2);
         rental3.setFacility(facility3);
 
-        Picture picture1rent = new Picture("picture_1", "ez egy url");
+        Picture picture1rent = new Picture("picture_1", "http://placehold.it/900x400");
         picture1rent.setRental(rental1);
-        Picture picture2rent = new Picture("picture_2", "ez egy másik");
+        Picture picture2rent = new Picture("picture_2", "http://placehold.it/700x400");
         picture2rent.setRental(rental2);
-        Picture picture3rent = new Picture("picture_3", "VVVVVVTTTTTT");
+        Picture picture3rent = new Picture("picture_3", "http://placehold.it/900x400");
         picture3rent.setRental(rental3);
         rental1.addPictures(picture1rent);
         rental2.addPictures(picture2rent);
