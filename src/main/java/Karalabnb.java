@@ -152,9 +152,9 @@ public class Karalabnb {
         picture2rent.setRental(rental2);
         Picture picture3rent = new Picture("picture_3", "VVVVVVTTTTTT");
         picture3rent.setRental(rental3);
-        rental1.setPictures(picture1rent);
-        rental2.setPictures(picture2rent);
-        rental2.setPictures(picture3rent);
+        rental1.addPictures(picture1rent);
+        rental2.addPictures(picture2rent);
+        rental2.addPictures(picture3rent);
 
 
         Picture picture1user = new Picture("picture_4", "user picture");
