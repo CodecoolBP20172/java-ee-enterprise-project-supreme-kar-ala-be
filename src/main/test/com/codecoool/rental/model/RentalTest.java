@@ -6,6 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -15,14 +19,19 @@ public class RentalTest {
     @Mock
     private User userMock;
 
+    @Mock
+    private Review reviewMock;
+
+    @Mock
+    private Reservation reservationMock;
+
     @InjectMocks
     private Rental rentalTest;
 
     @Test
     public void getRatingTest() {
-        Rental rentalTest = new Rental("házikó", "Description", 22.5, "Bukarest", 5, userMock);
+        rentalTest.setRating(5.0);
         assertEquals(5.0, rentalTest.getRating());
-
     }
 
     @Test
@@ -33,29 +42,14 @@ public class RentalTest {
 
     @Test
     public void getReviewsTest() {
-    }
-
-    @Test
-    public void getNameTest() {
-    }
-
-    @Test
-    public void getCityTest() {
-    }
-
-    @Test
-    public void getUserTest() {
-    }
-
-    @Test
-    public void getReservationsTest() {
+        List<Review> reviewMocks = new ArrayList<>(Arrays.asList(reviewMock));
+        rentalTest.addReview(reviewMock);
+        assertEquals(reviewMocks, rentalTest.getReviews());
     }
 
     @Test
     public void addReservationTest() {
-    }
-
-    @Test
-    public void addReviewTest() {
+        rentalTest.addReservation(reservationMock);
+        assertEquals(reservationMock, rentalTest.getReservations().get(0));
     }
 }
