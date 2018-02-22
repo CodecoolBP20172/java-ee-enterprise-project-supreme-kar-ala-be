@@ -56,7 +56,7 @@ public class Karalabnb {
             return "";
         });
         get("/rental/:id/make-reservation", (Request req, Response res) ->
-                new ThymeleafTemplateEngine().render(controller.makeReservation()));
+                new ThymeleafTemplateEngine().render(controller.makeReservation(req)));
         post("/add-review", (Request req, Response res) -> {
             controller.submitRentalReview(req);
             res.redirect("/");
@@ -74,8 +74,7 @@ public class Karalabnb {
             res.status(404);
         });
 
-
-        post("/make-reservation", (Request req, Response res) -> {
+        post("/rental/:id/submit-reservation", (Request req, Response res) -> {
             if (controller.submitReservation(req)) {
                 res.redirect("/");
             } else {
@@ -87,6 +86,11 @@ public class Karalabnb {
         exception(RentalDaoException.class, (e, req, res) -> {
             res.body(new ThymeleafTemplateEngine().render(controller.ServerIssue(e)));
             res.status(500);
+        });
+
+        exception(NumberFormatException.class, (e, req, res) -> {
+            res.body(new ThymeleafTemplateEngine().render(controller.RecordNoTFound(e)));
+            res.status(404);
         });
 
         enableDebugScreen();

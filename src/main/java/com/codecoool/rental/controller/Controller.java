@@ -112,20 +112,23 @@ public class Controller {
         return new ModelAndView(reservationService.getReservationsByUserId(user_id), "userReservations");
     }
 
-    public ModelAndView makeReservation() {
-        return new ModelAndView(new HashMap<>(), "/makeReservation");
+    public ModelAndView makeReservation(Request req) {
+        Integer rentalId = Integer.parseInt(req.params(":id"));
+        HashMap<String, Integer> params = new HashMap<>();
+        params.put("rentalId", rentalId);
+        System.out.println(params);
+        return new ModelAndView(params, "/makeReservation");
     }
 
     public boolean submitReservation(Request req) throws RecordNotFoundException {
+        // Test user
+        Integer userId = 1;
+        Integer rentalId = Integer.parseInt(req.params("id"));
+        System.out.println(rentalId);
         String startDateInput = req.queryParams("startDate");
         String endDateInput = req.queryParams("endDate");
-        String numOfPeople = req.queryParams("numberOfPeople");
-
-        //TODO session!!!
-        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
-        int user_id = 1;
-
-        return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople, user_id);
+        Integer numOfPeople = Integer.parseInt(req.queryParams("numberOfPeople"));
+        return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople, rentalId, userId);
     }
 
     public ModelAndView getUpdateRentalReview(Request req) {

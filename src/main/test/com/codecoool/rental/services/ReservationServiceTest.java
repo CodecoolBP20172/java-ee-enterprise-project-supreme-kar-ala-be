@@ -44,7 +44,7 @@ public class ReservationServiceTest {
         EntityManager em = emf.createEntityManager();
         this.reservationServiceTest = new ReservationService(em);
 
-        assertFalse(reservationServiceTest.submitReservation("2017-07-21", "2017-07-28", "3", 1));
+        assertFalse(reservationServiceTest.submitReservation("2017-07-21", "2017-07-28", 3, 1, 1));
 
         em.close();
         emf.close();
