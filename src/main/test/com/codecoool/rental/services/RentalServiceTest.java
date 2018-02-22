@@ -9,12 +9,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import javax.naming.ldap.HasControls;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RentalServiceTest {
 
@@ -41,7 +47,21 @@ public class RentalServiceTest {
     }
 
     @Test
-    public void getRental() {
+    public void getRentalTest() throws RecordNotFoundException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
+        EntityManager em = emf.createEntityManager();
+        this.rentalServiceTest = new RentalService(em);
+
+        assertEquals(1, rentalServiceTest.getRental(1).get("id"));
+    }
+
+    @Test
+    public void getRentalThrowsRecordNotFoundExceptionTest() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
+        EntityManager em = emf.createEntityManager();
+        this.rentalServiceTest = new RentalService(em);
+
+        assertThrows(RecordNotFoundException.class, () -> rentalServiceTest.getRental(1000));
     }
 
     @Test
