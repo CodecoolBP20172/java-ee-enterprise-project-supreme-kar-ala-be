@@ -17,10 +17,10 @@ import java.util.Date;
                 query = "SELECT reservation FROM Reservation reservation JOIN ReservationPeriod reservationPeriod " +
                         "ON reservation.reservationPeriod.id = reservationPeriod.id " +
                         "WHERE reservation.rental.id = :rentalId " +
-                        "AND (reservationPeriod.startDate BETWEEN :startDate AND :endDate)" +
+                        "AND ((reservationPeriod.startDate BETWEEN :startDate AND :endDate)" +
                         "OR (reservationPeriod.endDate BETWEEN :startDate AND :endDate)" +
                         "OR (:startDate BETWEEN reservationPeriod.startDate AND reservationPeriod.endDate)" +
-                        "OR (:endDate BETWEEN reservationPeriod.startDate AND reservationPeriod.endDate)")
+                        "OR (:endDate BETWEEN reservationPeriod.startDate AND reservationPeriod.endDate))")
 })
 
 public class Reservation {

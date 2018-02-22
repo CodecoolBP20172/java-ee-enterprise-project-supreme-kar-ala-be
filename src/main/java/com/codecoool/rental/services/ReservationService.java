@@ -29,7 +29,6 @@ public class ReservationService {
             em.getTransaction().begin();
         }
 
-        // Todo should this be here, or in controller?
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
         Date endDate;
