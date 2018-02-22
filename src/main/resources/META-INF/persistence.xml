@@ -17,8 +17,27 @@
 
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/karalabnb"/>
-            <property name="javax.persistence.jdbc.user" value="richard"/>
-            <property name="javax.persistence.jdbc.password" value="Haribo25+"/>
+            <property name="javax.persistence.jdbc.user" value=""/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <!--<property name="javax.persistence.sql-load-script-source" value="insert.sql"/>-->
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="karalabeTest" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>Karalabnb</class>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect"/>
+            <property name="hibernate.hbm2dll.auto" value="create"/>
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>
+            <property name="javax.persistence.schema-generation.scripts.action" value="create"/>
+            <property name="javax.persistence.schema-generation.scripts.create-target" value="src/main/resources/META-INF/create-test-schema.ddl"/>
+          <!--  <property name="javax.persistence.schema-generation.scripts.drop-target" value="src/main/resources/META-INF/drop-test-schema.ddl"/>-->
+
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/karalabetest"/>
+            <property name="javax.persistence.jdbc.user" value=""/>
+            <property name="javax.persistence.jdbc.password" value=""/>
             <!--<property name="javax.persistence.sql-load-script-source" value="insert.sql"/>-->
         </properties>
     </persistence-unit>
