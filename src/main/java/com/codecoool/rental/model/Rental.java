@@ -30,22 +30,31 @@ public class Rental {
 
     @Column(name = "guests")
     private int numOfGuests;
+
     @Column(name = "rating")
     private double rating;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Amenity amenity;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Facility facility;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
+
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Picture> pictures = new ArrayList<>();
+
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
+
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
+
     @ElementCollection
     private List<String> reservedPeriod = new ArrayList<>();
+
     public Rental() {
     }
 
@@ -130,6 +139,10 @@ public class Rental {
 
     public User getUser() {
         return user;
+    }
+
+    public int getOwnerId() {
+        return user.getId();
     }
 
     public void setUser(User user) {

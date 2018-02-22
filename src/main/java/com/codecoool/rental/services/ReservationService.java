@@ -18,8 +18,11 @@ import java.util.List;
 
 public class ReservationService {
 
-    public EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
-    public EntityManager em = emf.createEntityManager();
+    public EntityManager em;
+
+    public ReservationService(EntityManager em) {
+        this.em = em;
+    }
 
     public boolean submitReservation(String startDateInput, String endDateInput, Integer numOfPeople, Integer rentalId, Integer userId) throws RecordNotFoundException {
         if (!em.getTransaction().isActive()) {

@@ -12,38 +12,37 @@ import java.util.List;
 
 public class RentalService {
 
-    public EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
-    public EntityManager em = emf.createEntityManager();
+    public EntityManager em;
+
+    public RentalService(EntityManager em) {
+        this.em = em;
+    }
 
     // TODO
     // make reservation
 
     public HashMap writeRentalReview(int rental_id, int user_id) {
-
         HashMap<String, Object> params = new HashMap<>();
         params.put("rental_id", rental_id);
         params.put("user_id", user_id);
+        params.put("status", "new");
         return params;
     }
 
     public void submitRentalReview(String newReview, int rental_id, int rating, int user_id) throws RecordNotFoundException {
-
-        if (!em.getTransaction().isActive()){
+        if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
-        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental",Rental.class);
-        queryResult.setParameter("id", rental_id);
-        List<Rental> rentals = queryResult.getResultList();
 
+        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental", Rental.class);
+        queryResult.setParameter("id", rental_id);
+        Rental rentalResult = queryResult.getSingleResult();
 
         TypedQuery<User> users = em.createNamedQuery("getUserById", User.class);
         users.setParameter("id", user_id);
         User user = users.getSingleResult();
 
-        if (rentals == null){
-            throw new RecordNotFoundException("Could not find any record with the given rental id " + rental_id);
-        }
-        Rental rental = rentals.get(0);
+        Rental rental = rentalResult;
         Review review = new Review(rating, newReview, user);
         rental.addReview(review);
         review.setRental(rental);
@@ -52,6 +51,32 @@ public class RentalService {
     }
 
     //TODO update rentalreview
+    public HashMap getUpdateRentalReview(int review_id) {
+        HashMap<String, Object> params = new HashMap<>();
+        TypedQuery<Review> queryResult = em.createNamedQuery("getReviewById", Review.class);
+        queryResult.setParameter("id", review_id);
+        Review review = queryResult.getSingleResult();
+        String text = review.getText();
+        double rating = review.getRating();
+        params.put("review", text);
+        params.put("rating", rating);
+        params.put("status", "update");
+        params.put("review_id", review_id);
+        return params;
+    }
+
+    public void postUpdateRentalReview(String review, double rating, int review_id) {
+        TypedQuery<Review> queryResult = em.createNamedQuery("getReviewById", Review.class).setParameter("id", review_id);
+        Review reviewById = queryResult.getSingleResult();
+        reviewById.setText(review);
+        reviewById.setRating(rating);
+        if (!em.getTransaction().isActive()) {
+            em.getTransaction().begin();
+        }
+        em.persist(reviewById);
+        em.getTransaction().commit();
+    }
+
     //TODO delete rentalreview
 
     public HashMap getRental(int id) throws RecordNotFoundException {
@@ -72,23 +97,23 @@ public class RentalService {
         params.put("city", rental.getCity());
         params.put("numberOfGuests", rental.getNumOfGuests());
         params.put("reviews", rental.getReviews());
-        params.put("rating",rental.getRating());
+        params.put("rating", rental.getRating());
         return params;
     }
 
     public void registerRental(int user_id, String name, String description, String location, double price, int numOfGuests, int numOfBed, int numOfRoom, boolean hasWifi, boolean hasAirConditioner) {
-
-        Facility facility = new Facility(numOfRoom,numOfBed);
+        Facility facility = new Facility(numOfRoom, numOfBed);
         // TODO le kell kérni az adatbázisból a usert
         TypedQuery<User> users = em.createNamedQuery("getUserById", User.class);
         users.setParameter("id", user_id);
         User user = users.getSingleResult();
         Rental rental = new Rental(name, description, price, location, numOfGuests, user);
-        Amenity amenity = new Amenity(hasWifi,hasAirConditioner);
+        Amenity amenity = new Amenity(hasWifi, hasAirConditioner);
         rental.setAmenity(amenity);
         rental.setFacility(facility);
         facility.setRental(rental);
-        if (!em.getTransaction().isActive()){
+
+        if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
 

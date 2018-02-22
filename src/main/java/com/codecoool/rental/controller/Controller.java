@@ -8,6 +8,9 @@ import com.codecoool.rental.services.UserService;
 import spark.ModelAndView;
 import spark.Request;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.HashMap;
 
 public class Controller {
@@ -16,13 +19,14 @@ public class Controller {
     UserService userService;
     ReservationService reservationService;
 
-
     private static volatile Controller instance = null;
 
     private Controller() {
-        rentalService = new RentalService();
-        userService = new UserService();
-        reservationService = new ReservationService();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
+        EntityManager em = emf.createEntityManager();
+        rentalService = new RentalService(em);
+        userService = new UserService(em);
+        reservationService = new ReservationService(em);
     }
 
     public static Controller getInstance() {
@@ -125,5 +129,19 @@ public class Controller {
         String endDateInput = req.queryParams("endDate");
         Integer numOfPeople = Integer.parseInt(req.queryParams("numberOfPeople"));
         return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople, rentalId, userId);
+    }
+
+    public ModelAndView getUpdateRentalReview(Request req) {
+        int review_id = Integer.parseInt(req.params("review_id"));
+
+        return new ModelAndView(rentalService.getUpdateRentalReview(review_id),"/add_review");
+    }
+
+    public void postUpdateRentalReview(Request req){
+        int review_id = Integer.parseInt(req.params("review_id"));
+        String text = req.queryParams("review");
+        double rating = Double.parseDouble(req.queryParams("rating"));
+
+        rentalService.postUpdateRentalReview(text,rating,review_id);
     }
 }
