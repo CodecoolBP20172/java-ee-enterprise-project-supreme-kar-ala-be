@@ -3,10 +3,7 @@ package com.codecoool.rental.services;
 import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.model.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class RentalService {
         HashMap<String, Object> params = new HashMap<>();
         params.put("rental_id", rental_id);
         params.put("user_id", user_id);
+        params.put("status","new");
         return params;
     }
 
@@ -51,7 +49,39 @@ public class RentalService {
         em.getTransaction().commit();
     }
 
+
+
     //TODO update rentalreview
+    public HashMap getUpdateRentalReview(int review_id) {
+        HashMap<String, Object> params = new HashMap<>();
+        TypedQuery<Review> queryResult = em.createNamedQuery("getReviewById", Review.class);
+        queryResult.setParameter("id", review_id);
+        Review review = queryResult.getSingleResult();
+        String text = review.getText();
+        double rating = review.getRating();
+        params.put("review",text);
+        params.put("rating",rating);
+        params.put("status","update");
+        params.put("review_id",review_id);
+        return params;
+
+    }
+
+    public void postUpdateRentalReview(String review, double rating, int review_id){
+
+
+        TypedQuery<Review> queryResult = em.createNamedQuery("getReviewById",Review.class).setParameter("id",review_id);
+        Review reviewById = queryResult.getSingleResult();
+        reviewById.setText(review);
+        reviewById.setRating(rating);
+        if (!em.getTransaction().isActive()){
+            em.getTransaction().begin();
+        }
+        em.persist(reviewById);
+        em.getTransaction().commit();
+
+
+    }
     //TODO delete rentalreview
 
     public HashMap getRental(int id) throws RecordNotFoundException {
@@ -111,6 +141,8 @@ public class RentalService {
         params.put("rentals", rentals);
         return params;
     }
+
+
 
     // TODO
     // filter
