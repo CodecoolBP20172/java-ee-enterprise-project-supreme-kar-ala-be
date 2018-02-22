@@ -9025,6 +9025,14 @@ a.text-dark:focus, a.text-dark:hover {
     display: flex;
     align-items: center;
 }
+.container.form {
+    border-radius: 25px;
+
+}
+
+.rentals {
+    border-radius: 25px;
+}
 
 @media print {
     *, ::after, ::before {

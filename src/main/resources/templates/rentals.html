@@ -33,8 +33,8 @@
 
       <div class="row">
         <div class="col-lg-4 col-sm-6 portfolio-item" th:each="rental : ${rentals}">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" th:src="${rental.pictures[0].url}" alt="" height="250px"/></a>
+          <div class="card h-100 rentals">
+            <a th:href="${'/rental/' + rental.id}"><img class="card-img-top rentals" th:src="${rental.pictures[0].url}" alt="" height="250px"/></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a th:href="${'/rental/' + rental.id}" th:text="${rental.name}">Rental name</a>
@@ -76,7 +76,7 @@
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark register" style="position:absolute">
+    <footer class="py-5 bg-dark register" style="position:relative">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Supreme Kar-alá-b 2018</p>
       </div>

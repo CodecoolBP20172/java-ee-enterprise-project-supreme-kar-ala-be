@@ -50,7 +50,7 @@ public class Controller {
     public ModelAndView RecordNoTFound(Exception e) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("message", e.getMessage());
-        return new ModelAndView(params, "errors/error404");
+        return new ModelAndView(params, "notFound404");
     }
 
     public ModelAndView ServerIssue(Exception e) {
