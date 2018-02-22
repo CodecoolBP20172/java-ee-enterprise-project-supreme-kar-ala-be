@@ -123,4 +123,18 @@ public class Controller {
 
         return reservationService.submitReservation(startDateInput, endDateInput, numOfPeople, user_id);
     }
+
+    public ModelAndView getUpdateRentalReview(Request req) {
+        int review_id = Integer.parseInt(req.params("review_id"));
+
+        return new ModelAndView(rentalService.getUpdateRentalReview(review_id),"/add_review");
+    }
+
+    public void postUpdateRentalReview(Request req){
+        int review_id = Integer.parseInt(req.params("review_id"));
+        String text = req.queryParams("review");
+        double rating = Double.parseDouble(req.queryParams("rating"));
+
+        rentalService.postUpdateRentalReview(text,rating,review_id);
+    }
 }

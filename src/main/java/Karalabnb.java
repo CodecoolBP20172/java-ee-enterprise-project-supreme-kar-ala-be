@@ -42,6 +42,8 @@ public class Karalabnb {
                 new ThymeleafTemplateEngine().render(controller.getRental(req)));
         get("/rental/:id/add-review", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.writeRentalReview(req)));
+        get("/update-review/:review_id", (Request req, Response res) ->
+                new ThymeleafTemplateEngine().render(controller.getUpdateRentalReview(req)));
         get("/rentals", (Request req, Response res) ->
                 new ThymeleafTemplateEngine().render(controller.getAllRentals()));
         get("/register-rental", (Request req, Response res) ->
@@ -60,12 +62,18 @@ public class Karalabnb {
             res.redirect("/");
             return "";
         });
+        post("/update-review/:review_id", (Request req, Response res) -> {
+            controller.postUpdateRentalReview(req);
+            res.redirect("/");
+            return "";
+        });
 
         exception(RecordNotFoundException.class, (e, req, res) -> {
 
             res.body(new ThymeleafTemplateEngine().render(controller.RecordNoTFound(e)));
             res.status(404);
         });
+
 
         post("/make-reservation", (Request req, Response res) -> {
             if (controller.submitReservation(req)) {
