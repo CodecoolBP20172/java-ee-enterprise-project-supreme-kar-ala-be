@@ -8,7 +8,7 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
 
-    <title>3 Col Portfolio - Start Bootstrap Template</title>
+    <title>Kar-alá-BNB  -  Checkout our rentals</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
@@ -27,14 +27,14 @@
     <div class="container">
 
       <!-- Page Heading -->
-      <h1 class="my-4">Page Heading
-        <small>Secondary Text</small>
+      <h1 class="my-4">Rentals
+
       </h1>
 
       <div class="row">
         <div class="col-lg-4 col-sm-6 portfolio-item" th:each="rental : ${rentals}">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""/></a>
+          <div class="card h-100 rentals">
+            <a th:href="${'/rental/' + rental.id}"><img class="card-img-top rentals" th:src="${rental.pictures[0].url}" alt="" height="250px"/></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a th:href="${'/rental/' + rental.id}" th:text="${rental.name}">Rental name</a>
@@ -76,8 +76,12 @@
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer th:replace="fragments::footer"></footer>
-
+    <footer class="py-5 bg-dark register" style="position:relative">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Supreme Kar-alá-b 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
     <!-- Bootstrap core JavaScript -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.bundle.min.js"></script>

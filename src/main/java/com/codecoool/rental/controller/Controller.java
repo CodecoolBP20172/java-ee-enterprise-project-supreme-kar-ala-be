@@ -43,11 +43,14 @@ public class Controller {
     public ModelAndView index() {
         return new ModelAndView(new HashMap<>(), "index");
     }
+    public ModelAndView takenReservation() {
+        return new ModelAndView(new HashMap<>(), "takenReservation");
+    }
 
     public ModelAndView RecordNoTFound(Exception e) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("message", e.getMessage());
-        return new ModelAndView(params, "errors/error404");
+        return new ModelAndView(params, "notFound404");
     }
 
     public ModelAndView ServerIssue(Exception e) {
@@ -95,6 +98,10 @@ public class Controller {
         int numOfGuests = Integer.parseInt(req.queryParams("numOfGuest"));
         int numOfBed = Integer.parseInt(req.queryParams("numOfBed"));
         int numOfRoom = Integer.parseInt(req.queryParams("numOfRoom"));
+        String pictureUrl = req.queryParams("picture");
+        if (pictureUrl.equals("")){
+            pictureUrl = "http://placehold.it/900x400";
+        }
         //TODO session!!!
         //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
         int user_id = 1;
@@ -102,7 +109,7 @@ public class Controller {
         boolean hasWifi = req.queryParams("hasWifi") != null;
         boolean hasAirConditioner = req.queryParams("hasAirConditioner") != null;
 
-        rentalService.registerRental(user_id, name, description, location, price, numOfGuests, numOfBed, numOfRoom, hasWifi, hasAirConditioner);
+        rentalService.registerRental(user_id, name, description, location, price, numOfGuests, numOfBed, numOfRoom, hasWifi, hasAirConditioner,pictureUrl);
     }
 
     public ModelAndView getReservationsByUserId(Request req) throws RecordNotFoundException {

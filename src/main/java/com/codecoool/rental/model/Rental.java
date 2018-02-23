@@ -76,7 +76,12 @@ public class Rental {
         this.rating = rating;
     }
 
+    public List<Picture> getPictures() {
+        return pictures;
+    }
+
     public List<Review> getReviews() {
+
         return reviews;
     }
 
@@ -162,7 +167,7 @@ public class Rental {
             this.reservedPeriods.add(reservedPeriod)
         }
         */
-    public void setPictures(Picture picture) {
+    public void addPictures(Picture picture) {
         this.pictures.add(picture);
     }
 

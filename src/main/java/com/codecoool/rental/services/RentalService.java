@@ -4,8 +4,6 @@ import com.codecoool.rental.RecordNotFoundException;
 import com.codecoool.rental.model.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.List;
@@ -98,17 +96,22 @@ public class RentalService {
         params.put("numberOfGuests", rental.getNumOfGuests());
         params.put("reviews", rental.getReviews());
         params.put("rating", rental.getRating());
+        params.put("picture",rental.getPictures().get(0).getUrl());
+        System.out.println(rental.getPictures().get(0).getUrl());
         return params;
     }
 
-    public void registerRental(int user_id, String name, String description, String location, double price, int numOfGuests, int numOfBed, int numOfRoom, boolean hasWifi, boolean hasAirConditioner) {
+    public void registerRental(int user_id, String name, String description, String location, double price, int numOfGuests, int numOfBed, int numOfRoom, boolean hasWifi, boolean hasAirConditioner,String pictureUrl) {
         Facility facility = new Facility(numOfRoom, numOfBed);
         // TODO le kell kérni az adatbázisból a usert
         TypedQuery<User> users = em.createNamedQuery("getUserById", User.class);
         users.setParameter("id", user_id);
         User user = users.getSingleResult();
+        Picture picture = new Picture(name,pictureUrl);
         Rental rental = new Rental(name, description, price, location, numOfGuests, user);
         Amenity amenity = new Amenity(hasWifi, hasAirConditioner);
+        rental.addPictures(picture);
+        picture.setRental(rental);
         rental.setAmenity(amenity);
         rental.setFacility(facility);
         facility.setRental(rental);

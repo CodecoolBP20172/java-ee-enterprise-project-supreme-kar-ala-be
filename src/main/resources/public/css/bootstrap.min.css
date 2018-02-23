@@ -6546,6 +6546,14 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 footer.py-5.bg-dark.register {
     margin-top: 100px;
 }
+footer.py-5.bg-dark{
+    position: relative;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    text-align: center;
+}
 .container.form.reservation {
     width: 70%;
 }
@@ -9016,6 +9024,14 @@ a.text-dark:focus, a.text-dark:hover {
     justify-content: center;
     display: flex;
     align-items: center;
+}
+.container.form {
+    border-radius: 25px;
+
+}
+
+.rentals {
+    border-radius: 25px;
 }
 
 @media print {
