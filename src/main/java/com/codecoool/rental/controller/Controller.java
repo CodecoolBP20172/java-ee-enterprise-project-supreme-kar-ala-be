@@ -7,6 +7,7 @@ import com.codecoool.rental.service.ReservationService;
 import com.codecoool.rental.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,7 +56,7 @@ public class Controller {
 //    }
 
     @RequestMapping(value = "/rental/{rentalId}/add_review", method = RequestMethod.GET)
-    public String writeRentalReview(Model model, @RequestParam("rentalId") Integer rentalId) {
+    public String writeRentalReview(Model model, @PathVariable("rentalId") Integer rentalId) {
         int userId = 1;
         model.addAttribute("rental_id", rentalId);
         model.addAttribute("user_id", userId);
@@ -63,16 +64,17 @@ public class Controller {
         return "add_review";
     }
 
+    @RequestParam(value = "/rental/{rentalId}/add_review", method = RequestMethod.POST)
+    public String submitRentalReview(Model model,
+                                     @PathVariable("rentalId") Integer rentalId,
+                                     @RequestParam("review") String review,
+                                     @RequestParam("rating") Integer rating) {
+        int userId = 1;
+        rentalService.submitRentalReview(review, rentalId, rating, userId);
+        return "redirect:rental/{rentalId}";
+    }
     
 
-
-    public ModelAndView writeRentalReview(R req) {
-        int rental_id = Integer.parseInt(req.params("id"));
-        //TODO session!!!
-        //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
-        int user_id = 1;
-        return new ModelAndView(rentalService.writeRentalReview(rental_id, user_id), "add_review");
-    }
 
     public void submitRentalReview(Request req) throws RecordNotFoundException {
         String review = req.queryParams("review");
