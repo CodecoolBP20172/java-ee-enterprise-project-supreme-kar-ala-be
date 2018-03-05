@@ -1,4 +1,4 @@
-package com.codecoool.rental;
+package com.codecoool.rental.exceptions;
 
 public class RecordNotFoundException extends RentalDaoException {
 

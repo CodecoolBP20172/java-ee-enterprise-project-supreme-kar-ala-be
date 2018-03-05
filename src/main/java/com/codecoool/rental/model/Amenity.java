@@ -5,6 +5,7 @@ import com.sun.istack.internal.NotNull;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "amenity")
 public class Amenity {
 
     @Id

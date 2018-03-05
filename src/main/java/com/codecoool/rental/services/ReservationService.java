@@ -1,14 +1,12 @@
 package com.codecoool.rental.services;
 
-import com.codecoool.rental.RecordNotFoundException;
+import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.ReservationPeriodHost;
 import com.codecoool.rental.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

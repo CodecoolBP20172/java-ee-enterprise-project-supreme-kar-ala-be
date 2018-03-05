@@ -1,6 +1,6 @@
 package com.codecoool.rental.services;
 
-import com.codecoool.rental.RecordNotFoundException;
+import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.ReservationPeriod;

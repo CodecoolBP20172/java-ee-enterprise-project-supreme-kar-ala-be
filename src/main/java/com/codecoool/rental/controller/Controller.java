@@ -1,7 +1,7 @@
 package com.codecoool.rental.controller;
 
-import com.codecoool.rental.RecordNotFoundException;
-import com.codecoool.rental.RentalDaoException;
+import com.codecoool.rental.exceptions.RecordNotFoundException;
+import com.codecoool.rental.exceptions.RentalDaoException;
 import com.codecoool.rental.services.RentalService;
 import com.codecoool.rental.services.ReservationService;
 import com.codecoool.rental.services.UserService;

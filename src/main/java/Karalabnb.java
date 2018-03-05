@@ -1,5 +1,5 @@
-import com.codecoool.rental.RecordNotFoundException;
-import com.codecoool.rental.RentalDaoException;
+import com.codecoool.rental.exceptions.RecordNotFoundException;
+import com.codecoool.rental.exceptions.RentalDaoException;
 import com.codecoool.rental.controller.Controller;
 import com.codecoool.rental.model.*;
 import spark.Request;

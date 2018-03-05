@@ -40,7 +40,7 @@ public class Rental {
     @OneToOne(cascade = CascadeType.ALL)
     private Facility facility;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
