@@ -1,4 +1,4 @@
-package com.codecoool.rental.services;
+package com.codecoool.rental.service;
 
 import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.model.Review;

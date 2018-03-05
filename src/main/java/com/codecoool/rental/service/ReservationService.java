@@ -1,10 +1,13 @@
-package com.codecoool.rental.services;
+package com.codecoool.rental.service;
 
 import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
 import com.codecoool.rental.model.ReservationPeriodHost;
 import com.codecoool.rental.model.User;
+import com.codecoool.rental.repository.ReservationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -14,18 +17,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class ReservationService {
 
-    public EntityManager em;
-
-    public ReservationService(EntityManager em) {
-        this.em = em;
-    }
+    @Autowired
+    ReservationRepository reservationRepository;
 
     public boolean submitReservation(String startDateInput, String endDateInput, Integer numOfPeople, Integer rentalId, Integer userId) throws RecordNotFoundException {
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
@@ -81,6 +79,10 @@ public class ReservationService {
 
         params.put("reservations", reservations);
         return params;
+    }
+
+    public void save(Reservation entity) {
+        reservationRepository.save(entity);
     }
 
     //TODO update reservation

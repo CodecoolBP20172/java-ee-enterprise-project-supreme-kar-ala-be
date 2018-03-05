@@ -2,64 +2,71 @@ package com.codecoool.rental.controller;
 
 import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.exceptions.RentalDaoException;
-import com.codecoool.rental.services.RentalService;
-import com.codecoool.rental.services.ReservationService;
-import com.codecoool.rental.services.UserService;
-import spark.ModelAndView;
-import spark.Request;
+import com.codecoool.rental.service.RentalService;
+import com.codecoool.rental.service.ReservationService;
+import com.codecoool.rental.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.HashMap;
 
+@org.springframework.stereotype.Controller
 public class Controller {
 
+    @Autowired
     RentalService rentalService;
+
+    @Autowired
     UserService userService;
+
+    @Autowired
     ReservationService reservationService;
 
-    private static volatile Controller instance = null;
-
-    private Controller() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
-        EntityManager em = emf.createEntityManager();
-        rentalService = new RentalService(em);
-        userService = new UserService(em);
-        reservationService = new ReservationService(em);
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String mainPage() {
+        return "index";
     }
 
-    public static Controller getInstance() {
-        if (instance == null) {
-            synchronized (Controller.class) {
-                if (instance == null) {
-                    instance = new Controller();
-                }
-            }
-        }
-        return instance;
+    //TODO: to be handled by ErrorHandler?
+    @RequestMapping(value = "/takenReservation,", method = RequestMethod.GET)
+    public String takenReservation() {
+        return "takenReservation";
     }
 
-    public ModelAndView index() {
-        return new ModelAndView(new HashMap<>(), "index");
-    }
-    public ModelAndView takenReservation() {
-        return new ModelAndView(new HashMap<>(), "takenReservation");
+    //TODO: Spring based errorHandling
+
+//    public ModelAndView RecordNoTFound(Exception e) {
+//        HashMap<String, Object> params = new HashMap<>();
+//        params.put("message", e.getMessage());
+//        return new ModelAndView(params, "notFound404");
+//    }
+//
+//    public ModelAndView ServerIssue(Exception e) {
+//        HashMap<String, Object> params = new HashMap<>();
+//        params.put("message", e.getMessage());
+//        return new ModelAndView(params, "errors/error500");
+//    }
+
+    @RequestMapping(value = "/rental/{rentalId}/add_review", method = RequestMethod.GET)
+    public String writeRentalReview(Model model, @RequestParam("rentalId") Integer rentalId) {
+        int userId = 1;
+        model.addAttribute("rental_id", rentalId);
+        model.addAttribute("user_id", userId);
+        model.addAttribute("status", "new");
+        return "add_review";
     }
 
-    public ModelAndView RecordNoTFound(Exception e) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("message", e.getMessage());
-        return new ModelAndView(params, "notFound404");
-    }
+    
 
-    public ModelAndView ServerIssue(Exception e) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("message", e.getMessage());
-        return new ModelAndView(params, "errors/error500");
-    }
 
-    public ModelAndView writeRentalReview(Request req) {
+    public ModelAndView writeRentalReview(R req) {
         int rental_id = Integer.parseInt(req.params("id"));
         //TODO session!!!
         //int user_id = Integer.parseInt("VALAMI AMI LEKÉREI A SESSIONT");
@@ -141,7 +148,7 @@ public class Controller {
     public ModelAndView getUpdateRentalReview(Request req) {
         int review_id = Integer.parseInt(req.params("review_id"));
 
-        return new ModelAndView(rentalService.getUpdateRentalReview(review_id),"/add_review");
+        return new ModelAndView(rentalService.getRentalReviewToUpdate(review_id),"/add_review");
     }
 
     public void postUpdateRentalReview(Request req){

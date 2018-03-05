@@ -1,65 +1,61 @@
-package com.codecoool.rental.services;
+package com.codecoool.rental.service;
 
 import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.model.*;
+import com.codecoool.rental.repository.RentalRepository;
+import com.codecoool.rental.repository.ReservationRepository;
+import com.codecoool.rental.repository.ReviewRepository;
+import com.codecoool.rental.repository.UserRepository;
+import com.sun.xml.internal.bind.v2.TODO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class RentalService {
 
-    public EntityManager em;
+    @Autowired
+    public RentalRepository rentalRepository;
 
-    public RentalService(EntityManager em) {
-        this.em = em;
-    }
+    @Autowired
+    public UserRepository userRepository;
 
-    // TODO
-    // make reservation
+    @Autowired
+    public ReviewRepository reviewRepository;
 
-    public HashMap writeRentalReview(int rental_id, int user_id) {
+
+    public HashMap writeRentalReview(int rentalId, int userId) {
         HashMap<String, Object> params = new HashMap<>();
-        params.put("rental_id", rental_id);
-        params.put("user_id", user_id);
+        params.put("rental_id", rentalId);
+        params.put("user_id", userId);
         params.put("status", "new");
         return params;
     }
 
-    public void submitRentalReview(String newReview, int rental_id, int rating, int user_id) throws RecordNotFoundException {
-        if (!em.getTransaction().isActive()) {
-            em.getTransaction().begin();
-        }
+    public void submitRentalReview(String newReview, int rentalId, int rating, int userId) {
+        Rental rental = rentalRepository.findOne(rentalId);
+        User user = userRepository.findOne(userId);
 
-        TypedQuery<Rental> queryResult = em.createNamedQuery("getRental", Rental.class);
-        queryResult.setParameter("id", rental_id);
-        Rental rentalResult = queryResult.getSingleResult();
-
-        TypedQuery<User> users = em.createNamedQuery("getUserById", User.class);
-        users.setParameter("id", user_id);
-        User user = users.getSingleResult();
-
-        Rental rental = rentalResult;
         Review review = new Review(rating, newReview, user);
         rental.addReview(review);
         review.setRental(rental);
-        em.persist(review);
-        em.getTransaction().commit();
-    }
 
-    //TODO update rentalreview
-    public HashMap getUpdateRentalReview(int review_id) {
+        reviewRepository.save(review);
+    }
+    //TODO: refactor to return review
+    public HashMap getRentalReviewToUpdate(int reviewId) {
         HashMap<String, Object> params = new HashMap<>();
-        TypedQuery<Review> queryResult = em.createNamedQuery("getReviewById", Review.class);
-        queryResult.setParameter("id", review_id);
-        Review review = queryResult.getSingleResult();
+        Review review = reviewRepository.findOne(reviewId);
         String text = review.getText();
         double rating = review.getRating();
         params.put("review", text);
         params.put("rating", rating);
         params.put("status", "update");
-        params.put("review_id", review_id);
+        params.put("review_id", reviewId);
         return params;
     }
 
@@ -138,6 +134,14 @@ public class RentalService {
 
         params.put("rentals", rentals);
         return params;
+    }
+
+    public void save(Rental entity) {
+        rentalRepository.save(entity);
+    }
+
+    public List<Rental> findAll() {
+        return rentalRepository.findAll();
     }
 
     // TODO
