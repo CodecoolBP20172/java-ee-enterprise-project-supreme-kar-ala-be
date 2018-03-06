@@ -10,7 +10,6 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RentalServiceTest {
 

@@ -1,9 +1,7 @@
 package com.codecoool.rental.model;
 
-import org.eclipse.jetty.util.annotation.Name;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "reservation")

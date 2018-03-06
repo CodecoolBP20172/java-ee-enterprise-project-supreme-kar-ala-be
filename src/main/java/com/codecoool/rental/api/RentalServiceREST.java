@@ -20,6 +20,6 @@ public class RentalServiceREST {
 
     @GetMapping("/api/rentals")
     public ResponseEntity<List<Rental>> getAllRental() {
-        return new ResponseEntity(rentalService.findAll(), HttpStatus.OK);
+        return new ResponseEntity(rentalService.getAllRentals(), HttpStatus.OK);
     }
 }
