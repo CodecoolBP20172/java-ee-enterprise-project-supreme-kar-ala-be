@@ -6,10 +6,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "rental")
-@NamedQueries({
-        @NamedQuery(name = "getRental", query = "SELECT rental FROM Rental rental WHERE rental.id = :id"),
-        @NamedQuery(name = "getRentals", query = "SELECT rental FROM Rental rental")
-})
 public class Rental {
 
     @Id
@@ -144,10 +140,6 @@ public class Rental {
 
     public User getUser() {
         return user;
-    }
-
-    public int getOwnerId() {
-        return user.getId();
     }
 
     public void setUser(User user) {

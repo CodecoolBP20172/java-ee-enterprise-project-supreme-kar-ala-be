@@ -1,18 +1,11 @@
 package com.codecoool.rental.service;
 
-import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.model.*;
 import com.codecoool.rental.repository.RentalRepository;
-import com.codecoool.rental.repository.ReservationRepository;
 import com.codecoool.rental.repository.ReviewRepository;
 import com.codecoool.rental.repository.UserRepository;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.util.HashMap;
 import java.util.List;
 
 @Service

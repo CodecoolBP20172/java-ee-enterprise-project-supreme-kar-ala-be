@@ -1,13 +1,7 @@
 package com.codecoool.rental.service;
 
 import com.codecoool.rental.model.*;
-import com.codecoool.rental.repository.UserRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +31,8 @@ public class InitializerBean {
 
         User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
         User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
+        userService.save(user1);
+        userService.save(user2);
 
         Rental rental1 = new Rental("házikó", "Description", 22.5, "Bukarest", 5, user1);
         Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Bukarest", 5, user1);
@@ -92,9 +88,6 @@ public class InitializerBean {
         rental1.addReservation(reservation1);
         rental2.addReservation(reservation2);
         rental1.addReservation(reservation3);
-
-        userService.save(user1);
-        userService.save(user2);
 
         rentalService.save(rental1);
         rentalService.save(rental2);

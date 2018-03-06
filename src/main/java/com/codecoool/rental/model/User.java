@@ -6,9 +6,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@NamedQueries({
-        @NamedQuery(name = "getUserById", query = "SELECT user FROM User user WHERE user.id = :id")
-})
 public class User {
 
     @Id
@@ -41,14 +38,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.contacts = contacts;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
