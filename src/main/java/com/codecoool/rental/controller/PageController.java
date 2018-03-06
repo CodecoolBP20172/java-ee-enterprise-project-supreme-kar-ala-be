@@ -74,7 +74,7 @@ public class PageController {
         return "rental";
     }
 
-    @RequestMapping(value = "/rentals}", method = RequestMethod.GET)
+    @RequestMapping(value = "/rentals", method = RequestMethod.GET)
     public String getAllRentals(Model model) {
         List<Rental> rentals = rentalService.getAllRentals();
         model.addAttribute("rentals", rentals);
