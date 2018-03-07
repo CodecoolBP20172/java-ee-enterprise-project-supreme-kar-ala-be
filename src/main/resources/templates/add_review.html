@@ -34,8 +34,8 @@
     <nav th:replace="fragments::navBar"></nav>
 
     <!-- Page Content -->
-    <div class="container form reservation" th:switch="${review.status}">
-      <form th:case="new" class="form-horizontal" role="form" method="POST" action="/add-review" >
+    <div class="container form reservation" th:switch="${status}">
+      <form th:case="new" class="form-horizontal" role="form" method="POST" th:action="${'/rental/' + rental_id + '/add-review'}" >
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6">
@@ -52,7 +52,7 @@
               <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
                 <textarea th:name="review" class="form-control" id="review"
-                          placeholder="Only nice things plz" th:required="required" th:text="${review.text}"></textarea>
+                          placeholder="Only nice things plz" th:required="required"></textarea>
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
               <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
                 <input type="number" th:name="rating" class="form-control" id="rating"
-                       placeholder="5 stars ;))" th:required="required" th:value="${review.rating}"/>
+                       placeholder="5 stars ;))" th:required="required"/>
               </div>
             </div>
           </div>
@@ -94,7 +94,7 @@
           </div>
         </div>
       </form>
-      <form th:case="update" class="form-horizontal" role="form" method="POST" th:action="${'/update_review/' + review_id}"  >
+      <form th:case="update" class="form-horizontal" role="form" method="POST" th:action="${'rental/' + rental_id + '/update-review/' + review.getId()}">
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6">

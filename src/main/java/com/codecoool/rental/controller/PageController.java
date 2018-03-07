@@ -48,7 +48,7 @@ public class PageController {
 //        return new ModelAndView(params, "errors/error500");
 //    }
 
-    @RequestMapping(value = "/rental/{rentalId}/add_review", method = RequestMethod.GET)
+    @RequestMapping(value = "/rental/{rentalId}/add-review", method = RequestMethod.GET)
     public String writeRentalReview(Model model, @PathVariable("rentalId") Integer rentalId) {
         int userId = 1;
         model.addAttribute("rental_id", rentalId);
@@ -57,14 +57,14 @@ public class PageController {
         return "add_review";
     }
 
-    @RequestMapping(value = "/rental/{rentalId}/add_review", method = RequestMethod.POST)
+    @RequestMapping(value = "/rental/{rentalId}/add-review", method = RequestMethod.POST)
     public String submitRentalReview(Model model,
                                      @PathVariable("rentalId") Integer rentalId,
                                      @RequestParam("review") String review,
                                      @RequestParam("rating") Integer rating) {
         int userId = 1;
         rentalService.submitRentalReview(review, rentalId, rating, userId);
-        return "redirect:rental";
+        return "redirect:";
     }
 
     @RequestMapping(value = "/rental/{rentalId}", method = RequestMethod.GET)
@@ -81,12 +81,12 @@ public class PageController {
         return "rentals";
     }
 
-    @RequestMapping(value = "/rental/{rentalId}/register_rental", method = RequestMethod.GET)
+    @RequestMapping(value = "/rental/{rentalId}/register-rental", method = RequestMethod.GET)
     public String getAllRentals() {
         return "register_rental";
     }
 
-    @RequestMapping(value = "/rentals/register_rental", method = RequestMethod.POST)
+    @RequestMapping(value = "/rentals/register-rental", method = RequestMethod.POST)
     public String submitRegistration(@RequestParam("name") String name,
                                      @RequestParam("description") String description,
                                      @RequestParam("location") String location,
@@ -98,8 +98,8 @@ public class PageController {
                                      @RequestParam("hasWifi") String hasWifi,
                                      @RequestParam("hasAirConditioner") String hasAirConditioner)
     {
-        int user_id = 1;
-        rentalService.registerRental(user_id, name, description, location, price, numOfGuest, numOfBed, numOfRoom, hasWifi, hasAirConditioner, pictureUrl);
+        int userId = 1;
+        rentalService.registerRental(userId, name, description, location, price, numOfGuest, numOfBed, numOfRoom, hasWifi, hasAirConditioner, pictureUrl);
         return "redirect:/rentals";
     }
 
@@ -110,13 +110,13 @@ public class PageController {
         return "userReservations";
     }
 
-    @RequestMapping(value = "/rental/{rentalId}/make_reservation", method = RequestMethod.GET)
+    @RequestMapping(value = "/rental/{rentalId}/make-reservation", method = RequestMethod.GET)
     public String makeReservation(Model model, @PathVariable("rentalId") Integer rentalId) {
         model.addAttribute("rentalId", rentalId);
         return "makeReservation";
     }
 
-    @RequestMapping(value = "/rental/{rentalId}/submit_reservation", method = RequestMethod.POST)
+    @RequestMapping(value = "/rental/{rentalId}/submit-reservation", method = RequestMethod.POST)
     public String submitReservation(Model model,
                                     @PathVariable("rentalId") Integer rentalId,
                                     @RequestParam("startDate") String startDate,
@@ -130,19 +130,24 @@ public class PageController {
         else return "takenReservation";
     }
 
-    @RequestMapping(value = "/update_review/{reviewId}", method = RequestMethod.GET)
-    public String getUpdateRentalReview(Model model, @PathVariable("reviewId") Integer reviewId) {
+    @RequestMapping(value = "rental/{rentalId}/update-review/{reviewId}", method = RequestMethod.GET)
+    public String getUpdateRentalReview(Model model,
+                                        @PathVariable("reviewId") Integer reviewId,
+                                        @PathVariable("rentalId") Integer rentalId) {
         model.addAttribute("review", rentalService.getRentalReviewToUpdate(reviewId));
+        model.addAttribute("rental_id", rentalId);
         model.addAttribute("status", "update");
         return "add_review";
     }
 
-    @RequestMapping(value = "/update_review/{reviewId}", method = RequestMethod.POST)
-    public void postUpdateRentalReview(
+    @RequestMapping(value = "rental/{rentalId}/update-review/{reviewId}", method = RequestMethod.POST)
+    public String postUpdateRentalReview(
             @PathVariable("reviewId") Integer reviewId,
+            @PathVariable("rentalId") Integer rentalId,
             @RequestParam("review") String review,
             @RequestParam("rating") Double rating){
 
         rentalService.postUpdateRentalReview(review, rating,reviewId);
+        return "rentals";
     }
 }

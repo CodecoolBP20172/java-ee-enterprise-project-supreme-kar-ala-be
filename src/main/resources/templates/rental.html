@@ -52,9 +52,9 @@
             <div class="card-header">
               Rental Reviews
             </div>
-            <div class="card-body" th:each="review,iterstat : ${reviews}">
+            <div class="card-body" th:each="review : ${rental.reviews}">
                 <div>
-                    <a th:href="${'/update-review/' + review.getId() }" class="btn btn-success">Update</a>
+                    <a th:href="${'/rental/' + rental.id + '/update-review/' + review.getId() }" class="btn btn-success">Update</a>
                 </div>
               <p th:text="${review.getText()}" >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
               <small class="text-muted">Posted by Anonymous on 3/1/17 Rating : <span th:text="${review.getRating()}"></span>  </small>
