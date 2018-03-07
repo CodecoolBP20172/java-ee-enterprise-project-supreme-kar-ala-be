@@ -1,9 +1,13 @@
 package com.codecoool.rental.service;
 
-import com.codecoool.rental.model.*;
+import com.codecoool.rental.model.Rental;
+import com.codecoool.rental.model.Reservation;
+import com.codecoool.rental.model.ReservationType;
+import com.codecoool.rental.model.User;
 import com.codecoool.rental.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,8 +25,7 @@ public class ReservationService {
     @Autowired
     RentalService rentalService;
 
-    public boolean isPeriodFree(String startDateInput, String endDateInput, Integer numOfPeople, Integer rentalId, Integer userId) {
-
+    public boolean isPeriodFree(String startDateInput, String endDateInput, Integer rentalId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
         Date endDate;
@@ -32,34 +35,11 @@ public class ReservationService {
             endDate = sdf.parse(endDateInput);
         } catch (ParseException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("not valid format");
+            throw new IllegalArgumentException("Date was given in an invalid format");
         }
-/*
-        TypedQuery<Reservation> reservationTypedQuery = em.createNamedQuery("getNumOfReservationsForRentalInPeriod", Reservation.class)
-                .setParameter("rentalId", rentalId)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate);
 
-
-        if (reservationTypedQuery.getResultList().size() == 0) {
-            TypedQuery<User> userTypedQuery = em.createNamedQuery("getUserById", User.class).setParameter("id", userId);
-            User user = userTypedQuery.getSingleResult();
-
-            TypedQuery<Rental> rentalTypedQuery = em.createNamedQuery("getRental", Rental.class).setParameter("id", rentalId);
-            Rental rental = rentalTypedQuery.getSingleResult();
-
-            // TODO check if user is the host of the rental
-            ReservationPeriodHost host = new ReservationPeriodHost(startDate, endDate);
-
-            Reservation reservation = new Reservation();
-            reservation.setNumberOfPeople(numOfPeople);
-            reservation.setRental(rental);
-            reservation.setUser(user);
-            reservation.setReservationPeriod(host);
-            em.persist(reservation);
-            em.getTransaction().commit();
-            */
-            return true;
+        List<Reservation> reservationsInPeriod = reservationRepository.getReservationsForRentalInPeriod(rentalId, startDate, endDate);
+        return reservationsInPeriod.isEmpty();
     }
 
     public List<Reservation> getReservationsByUserId(int user_id) {
@@ -80,13 +60,16 @@ public class ReservationService {
             endDate = sdf.parse(endDateInput);
         } catch (ParseException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("not valid format");
+            throw new IllegalArgumentException("Date was given in an invalid format");
         }
 
-        ReservationPeriod reservationPeriod = new ReservationPeriodGuest(startDate, endDate);
         User user = userService.getUserById(userId);
         Rental rental = rentalService.getRental(rentalId);
-        Reservation reservation = new Reservation(numberOfPeople,reservationPeriod, user, rental);
+        ReservationType reservationType = ReservationType.GUEST;
+        if (userId == rental.getUser().getId()) {
+            reservationType = ReservationType.HOST;
+        }
+        Reservation reservation = new Reservation(numberOfPeople, startDate, endDate, reservationType, user, rental);
         reservationRepository.save(reservation);
     }
 

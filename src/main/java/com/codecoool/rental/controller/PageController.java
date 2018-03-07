@@ -108,7 +108,7 @@ public class PageController {
                                     @RequestParam("numberOfPeople") Integer numberOfPeople) {
         Integer userId = 1;
 
-        if (reservationService.isPeriodFree(startDate, endDate, numberOfPeople, rentalId, userId)) {
+        if (reservationService.isPeriodFree(startDate, endDate, rentalId)) {
             reservationService.submitReservation(startDate, endDate, numberOfPeople, rentalId, userId);
             return "redirect:/rentals";
         }

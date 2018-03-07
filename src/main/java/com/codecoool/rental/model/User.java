@@ -17,7 +17,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    //@ColumnTransformer(read = "pgp_sym_decrypt(password, ‘karalábé‘)", write = "pgp_sym_encrypt(?, ‘karalábé‘)")
+    //TODO hash password
     private String password;
     private String contacts;
 
@@ -38,6 +38,10 @@ public class User {
         this.email = email;
         this.password = password;
         this.contacts = contacts;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {
@@ -72,7 +76,7 @@ public class User {
         return reservations;
     }
 
-    public void setReservations(Reservation reservation) {
+    public void addReservation(Reservation reservation) {
         this.reservations.add(reservation);
     }
 
@@ -80,7 +84,7 @@ public class User {
         return pictures;
     }
 
-    public void setPictures(Picture picture) {
+    public void addPicture(Picture picture) {
         this.pictures.add(picture);
     }
 
@@ -88,7 +92,7 @@ public class User {
         return rentals;
     }
 
-    public void setRentals(Rental rental) {
+    public void addRental(Rental rental) {
         this.rentals.add(rental);
     }
 

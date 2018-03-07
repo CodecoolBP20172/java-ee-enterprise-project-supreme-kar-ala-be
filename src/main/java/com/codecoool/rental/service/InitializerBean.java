@@ -9,7 +9,7 @@ import java.util.Calendar;
 @Component
 public class InitializerBean {
 
-    public InitializerBean(UserService userService, RentalService rentalService, ReservationPeriodService reservationPeriodService, ReservationService reservationService) {
+    public InitializerBean(UserService userService, RentalService rentalService, ReservationService reservationService) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date date1 = Calendar.getInstance().getTime();
@@ -29,6 +29,7 @@ public class InitializerBean {
             e.printStackTrace();
         }
 
+        // Creating entities
         User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
         User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
         userService.save(user1);
@@ -38,13 +39,9 @@ public class InitializerBean {
         Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Bukarest", 5, user1);
         Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Bukarest", 5, user2);
 
-        ReservationPeriod reservationPeriod1 = new ReservationPeriodGuest(date1, date2);
-        ReservationPeriod reservationPeriod2 = new ReservationPeriodGuest(date3, date4);
-        ReservationPeriod reservationPeriod3 = new ReservationPeriodGuest(date5, date6);
-
-        Reservation reservation1 = new Reservation(3, reservationPeriod1, user1, rental1);
-        Reservation reservation2 = new Reservation(3, reservationPeriod2, user1, rental2);
-        Reservation reservation3 = new Reservation(2, reservationPeriod3, user2, rental1);
+        Reservation reservation1 = new Reservation(3, date1, date2, ReservationType.GUEST, user1, rental1);
+        Reservation reservation2 = new Reservation(3, date3, date4, ReservationType.GUEST, user1, rental2);
+        Reservation reservation3 = new Reservation(2, date5, date6, ReservationType.GUEST, user2, rental1);
 
         Amenity amenity1 = new Amenity(true, true);
         Amenity amenity2 = new Amenity(true, false);
@@ -68,22 +65,22 @@ public class InitializerBean {
         rental2.addPictures(picture2rent);
         rental2.addPictures(picture3rent);
 
-
+        // Setting user profile pictures
         Picture picture1user = new Picture("picture_4", "user picture");
         picture1user.setUser(user1);
         Picture picture2user = new Picture("picture_5", "másik user pic");
         picture2user.setUser(user2);
-        user1.setPictures(picture1user);
-        user2.setPictures(picture2user);
+        user1.addPicture(picture1user);
+        user2.addPicture(picture2user);
 
+        // Adding rentals to test users
+        user1.addRental(rental1);
+        user1.addRental(rental2);
+        user2.addRental(rental3);
 
-        user1.setRentals(rental1);
-        user1.setRentals(rental2);
-        user2.setRentals(rental3);
-
-        user1.setReservations(reservation1);
-        user1.setReservations(reservation2);
-        user2.setReservations(reservation3);
+        user1.addReservation(reservation1);
+        user1.addReservation(reservation2);
+        user2.addReservation(reservation3);
 
         rental1.addReservation(reservation1);
         rental2.addReservation(reservation2);
@@ -93,13 +90,8 @@ public class InitializerBean {
         rentalService.save(rental2);
         rentalService.save(rental3);
 
-        reservationPeriodService.save(reservationPeriod1);
-        reservationPeriodService.save(reservationPeriod2);
-        reservationPeriodService.save(reservationPeriod3);
-
         reservationService.save(reservation1);
         reservationService.save(reservation1);
         reservationService.save(reservation1);
-
     }
 }

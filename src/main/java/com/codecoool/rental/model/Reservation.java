@@ -1,9 +1,16 @@
 package com.codecoool.rental.model;
 
-
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
+@NamedQuery(name = "Reservation.getReservationsForRentalInPeriod",
+        query = "SELECT reservation FROM Reservation reservation " +
+                "WHERE reservation.rental.id = ?1 " +
+                "AND ((reservation.startDate BETWEEN ?2 AND ?3)" +
+                "OR (reservation.endDate BETWEEN ?2 AND ?3)" +
+                "OR (?2 BETWEEN reservation.startDate AND reservation.endDate)" +
+                "OR (?3 BETWEEN reservation.startDate AND reservation.endDate))")
 @Table(name = "reservation")
 public class Reservation {
 
@@ -14,8 +21,15 @@ public class Reservation {
     @Column(name = "number_of_people")
     private Integer numberOfPeople;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ReservationPeriod reservationPeriod;
+    @Column(name = "start_date")
+    private Date startDate;
+
+    @Column(name = "end_date")
+    private Date endDate;
+
+    @Column(name = "reservation_type")
+    @Enumerated(EnumType.STRING)
+    private ReservationType reservationType;
 
     @ManyToOne
     private User user;
@@ -26,13 +40,11 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(ReservationPeriod reservationPeriod, Rental rental) {
-        this.reservationPeriod = reservationPeriod;
-    }
-
-    public Reservation(Integer numberOfPeople, ReservationPeriod reservationPeriod, User user, Rental rental) {
+    public Reservation(Integer numberOfPeople, Date startDate, Date endDate, ReservationType reservationType, User user, Rental rental) {
         this.numberOfPeople = numberOfPeople;
-        this.reservationPeriod = reservationPeriod;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reservationType = reservationType;
         this.user = user;
         this.rental = rental;
     }
@@ -47,6 +59,30 @@ public class Reservation {
 
     public void setNumberOfPeople(Integer numberOfPeople) {
         this.numberOfPeople = numberOfPeople;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public ReservationType getReservationType() {
+        return reservationType;
+    }
+
+    public void setReservationType(ReservationType reservationType) {
+        this.reservationType = reservationType;
     }
 
     public User getUser() {
@@ -65,21 +101,15 @@ public class Reservation {
         this.rental = rental;
     }
 
-    public ReservationPeriod getReservationPeriod() {
-        return reservationPeriod;
-    }
-
-    public void setReservationPeriod(ReservationPeriod reservationPeriod) {
-        this.reservationPeriod = reservationPeriod;
-    }
-
     @Override
     public String toString() {
         return "Reservation{" +
-                "id=" + id +
-                ", numberOfPeople=" + numberOfPeople +
-                ", user=" + user +
-                ", rental=" + rental +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", numOfPeople=" + numberOfPeople +
+                ", resType=" + reservationType +
+                ", userId=" + user.getId() +
+                ", rentalId=" + rental.getId() +
                 '}';
     }
 }
