@@ -108,8 +108,11 @@ public class PageController {
                                     @RequestParam("numberOfPeople") Integer numberOfPeople) {
         Integer userId = 1;
 
-        if (reservationService.submitReservation(startDate, endDate, numberOfPeople, rentalId, userId)) return "redirect:rental";
-        else return "takenReservation";
+        if (reservationService.isPeriodFree(startDate, endDate, numberOfPeople, rentalId, userId)) {
+            reservationService.submitReservation(startDate, endDate, numberOfPeople, rentalId, userId);
+            return "redirect:/rentals";
+        }
+        return "takenReservation";
     }
 
     @RequestMapping(value = "/rental/{rentalId}/add-review", method = RequestMethod.GET)
@@ -144,10 +147,8 @@ public class PageController {
     @RequestMapping(value = "/update-review/{reviewId}", method = RequestMethod.POST)
     public String postUpdateRentalReview(
             @PathVariable("reviewId") Integer reviewId,
-            //@PathVariable("rentalId") Integer rentalId,
             @RequestParam("review") String review,
             @RequestParam("rating") Double rating) {
-
         rentalService.postUpdateRentalReview(review, rating, reviewId);
         return "redirect:/rentals";
     }

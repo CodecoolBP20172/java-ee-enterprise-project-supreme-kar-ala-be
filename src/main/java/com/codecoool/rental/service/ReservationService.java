@@ -1,6 +1,6 @@
 package com.codecoool.rental.service;
 
-import com.codecoool.rental.model.Reservation;
+import com.codecoool.rental.model.*;
 import com.codecoool.rental.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,13 @@ public class ReservationService {
     @Autowired
     ReservationRepository reservationRepository;
 
-    public boolean submitReservation(String startDateInput, String endDateInput, Integer numOfPeople, Integer rentalId, Integer userId) {
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    RentalService rentalService;
+
+    public boolean isPeriodFree(String startDateInput, String endDateInput, Integer numOfPeople, Integer rentalId, Integer userId) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
@@ -62,6 +68,26 @@ public class ReservationService {
 
     public void save(Reservation entity) {
         reservationRepository.save(entity);
+    }
+
+    public void submitReservation(String startDateInput, String endDateInput, Integer numberOfPeople, Integer rentalId, Integer userId) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate;
+        Date endDate;
+
+        try {
+            startDate = sdf.parse(startDateInput);
+            endDate = sdf.parse(endDateInput);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("not valid format");
+        }
+
+        ReservationPeriod reservationPeriod = new ReservationPeriodGuest(startDate, endDate);
+        User user = userService.getUserById(userId);
+        Rental rental = rentalService.getRental(rentalId);
+        Reservation reservation = new Reservation(numberOfPeople,reservationPeriod, user, rental);
+        reservationRepository.save(reservation);
     }
 
     //TODO update reservation
