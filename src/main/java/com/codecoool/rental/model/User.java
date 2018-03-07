@@ -92,6 +92,10 @@ public class User {
         this.rentals.add(rental);
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "id=" + id + ", " +

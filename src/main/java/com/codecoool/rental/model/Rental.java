@@ -181,4 +181,9 @@ public class Rental {
     public void addReview(Review review) {
         reviews.add(review);
     }
+
+    public Integer getRentalUserId() {
+        return user.getId();
+    }
+
 }

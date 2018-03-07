@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,27 @@ public class ReservationService {
     @Autowired
     RentalService rentalService;
 
+//    public List<Date> parseDate(String startDateInput, String endDateInput) {
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//
+//        Date startDate;
+//        Date endDate;
+//
+//        try {
+//            startDate = sdf.parse(startDateInput);
+//            endDate = sdf.parse(endDateInput);
+//            List<Date> dates = new ArrayList<>();
+//            dates.add(startDate);
+//            dates.add(endDate);
+//            return dates;
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            throw new IllegalArgumentException("not valid format");
+//        }
+//    }
+
     public boolean isPeriodFree(String startDateInput, String endDateInput, Integer numOfPeople, Integer rentalId, Integer userId) {
+//        parseDate(startDateInput, endDateInput);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
@@ -71,6 +92,7 @@ public class ReservationService {
     }
 
     public void submitReservation(String startDateInput, String endDateInput, Integer numberOfPeople, Integer rentalId, Integer userId) {
+//        parseDate(startDateInput, endDateInput);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
         Date endDate;
@@ -83,11 +105,17 @@ public class ReservationService {
             throw new IllegalArgumentException("not valid format");
         }
 
-        ReservationPeriod reservationPeriod = new ReservationPeriodGuest(startDate, endDate);
         User user = userService.getUserById(userId);
         Rental rental = rentalService.getRental(rentalId);
-        Reservation reservation = new Reservation(numberOfPeople,reservationPeriod, user, rental);
-        reservationRepository.save(reservation);
+        if (user.getId().equals(rental.getRentalUserId())) {
+            ReservationPeriodHost reservationPeriodHost = new ReservationPeriodHost(startDate, endDate);
+            Reservation reservationHost = new Reservation(numberOfPeople, reservationPeriodHost, user, rental);
+            reservationRepository.save(reservationHost);
+        } else {
+            ReservationPeriodGuest reservationPeriodGuest = new ReservationPeriodGuest(startDate, endDate);
+            Reservation reservationGuest = new Reservation(numberOfPeople, reservationPeriodGuest, user, rental);
+            reservationRepository.save(reservationGuest);
+        }
     }
 
     //TODO update reservation
