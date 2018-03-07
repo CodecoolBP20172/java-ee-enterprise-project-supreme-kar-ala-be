@@ -30,16 +30,14 @@ public class InitializerBean {
         }
 
         // Creating entities
-        User user1 = new User("user name", "user@user.com", "user123", "06-03-1234");
-        User user2 = new User("new user2", "user2222@user.com", "xcvbn", "11-11-9999");
-        userService.save(user1);
-        userService.save(user2);
+        User user1 = new User("test user1", "test1@user.com", "user123", "06-30-1234567");
+        User user2 = new User("test user2", "test2@user.com", "user456", "06-20-7654321");
 
         Rental rental1 = new Rental("házikó", "Description", 22.5, "Bukarest", 5, user1);
         Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Bukarest", 5, user1);
         Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Bukarest", 5, user2);
 
-        Reservation reservation1 = new Reservation(3, date1, date2, ReservationType.GUEST, user1, rental1);
+        Reservation reservation1 = new Reservation(3, date1, date2, ReservationType.HOST, user1, rental1);
         Reservation reservation2 = new Reservation(3, date3, date4, ReservationType.GUEST, user1, rental2);
         Reservation reservation3 = new Reservation(2, date5, date6, ReservationType.GUEST, user2, rental1);
 
@@ -85,6 +83,9 @@ public class InitializerBean {
         rental1.addReservation(reservation1);
         rental2.addReservation(reservation2);
         rental1.addReservation(reservation3);
+
+        userService.save(user1);
+        userService.save(user2);
 
         rentalService.save(rental1);
         rentalService.save(rental2);

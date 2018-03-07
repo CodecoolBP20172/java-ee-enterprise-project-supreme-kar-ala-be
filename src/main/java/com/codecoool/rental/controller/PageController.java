@@ -65,12 +65,12 @@ public class PageController {
         return "rentals";
     }
 
-    @RequestMapping(value = "/rental/{rentalId}/register-rental", method = RequestMethod.GET)
+    @RequestMapping(value = "/register-rental", method = RequestMethod.GET)
     public String getAllRentals() {
         return "register_rental";
     }
 
-    @RequestMapping(value = "/rentals/register-rental", method = RequestMethod.POST)
+    @RequestMapping(value = "/register-rental", method = RequestMethod.POST)
     public String submitRegistration(@RequestParam("name") String name,
                                      @RequestParam("description") String description,
                                      @RequestParam("location") String location,
@@ -82,8 +82,8 @@ public class PageController {
                                      @RequestParam("hasWifi") String hasWifi,
                                      @RequestParam("hasAirConditioner") String hasAirConditioner) {
         int userId = 1;
-        rentalService.registerRental(userId, name, description, location, price, numOfGuest, numOfBed, numOfRoom, hasWifi, hasAirConditioner, pictureUrl);
-        return "redirect:/rentals";
+        rentalService.registerRental(userId, name, description, location, price, numOfGuest, numOfBed, numOfRoom, pictureUrl, hasWifi, hasAirConditioner);
+        return "redirect:";
     }
 
     @RequestMapping(value = "/user/reservations", method = RequestMethod.GET)

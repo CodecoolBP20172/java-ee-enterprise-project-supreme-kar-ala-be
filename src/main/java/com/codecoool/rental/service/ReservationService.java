@@ -50,7 +50,7 @@ public class ReservationService {
         reservationRepository.save(entity);
     }
 
-    public void submitReservation(String startDateInput, String endDateInput, Integer numberOfPeople, Integer rentalId, Integer userId) {
+    public void submitReservation(String startDateInput, String endDateInput, int numberOfPeople, int rentalId, int userId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate;
         Date endDate;
@@ -66,9 +66,11 @@ public class ReservationService {
         User user = userService.getUserById(userId);
         Rental rental = rentalService.getRental(rentalId);
         ReservationType reservationType = ReservationType.GUEST;
+
         if (userId == rental.getUser().getId()) {
             reservationType = ReservationType.HOST;
         }
+
         Reservation reservation = new Reservation(numberOfPeople, startDate, endDate, reservationType, user, rental);
         reservationRepository.save(reservation);
     }
