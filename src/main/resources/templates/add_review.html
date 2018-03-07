@@ -89,12 +89,13 @@
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6 regButton">
-            <input th:type="hidden" th:name="rental_id" th:value="${rental_id}"/>
+            <!--<input th:type="hidden" th:name="rental_id" th:value="${rental_id}"/>-->
             <button type="submit" class="btn btn-success "><i class="fa fa-user-plus"></i>Submit review</button>
           </div>
         </div>
       </form>
-      <form th:case="update" class="form-horizontal" role="form" method="POST" th:action="${'rental/' + rental_id + '/update-review/' + review.getId()}">
+      <form th:case="update" class="form-horizontal" role="form" method="POST" th:action="${'/update-review/' + review.getId()}">
+        <!--th:action="${'rental/' + rental_id + '/update-review/' + review.getId()}"-->
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6">
@@ -148,7 +149,7 @@
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6 regButton">
-            <input th:type="hidden" th:name="rental_id" th:value="${rental_id}"/>
+            <!--<input th:type="hidden" th:name="rental_id" th:value="${rental_id}"/>-->
             <button type="submit" class="btn btn-success "><i class="fa fa-user-plus"></i>Submit review</button>
           </div>
         </div>
