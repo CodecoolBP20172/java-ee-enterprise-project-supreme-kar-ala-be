@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import static org.junit.Assert.assertEquals;
 
+// TODO in spring
 public class RentalServiceTest {
 
     private RentalService rentalServiceTest;
