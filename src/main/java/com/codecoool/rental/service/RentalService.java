@@ -59,10 +59,11 @@ public class RentalService {
         int numOfGuestsInt = Integer.parseInt(numOfGuests);
         int numOfBedInt = Integer.parseInt(numOfBed);
         int numOfRoomInt = Integer.parseInt(numOfRoom);
-        boolean hasWifiOrNot = hasWifi != null;
+        boolean hasWifiOrNot = hasWifi !=null;
         boolean hasAirConditionerOrNot = hasAirConditioner != null;
+        System.out.println(pictureUrl + " ez volt az url");
 
-        if (pictureUrl.equals("")){
+        if (pictureUrl.isEmpty()){
             pictureUrl = "http://placehold.it/900x400";
         }
 
