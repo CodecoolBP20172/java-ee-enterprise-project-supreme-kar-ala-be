@@ -1,57 +1,84 @@
 package com.codecoool.rental.service;
 
-import com.codecoool.rental.exceptions.RecordNotFoundException;
+import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Review;
+import com.codecoool.rental.repository.RentalRepository;
+import com.codecoool.rental.repository.ReservationRepository;
+import com.codecoool.rental.repository.ReviewRepository;
+import com.codecoool.rental.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 
-// TODO in spring
+@RunWith(SpringRunner.class)
 public class RentalServiceTest {
 
-    private RentalService rentalServiceTest;
+    @TestConfiguration
+    static class RentalServiceTestContextConfiguration {
+
+        @Bean
+        public RentalService rentalService() {
+            return new RentalService();
+        }
+    }
+
+    @Autowired
+    private RentalService rentalService;
+
+    @MockBean
+    ReviewRepository reviewRepository;
+
+    @MockBean
+    RentalRepository rentalRepository;
+
+    @MockBean
+    UserRepository userRepository;
+
+    @MockBean
+    ReservationRepository reservationRepository;
+
+
+    @Before
+    public void setUp() {
+
+        Review review1 = new Review();
+        review1.setText("awesome");
+
+        Rental rental1 = new Rental();
+        rental1.setName("házikó");
+
+        Mockito.when(reviewRepository.findOne(1))
+                .thenReturn(review1);
+
+        Mockito.when(rentalRepository.findOne(1))
+                .thenReturn(rental1);
+
+    }
+
 
     @Test
-    public void submitRentalReviewTest() throws RecordNotFoundException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
-        EntityManager em = emf.createEntityManager();
-        this.rentalServiceTest = new RentalService(em);
+    public void getRentalReviewToUpdateTest() {
 
-        rentalServiceTest.submitRentalReview("awesome", 1, 5, 1);
-        TypedQuery<Review> typedQuery = rentalServiceTest.em.createNamedQuery("getReviewById", Review.class).setParameter("id", 1);
-        Review testReview = typedQuery.getSingleResult();
-        assertEquals("awesome",testReview.getText());
+        Review review = rentalService.getRentalReviewToUpdate(1);
 
-        em.close();
-        emf.close();
+        assertEquals("awesome", review.getText());
     }
 
     @Test
-    public void getRentalTest() throws RecordNotFoundException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
-        EntityManager em = emf.createEntityManager();
-        this.rentalServiceTest = new RentalService(em);
+    public void getRentalTest() {
 
-        assertEquals(1, rentalServiceTest.getRental(1).get("id"));
+        Rental rental = rentalService.getRental(1);
+        assertEquals("házikó", rental.getName());
 
-        em.close();
-        emf.close();
     }
 
-    @Test
-    public void getRentalThrowsRecordNotFoundExceptionTest() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
-        EntityManager em = emf.createEntityManager();
-        this.rentalServiceTest = new RentalService(em);
 
-        assertThrows(RecordNotFoundException.class, () -> rentalServiceTest.getRental(1000));
-
-        em.close();
-        emf.close();
-    }
 }

@@ -17,6 +17,7 @@ public class Review {
     private Rental rental;
     @ManyToOne
     private User user;
+
     public Review() {
     }
 

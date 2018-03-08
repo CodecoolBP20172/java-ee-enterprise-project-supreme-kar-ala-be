@@ -1,65 +1,88 @@
 package com.codecoool.rental.service;
 
-import com.codecoool.rental.exceptions.RecordNotFoundException;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
-import com.codecoool.rental.model.ReservationPeriod;
+import com.codecoool.rental.model.Review;
 import com.codecoool.rental.model.User;
+import com.codecoool.rental.repository.RentalRepository;
+import com.codecoool.rental.repository.ReservationRepository;
+import com.codecoool.rental.repository.ReviewRepository;
+import com.codecoool.rental.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class ReservationServiceTest {
 
-    private ReservationService reservationServiceTest;
+    @TestConfiguration
+    static class RentalServiceContextConfiguration {
 
-    @InjectMocks
-    private Reservation reservation;
-
-    @Mock
-    private Rental rentalMock;
-
-    @Mock
-    private User userMock;
-
-    @Mock
-    private ReservationPeriod reservationPeriodMock;
-
-
-    @Test
-    public void submitReservationTest() throws RecordNotFoundException {
-        // Yes Miki, we tried
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
-        EntityManager em = emf.createEntityManager();
-        this.reservationServiceTest = new ReservationService(em);
-
-        assertFalse(reservationServiceTest.submitReservation("2017-07-21", "2017-07-28", 3, 1, 1));
-
-        em.close();
-        emf.close();
+        @Bean
+        public ReservationService reservationService() {
+            return new ReservationService();
+        }
     }
 
+
+
+    @Autowired
+    private ReservationService reservationService;
+
+    @MockBean
+    ReviewRepository reviewRepository;
+
+    @MockBean
+    RentalRepository rentalRepository;
+
+    @MockBean
+    UserRepository userRepository;
+
+    @MockBean
+    ReservationRepository reservationRepository;
+
+    @MockBean
+    UserService userService;
+
+    @MockBean
+    RentalService rentalService;
+
+    @Before
+    public void setUp() {
+
+        User user = new User();
+        user.setName("valaki");
+
+        Reservation reservation1 = new Reservation();
+        reservation1.setUser(user);
+
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(reservation1);
+
+        Mockito.when(reservationRepository.findAllByUserId(1))
+                .thenReturn(reservations);
+
+
+    }
+
+
     @Test
-    public void getReservationsByUserId() throws RecordNotFoundException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
-        EntityManager em = emf.createEntityManager();
-        this.reservationServiceTest = new ReservationService(em);
+    public void getReservationsByUserIdTest() {
 
-        when(userMock.getId()).thenReturn(1);
-        assertEquals(1, reservationServiceTest.getReservationsByUserId(userMock.getId()).size());
+    List<Reservation> reservations = reservationService.getReservationsByUserId(1);
 
-        em.close();
-        emf.close();
+    assertEquals("valaki", reservations.get(0).getUser().getName());
     }
 }
