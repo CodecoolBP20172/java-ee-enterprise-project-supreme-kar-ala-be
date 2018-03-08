@@ -8,7 +8,7 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
 
-    <title>Kar-alá-BNB  -  Reservation is already taken</title>
+    <title th:text="${title}">Kar-alá-BNB  -  Exception title</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
@@ -25,12 +25,9 @@
 
     <!-- Page Content -->
     <div class="container">
-
       <!-- Page Heading -->
-      <h1 class="my-4">There is another reservation at the given time. Please try another
-
-      </h1>
-
+      <h1 class="my-4" th:text="${title} + ' - ERROR ' + ${status}">Error title - error code</h1>
+      <p th:text="${message}">Error message</p>
     </div>
     <!-- /.container -->
 

@@ -1,17 +1,17 @@
 package com.codecoool.rental.controller;
 
+import com.codecoool.rental.exception.IllegalReservationException;
 import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.service.RentalService;
 import com.codecoool.rental.service.ReservationService;
 import com.codecoool.rental.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -31,25 +31,28 @@ public class PageController {
         return "index";
     }
 
-    //TODO: to be handled by ErrorHandler?
-    @RequestMapping(value = "/takenReservation,", method = RequestMethod.GET)
-    public String takenReservation() {
-        return "takenReservation";
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The requested page can not be found.")
+    @ExceptionHandler(Exception.class)
+    public String exceptionHandler(HttpServletRequest requestAttributes, Exception e, Model model) {
+        model.addAttribute("title", e.getLocalizedMessage());
+        model.addAttribute("message", e.getMessage());
+        return "exceptionHandler";
     }
 
-    //TODO: Spring based errorHandling
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalReservationException.class)
+    public String illegalReservationExceptionHandler(HttpServletRequest request, IllegalReservationException e, Model model) {
+        model.addAttribute("title", "Bad Request");
+        model.addAttribute("status", 409);
+        model.addAttribute("message", e.getMessage());
+        return "exceptionHandler";
+    }
 
-//    public ModelAndView RecordNoTFound(Exception e) {
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("message", e.getMessage());
-//        return new ModelAndView(params, "notFound404");
-//    }
-//
-//    public ModelAndView ServerIssue(Exception e) {
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("message", e.getMessage());
-//        return new ModelAndView(params, "errors/error500");
-//    }
+    // This is for testing purposes.
+    @RequestMapping("/exception")
+    public String raiseException() throws Exception {
+        throw new IllegalReservationException("That time period is already reserved, please choose another one.");
+    }
 
     @RequestMapping(value = "/rental/{rentalId}", method = RequestMethod.GET)
     public String getRental(Model model, @PathVariable("rentalId") Integer rentalId) {
@@ -88,8 +91,8 @@ public class PageController {
 
     @RequestMapping(value = "/user/reservations", method = RequestMethod.GET)
     public String getReservationsByUserId(Model model) {
-        int user_id = 1;
-        model.addAttribute("reservations", reservationService.getReservationsByUserId(user_id));
+        int userId = 1;
+        model.addAttribute("reservations", reservationService.getReservationsByUserId(userId));
         return "userReservations";
     }
 
@@ -100,19 +103,17 @@ public class PageController {
     }
 
     @RequestMapping(value = "/rental/{rentalId}/submit-reservation", method = RequestMethod.POST)
-    public String submitReservation(Model model,
-                                    @PathVariable("rentalId") Integer rentalId,
+    public String submitReservation(@PathVariable("rentalId") Integer rentalId,
                                     @RequestParam("startDate") String startDate,
                                     @RequestParam("endDate") String endDate,
-                                    //TODO átkasztolja-e Inté stringet?
-                                    @RequestParam("numberOfPeople") Integer numberOfPeople) {
+                                    @RequestParam("numberOfPeople") Integer numberOfPeople) throws IllegalReservationException {
         Integer userId = 1;
 
         if (reservationService.isPeriodFree(startDate, endDate, rentalId)) {
             reservationService.submitReservation(startDate, endDate, numberOfPeople, rentalId, userId);
             return "redirect:/rentals";
         }
-        return "takenReservation";
+        throw new IllegalReservationException("That time period is already reserved, please choose another one.");
     }
 
     @RequestMapping(value = "/rental/{rentalId}/add-review", method = RequestMethod.GET)
