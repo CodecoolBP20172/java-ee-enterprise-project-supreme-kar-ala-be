@@ -25,6 +25,18 @@
 
     <!-- Page Content -->
     <div class="container">
+      <div>
+        <form action="/rentals">
+          Filter by :
+          <select class="selectpicker" th:placeholder="City" th:name="filterByCity">
+            <option th:value="Budapest">Budapest</option>
+            <option th:value="Moskow">Moskow</option>
+            <option th:value="Russia">Russia</option>
+          </select>
+          <button type="submit">Filter</button>
+        </form>
+
+      </div>
 
       <!-- Page Heading -->
       <h1 class="my-4">Rentals

@@ -62,7 +62,13 @@ public class PageController {
     }
 
     @RequestMapping(value = "/rentals", method = RequestMethod.GET)
-    public String getAllRentals(Model model) {
+    public String getAllRentals(@RequestParam(value = "filterByCity",defaultValue = "",required = false) String filteredCity ,Model model) {
+        System.out.println(filteredCity);
+        if (!filteredCity.equals("")){
+            List<Rental> rentals = rentalService.getRentalsByCity(filteredCity);
+            model.addAttribute("rentals", rentals);
+            return "rentals";
+        }
         List<Rental> rentals = rentalService.getAllRentals();
         model.addAttribute("rentals", rentals);
         return "rentals";

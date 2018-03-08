@@ -49,6 +49,9 @@ public class RentalService {
     public Rental getRental(int id){
         return rentalRepository.findOne(id);
     }
+    public List<Rental> getRentalsByCity (String city){
+        return rentalRepository.findAllByCity(city);
+    }
 
     public void registerRental(int user_id, String name, String description, String location, String price, String numOfGuests, String numOfBed, String numOfRoom, String hasWifi, String hasAirConditioner, String pictureUrl) {
 
