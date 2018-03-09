@@ -35,7 +35,7 @@
 
     <!-- Page Content -->
     <div class="container form">
-      <form class="form-horizontal" role="form" method="POST" action="/register-rental">
+      <form class="form-horizontal" role="form" method="POST" th:action="${'/register-rental'}">
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6">
@@ -93,8 +93,12 @@
             <div class="form-group">
               <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon" style="width: 2.6rem"><i class="fas fa-globe"></i></div>
-                <input type="text" th:name="location" class="form-control" id="location"
-                       placeholder="Location" th:required="required"/>
+                <select class="selectpicker form-control" th:placeholder="City" th:name="location">
+                  <option th:value="Budapest">Budapest</option>
+                  <option th:value="Miskolc">Miskolc</option>
+                  <option th:value="Warsaw">Warsaw</option>
+                  <option th:value="Krakow">Krakow</option>
+                </select>
               </div>
             </div>
           </div>

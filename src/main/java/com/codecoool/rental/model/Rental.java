@@ -6,10 +6,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "rental")
-@NamedQueries({
-        @NamedQuery(name = "getRental", query = "SELECT rental FROM Rental rental WHERE rental.id = :id"),
-        @NamedQuery(name = "getRentals", query = "SELECT rental FROM Rental rental")
-})
 public class Rental {
 
     @Id
@@ -28,7 +24,7 @@ public class Rental {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "guests")
+    @Column(name = "num_of_guests")
     private int numOfGuests;
 
     @Column(name = "rating")
@@ -40,51 +36,30 @@ public class Rental {
     @OneToOne(cascade = CascadeType.ALL)
     private Facility facility;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Picture> pictures = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private User user;
-
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> reservedPeriod = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
 
     public Rental() {
     }
 
     public Rental(String name, String description, double price, String city, int numOfGuests, User user) {
         this.name = name;
-        this.rating = 5.0;
         this.description = description;
         this.price = price;
         this.city = city;
         this.numOfGuests = numOfGuests;
+        this.rating = 5.0;
+        this.user = user;
     }
-
-    public double getRating() {
-        //TODO create methods to get the real rating from reviews
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public List<Picture> getPictures() {
-        return pictures;
-    }
-
-    public List<Review> getReviews() {
-
-        return reviews;
-    }
-
 
     public int getId() {
         return id;
@@ -130,28 +105,29 @@ public class Rental {
         this.numOfGuests = numOfGuests;
     }
 
+    public double getRating() {
+        //TODO create methods to get the real rating from reviews
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public Amenity getAmenity() {
+        return amenity;
+    }
+
     public void setAmenity(Amenity amenity) {
         this.amenity = amenity;
     }
 
+    public Facility getFacility() {
+        return facility;
+    }
+
     public void setFacility(Facility facility) {
         this.facility = facility;
-    }
-
-    public void setReview(Review review) {
-        this.reviews.add(review);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public int getOwnerId() {
-        return user.getId();
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public List<Reservation> getReservations() {
@@ -159,18 +135,32 @@ public class Rental {
     }
 
     public void addReservation(Reservation reservation) {
-        this.reservations.add(reservation);
+        reservations.add(reservation);
     }
 
-    /*TODO class implementation missing
-        public void setReservedPeriod(ReservedPeriod reservedPeriod) {
-            this.reservedPeriods.add(reservedPeriod)
-        }
-        */
+    public List<Picture> getPictures() {
+        return pictures;
+    }
+
     public void addPictures(Picture picture) {
-        this.pictures.add(picture);
+        pictures.add(picture);
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public String toString() {
@@ -184,9 +174,5 @@ public class Rental {
                 ", amenity=" + amenity +
                 ", facility=" + facility +
                 '}';
-    }
-
-    public void addReview(Review review) {
-        reviews.add(review);
     }
 }

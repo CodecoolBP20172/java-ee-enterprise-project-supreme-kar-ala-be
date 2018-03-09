@@ -36,15 +36,15 @@
         <div class="col-lg-9">
 
           <div class="card mt-4">
-            <img class="card-img-top img-fluid" th:src="${picture}" alt=""/>
+            <img class="card-img-top img-fluid" th:src="${rental.pictures[0].url}" alt=""/>
             <div class="card-body">
-              <h3 class="card-title" th:text="${name}" ></h3>
-              <h4 th:text="${price} + '$'">$24.99</h4>
-              <p class="card-text" th:text="${description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
+              <h3 class="card-title" th:text="${rental.name}" ></h3>
+              <h4 th:text="${rental.price} + '$'">$24.99</h4>
+              <p class="card-text" th:text="${rental.description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
               <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
-                <span th:text="${rating} + ' stars'"></span>
+                <span th:text="${rental.rating} + ' stars'"></span>
             </div>
-              <a th:href="${id + '/make-reservation'}" class="btn btn-success">Make reservation</a>
+              <a th:href="${rental.id + '/make-reservation'}" class="btn btn-success">Make reservation</a>
           </div>
           <!-- /.card -->
 
@@ -52,15 +52,15 @@
             <div class="card-header">
               Rental Reviews
             </div>
-            <div class="card-body" th:each="review,iterstat : ${reviews}">
+            <div class="card-body" th:each="review : ${rental.reviews}">
                 <div>
-                    <a th:href="${'/update-review/' + review.getId() }" class="btn btn-success">Update</a>
+                    <a th:href="${'/rental/' + rental.id + '/update-review/' + review.getId() }" class="btn btn-success">Update</a>
                 </div>
               <p th:text="${review.getText()}" >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
               <small class="text-muted">Posted by Anonymous on 3/1/17 Rating : <span th:text="${review.getRating()}"></span>  </small>
               <hr/>
             </div>
-          <a th:href="${id + '/add-review'}" class="btn btn-success">Leave a Review</a>
+          <a th:href="${rental.id + '/add-review'}" class="btn btn-success">Leave a Review</a>
           </div>
           <!-- /.card -->
 

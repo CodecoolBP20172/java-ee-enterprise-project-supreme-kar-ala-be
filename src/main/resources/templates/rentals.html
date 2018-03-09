@@ -25,6 +25,19 @@
 
     <!-- Page Content -->
     <div class="container">
+      <div>
+        <form action="/rentals">
+          Filter by :
+          <select class="selectpicker btn btn-secondary dropdown-toggle" th:placeholder="City" th:name="filterByCity">
+            <option th:value="Budapest">Budapest</option>
+            <option th:value="Miskolc">Miskolc</option>
+            <option th:value="Krakow">Krakow</option>
+            <option th:value="Warsaw">Warsaw</option>
+          </select>
+          <button type="submit" class="btn btn-secondary">Filter</button>
+        </form>
+
+      </div>
 
       <!-- Page Heading -->
       <h1 class="my-4">Rentals
