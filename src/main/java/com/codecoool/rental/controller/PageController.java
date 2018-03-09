@@ -62,7 +62,13 @@ public class PageController {
     }
 
     @RequestMapping(value = "/rentals", method = RequestMethod.GET)
-    public String getAllRentals(Model model) {
+    public String getAllRentals(@RequestParam(value = "filterByCity",defaultValue = "",required = false) String filteredCity ,Model model) {
+        System.out.println(filteredCity);
+        if (!filteredCity.equals("")){
+            List<Rental> rentals = rentalService.getRentalsByCity(filteredCity);
+            model.addAttribute("rentals", rentals);
+            return "rentals";
+        }
         List<Rental> rentals = rentalService.getAllRentals();
         model.addAttribute("rentals", rentals);
         return "rentals";
@@ -85,7 +91,17 @@ public class PageController {
                                      @RequestParam("hasWifi") String hasWifi,
                                      @RequestParam("hasAirConditioner") String hasAirConditioner) {
         int userId = 1;
-        rentalService.registerRental(userId, name, description, location, price, numOfGuest, numOfBed, numOfRoom, pictureUrl, hasWifi, hasAirConditioner);
+        System.out.println("userid : " +userId);
+        System.out.println("name : " + name);
+        System.out.println("desc: " +description);
+        System.out.println("location : " +location);
+        System.out.println("price : " + price);
+        System.out.println("guest : " + numOfGuest);
+        System.out.println(numOfBed);
+        System.out.println("url : " +pictureUrl);
+        System.out.println("wifi : " +hasWifi);
+        System.out.println("air : " +hasAirConditioner);
+        rentalService.registerRental(userId, name, description, location, price, numOfGuest, numOfBed, numOfRoom,  hasWifi, hasAirConditioner,pictureUrl);
         return "redirect:";
     }
 

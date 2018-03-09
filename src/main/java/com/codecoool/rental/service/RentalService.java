@@ -49,6 +49,9 @@ public class RentalService {
     public Rental getRental(int id){
         return rentalRepository.findOne(id);
     }
+    public List<Rental> getRentalsByCity (String city){
+        return rentalRepository.findAllByCity(city);
+    }
 
     public void registerRental(int user_id, String name, String description, String location, String price, String numOfGuests, String numOfBed, String numOfRoom, String hasWifi, String hasAirConditioner, String pictureUrl) {
 
@@ -56,10 +59,11 @@ public class RentalService {
         int numOfGuestsInt = Integer.parseInt(numOfGuests);
         int numOfBedInt = Integer.parseInt(numOfBed);
         int numOfRoomInt = Integer.parseInt(numOfRoom);
-        boolean hasWifiOrNot = hasWifi != null;
+        boolean hasWifiOrNot = hasWifi !=null;
         boolean hasAirConditionerOrNot = hasAirConditioner != null;
+        System.out.println(pictureUrl + " ez volt az url");
 
-        if (pictureUrl.equals("")){
+        if (pictureUrl.isEmpty()){
             pictureUrl = "http://placehold.it/900x400";
         }
 
@@ -74,6 +78,7 @@ public class RentalService {
         rental.setAmenity(amenity);
         rental.setFacility(facility);
         facility.setRental(rental);
+        amenity.setRental(rental);
 
         rentalRepository.save(rental);
     }
