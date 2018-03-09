@@ -1,65 +1,102 @@
 package com.codecoool.rental.service;
 
-import com.codecoool.rental.exceptions.RecordNotFoundException;
-import com.codecoool.rental.model.Rental;
 import com.codecoool.rental.model.Reservation;
-import com.codecoool.rental.model.ReservationPeriod;
 import com.codecoool.rental.model.User;
+import com.codecoool.rental.repository.RentalRepository;
+import com.codecoool.rental.repository.ReservationRepository;
+import com.codecoool.rental.repository.ReviewRepository;
+import com.codecoool.rental.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class ReservationServiceTest {
 
-    private ReservationService reservationServiceTest;
+    @TestConfiguration
+    static class RentalServiceContextConfiguration {
 
-    @InjectMocks
-    private Reservation reservation;
+        @Bean
+        public ReservationService reservationService() {
+            return new ReservationService();
+        }
+    }
 
-    @Mock
-    private Rental rentalMock;
+    @Autowired
+    private ReservationService reservationService;
 
-    @Mock
-    private User userMock;
+    @MockBean
+    ReviewRepository reviewRepository;
 
-    @Mock
-    private ReservationPeriod reservationPeriodMock;
+    @MockBean
+    RentalRepository rentalRepository;
 
+    @MockBean
+    UserRepository userRepository;
 
-    @Test
-    public void submitReservationTest() throws RecordNotFoundException {
-        // Yes Miki, we tried
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
-        EntityManager em = emf.createEntityManager();
-        this.reservationServiceTest = new ReservationService(em);
+    @MockBean
+    ReservationRepository reservationRepository;
 
-        assertFalse(reservationServiceTest.submitReservation("2017-07-21", "2017-07-28", 3, 1, 1));
+    @MockBean
+    UserService userService;
 
-        em.close();
-        emf.close();
+    @MockBean
+    RentalService rentalService;
+
+    @Before
+    public void setUp() throws ParseException {
+
+        User user = new User();
+        user.setName("valaki");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = sdf.parse("2017-07-21");
+        Date endDate = sdf.parse("2017-07-28");
+
+        Reservation reservation1 = new Reservation();
+        reservation1.setUser(user);
+        reservation1.setStartDate(startDate);
+        reservation1.setEndDate(endDate);
+
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(reservation1);
+
+        Mockito.when(reservationRepository.findAllByUserId(1))
+                .thenReturn(reservations);
+
+        Mockito.when(reservationRepository.getReservationsForRentalInPeriod(1, startDate, endDate))
+                .thenReturn(reservations);
     }
 
     @Test
-    public void getReservationsByUserId() throws RecordNotFoundException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("karalabeTest");
-        EntityManager em = emf.createEntityManager();
-        this.reservationServiceTest = new ReservationService(em);
+    public void getReservationsByUserIdTest() {
 
-        when(userMock.getId()).thenReturn(1);
-        assertEquals(1, reservationServiceTest.getReservationsByUserId(userMock.getId()).size());
+    List<Reservation> reservations = reservationService.getReservationsByUserId(1);
 
-        em.close();
-        emf.close();
+    assertEquals("valaki", reservations.get(0).getUser().getName());
+    }
+
+    @Test
+    public void isPeriodFreeTestIfNot() throws ParseException {
+        assertFalse(reservationService.isPeriodFree("2017-07-21", "2017-07-28", 1));
+    }
+
+    @Test
+    public void isPeriodFreeTestIfYes() throws ParseException {
+        assertTrue(reservationService.isPeriodFree("2020-03-03", "2020-03-28", 1));
     }
 }

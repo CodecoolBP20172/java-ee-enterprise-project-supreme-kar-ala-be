@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RentalTest {
@@ -32,12 +31,6 @@ public class RentalTest {
     public void getRatingTest() {
         rentalTest.setRating(5.0);
         assertEquals(5.0, rentalTest.getRating());
-    }
-
-    @Test
-    public void getOwnerIdTest() {
-        when(userMock.getId()).thenReturn(1);
-        assertEquals(userMock.getId(), rentalTest.getOwnerId());
     }
 
     @Test
