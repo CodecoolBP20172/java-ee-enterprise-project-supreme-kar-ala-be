@@ -78,6 +78,7 @@ public class RentalService {
         rental.setAmenity(amenity);
         rental.setFacility(facility);
         facility.setRental(rental);
+        amenity.setRental(rental);
 
         rentalRepository.save(rental);
     }

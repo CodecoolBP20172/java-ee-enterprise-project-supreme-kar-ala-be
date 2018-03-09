@@ -33,9 +33,9 @@ public class InitializerBean {
         User user1 = new User("test user1", "test1@user.com", "user123", "06-30-1234567");
         User user2 = new User("test user2", "test2@user.com", "user456", "06-20-7654321");
 
-        Rental rental1 = new Rental("házikó", "Description", 22.5, "Bukarest", 5, user1);
+        Rental rental1 = new Rental("házikó", "Description", 22.5, "Krakow", 5, user1);
         Rental rental2 = new Rental("kiskunyhó", "Description", 22.5, "Budapest", 5, user1);
-        Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Moskow", 5, user2);
+        Rental rental3 = new Rental("hídalattó", "Description", 22.5, "Miskolc", 5, user2);
 
         Reservation reservation1 = new Reservation(3, date1, date2, ReservationType.HOST, user1, rental1);
         Reservation reservation2 = new Reservation(3, date3, date4, ReservationType.GUEST, user1, rental2);
